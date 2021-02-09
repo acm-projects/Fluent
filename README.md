@@ -40,7 +40,6 @@ A socially-oriented language learning mobile app that connects you with fluent s
 - [Flutter](https://flutter.dev/)
   * Uses [Dart](https://dart.dev/): used less by developers than JavaScript, but has great documentation
   * Lots of built-in components
-  * Released by Google
 - [React Native](https://reactnative.dev/)
   * Uses JavaScript: pretty popular with an active and established dev community
   * Less built-in components, reliant on third-party libraries
@@ -53,7 +52,6 @@ A socially-oriented language learning mobile app that connects you with fluent s
   * Whole ecosystem for mobile development, also includes user authentication and text chat
   * Free up to 1 GB of storage (see plans [here](https://firebase.google.com/pricing))
 - [MongoDB](https://www.mongodb.com/)
-  * Part of the popular MERN (MongoDB, ExpressJS, ReactJS, NodeJS) stack
   * More advanced querying than Firebase
   * More flexible & scalable, but lacks a complete ecosystem for mobile development
   * Start with 512 MB and scale up to 5 GB for free
@@ -69,7 +67,7 @@ A socially-oriented language learning mobile app that connects you with fluent s
 **Additional Software**
 - [NodeJS](https://nodejs.org/en/): install if using React Native
   * Runtime environment that allows software developers to launch both the frontend and backend of web apps using JavaScript
-- [Homebrew](https://brew.sh/): install if using React Native
+- [Homebrew](https://brew.sh/): install if using React Native & macOS
   * Software package management system that simplifies the installation of software on macOS
 
 ### Getting Started
@@ -81,4 +79,29 @@ Look through all of these resources at the beginning :)
 - [Overview of making API calls](https://snipcart.com/blog/apis-integration-usage-benefits)
 
 #### Common GitHub Commands
-include tables and stuff and links
+[GitHub Cheatsheet PDF](https://education.github.com/git-cheat-sheet-education.pdf)
+
+Login/Setup:
+| Command | Description |
+| :-----: | :---------: |
+| git config --global user.name "username" | Set username |
+| git config --global user.email "email" | Set email |
+| git config user.name | Checks that you're in, in case you're unsure |
+
+First Time Setup: 
+| Command | Description |
+| :-----: | :---------: |
+| git clone [url] | Creates local copy of remote repo. Try not to do this again. |
+
+General Use
+| Command | Description |
+| :-----: | :---------: |
+| cd "Fluent" | Change directories to our repository |
+| git branch | Lists branches |
+| git branch "branch name " | Makes a new branch |
+| git checkout "branch name" | Switch to branch |
+| git checkout -b "branch name" | 2 previous commands combined |
+| git add . | Finds and adds all changed files to your next commit |
+| git commit -m "msg" | Commit with message |
+| git push origin "branch" | Push to branch |
+| git pull origin "branch" | Pull updates from a specific branch |
