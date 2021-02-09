@@ -38,7 +38,7 @@ A socially-oriented language learning mobile app that connects you with fluent s
 ### Tech Stack
 **Mobile Application Framework Options**
 - [Flutter](https://flutter.dev/)
-  * Uses [Dart](https://flutter.dev/): used less by developers than JavaScript, but has great documentation
+  * Uses [Dart](https://dart.dev/): used less by developers than JavaScript, but has great documentation
   * Lots of built-in components
   * Released by Google
 - [React Native](https://reactnative.dev/)
