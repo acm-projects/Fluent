@@ -81,6 +81,7 @@ Look through all of these resources at the beginning :)
 
 #### Common GitHub Commands
 [GitHub Cheatsheet PDF](https://education.github.com/git-cheat-sheet-education.pdf)
+[Video: Learn Git in 15 minutes](https://youtu.be/USjZcfj8yxE)
 
 Login/Setup:
 | Command | Description |
