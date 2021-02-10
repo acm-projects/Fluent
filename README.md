@@ -94,7 +94,7 @@ First Time Setup:
 | :-----: | :---------: |
 | git clone [url] | Creates local copy of remote repo. Try not to do this again. |
 
-General Use
+General Use:
 | Command | Description |
 | :-----: | :---------: |
 | cd "Fluent" | Change directories to our repository |
