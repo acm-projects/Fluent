@@ -67,16 +67,17 @@ A socially-oriented language learning mobile app that connects you with fluent s
 **Additional Software**
 - [NodeJS](https://nodejs.org/en/): install if using React Native
   * Runtime environment that allows software developers to launch both the frontend and backend of web apps using JavaScript
-- [Homebrew](https://brew.sh/): install if using React Native & macOS
+- [Homebrew](https://brew.sh/): install if using React Native and/or macOS
   * Software package management system that simplifies the installation of software on macOS
 
-### Getting Started
-Maybe include a step-by-step installation guide?
+### [Getting Started](https://docs.google.com/document/d/17Tu3zG0fuDVQO7FjPYxGqbTPvIRuphNbcDw4orascy8/edit?usp=sharing)
+^ A general installation guide. Please feel free to find additional resources that work for you!
 
 #### Learning Resources
 Look through all of these resources at the beginning :)
 - [How to be successful in ACM Projects](https://docs.google.com/document/d/1mRIWzmfmJO3MCsvR9vr6VI94GnVYtHqZiq4sqMd3fic/edit?usp=sharing)
 - [Overview of making API calls](https://snipcart.com/blog/apis-integration-usage-benefits)
+- [Professor Cole's How to Program](https://personal.utdallas.edu/~jxc064000/HowToProgram.html)
 
 #### Common GitHub Commands
 [GitHub Cheatsheet PDF](https://education.github.com/git-cheat-sheet-education.pdf)
