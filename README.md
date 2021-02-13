@@ -8,6 +8,7 @@ A socially-oriented language learning mobile app that connects you with fluent s
 - Matching algorithm
   * Match users based on their languages and preferences
   * Ability to find a new match
+- Ability to search for and find a specific user
 - Inbox to see current conversations
 - In-app text chat
 - In-app voice chat
@@ -15,14 +16,19 @@ A socially-oriented language learning mobile app that connects you with fluent s
 ## Stretch Goals
 - Chat Features
   * In-app video chat
-  * Group chats
+  * Group chats/forums
   * Chatbot assistant to help generate more conversation/add structure
+  * Ability to translate a chat message (using Google Translate)
+  * Voice Memos (like iMessage voice memos)
+  * Speech to Text Functions (w/ Google Speech To Text)
+  * Corrections for feedback
 - Learning Features
   * Learning section (eg. basic phrases, alphabet, etc. for major languages)
 - Tracking Features
-  * Daily interaction streak/points system with rewards
+  * Daily interaction streak
 - Social Features
   * Ability to block another user
+  * Geolocation: filter by people near me
   
 ## Resources
 ### General Software
@@ -83,18 +89,6 @@ Look through all of these resources at the beginning :)
 [GitHub Cheatsheet PDF](https://education.github.com/git-cheat-sheet-education.pdf)
 
 [Video: Learn Git in 15 minutes](https://youtu.be/USjZcfj8yxE)
-
-Login/Setup:
-| Command | Description |
-| :-----: | :---------: |
-| git config --global user.name "username" | Set username |
-| git config --global user.email "email" | Set email |
-| git config user.name | Checks that you're in, in case you're unsure |
-
-First Time Setup: 
-| Command | Description |
-| :-----: | :---------: |
-| git clone [url] | Creates local copy of remote repo. Try not to do this again. |
 
 General Use:
 | Command | Description |
