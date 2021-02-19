@@ -33,32 +33,22 @@ A socially-oriented language learning mobile app that connects you with fluent s
 ## Resources
 ### General Software
 - [Git Bash](https://git-scm.com/downloads) 
-  * For command line Git
-- Text Editors/IDEs
-  * [Android Studio](https://developer.android.com/studio): IDE designed specifically for Android app development, works well with Flutter 
+- Text Editors/IDEs:
+  * [Android Studio](https://developer.android.com/studio)
 - UI/UX Design Tool options: 
-  * [Figma](https://www.figma.com/): free web-based design tool
-  * [Adobe XD](https://www.adobe.com/products/xd.html): more powerful design tool, can have 1 project for free
+  * [Figma](https://www.figma.com/)
+  * [Adobe XD](https://www.adobe.com/products/xd.html)
 
 ### Tech Stack
 **Mobile Application Framework**
 - [Flutter](https://flutter.dev/)
-  * Uses [Dart](https://dart.dev/): used less by developers than JavaScript, but has great documentation
-  * Lots of built-in components
 
 **Database Options**
 - [Firebase](https://firebase.google.com/)
-  * Works well with Flutter (b/c also released by Google)
-  * Real-time database, cross-platform API
-  * Whole ecosystem for mobile development, also includes user authentication and text chat
-  * Free up to 1 GB of storage (see plans [here](https://firebase.google.com/pricing))
 
 **Chat APIs**
 - [Twilio Conversations API](https://www.twilio.com/conversations-api)
-  * Scalable, multiparty conversations
-  * Free up to 200 users
 - [Twilio VOIP (Voice Over Internet Protocol)](https://www.twilio.com/client)
-  * $0.0040 per minute for calls to or from mobile devices
 
 ### [Getting Started](https://docs.google.com/document/d/17Tu3zG0fuDVQO7FjPYxGqbTPvIRuphNbcDw4orascy8/edit?usp=sharing)
 ^ A general installation guide. Please feel free to find additional resources that work for you!
