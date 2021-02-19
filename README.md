@@ -33,20 +33,14 @@ A socially-oriented language learning mobile app that connects you with fluent s
 ## Resources
 ### General Software
 - [Git Bash](https://git-scm.com/downloads) 
-- Text Editors/IDEs:
-  * [Android Studio](https://developer.android.com/studio)
+- [Android Studio](https://developer.android.com/studio)
 - UI/UX Design Tool options: 
   * [Figma](https://www.figma.com/)
   * [Adobe XD](https://www.adobe.com/products/xd.html)
 
 ### Tech Stack
-**Mobile Application Framework**
 - [Flutter](https://flutter.dev/)
-
-**Database Options**
 - [Firebase](https://firebase.google.com/)
-
-**Chat APIs**
 - [Twilio Conversations API](https://www.twilio.com/conversations-api)
 - [Twilio VOIP (Voice Over Internet Protocol)](https://www.twilio.com/client)
 
