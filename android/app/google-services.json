@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "859142990666",
+    "project_id": "acm-fluent",
+    "storage_bucket": "acm-fluent.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:859142990666:android:6d2db368863eba431dafb3",
+        "android_client_info": {
+          "package_name": "co.acmutd.fluent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "859142990666-un2u8abkioetlc5r9bi0lgn4f7oqmbvu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.acmutd.fluent",
+            "certificate_hash": "9bea3dcfd4a55acdb1decc560f7554cc72ab2c58"
+          }
+        },
+        {
+          "client_id": "859142990666-dsaq7v2meuqem19slaauei3q6csa6hgd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwHWF8-0v8zzOmAU4EKb56f2G3MjZ6M9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "859142990666-dsaq7v2meuqem19slaauei3q6csa6hgd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
