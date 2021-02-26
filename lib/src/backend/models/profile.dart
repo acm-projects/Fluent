@@ -27,5 +27,6 @@ class Profile {
   /// This user's languages.
   Map<Language, LanguageInfo> languages;
 
-  Profile._(this.uid, this.username, this.name, this.pfpUrl, this.age, this.gender, this.bio, this.languages);
+  //Profile._(this.uid, this.username, this.name, this.pfpUrl, this.age, this.gender, this.bio, this.languages);
+  Profile({this.uid, this.username, this.name, this.pfpUrl, this.age, this.gender, this.bio, this.languages});
 }
