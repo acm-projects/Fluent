@@ -1,17 +1,43 @@
 import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore;
-import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fluent/src/backend/models/language.dart';
-import 'package:fluent/src/backend/models/user.dart';
+import 'package:fluent/src/backend/models/data.dart';
 
-Future<CurrentUser> register({String email, String password}) async {
-  var auth = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
-  return CurrentUser(auth);
-}
+class AuthService{
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-Future<CurrentUser> login({String email, String password}) async {
-  var auth = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-  return CurrentUser(auth);
+  //sign in with email and password
+  Future signInUserWithEmailAndPassword(String email, String password) async {
+    try{
+      UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      User user = result.user;
+      return user;
+    }catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
+  //register with email and password
+  Future registerUserWithEmailAndPassword(String email, String password) async {
+    try{
+      UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      User user = result.user;
+      return user;
+    }catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
+  //sign out
+  Future signOutUser() async{
+    try{
+      return await _auth.signOut();
+    }catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
 }
 
 Future<Profile> fetchProfile(String uid) async {
