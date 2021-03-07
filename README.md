@@ -22,6 +22,7 @@ A socially-oriented language learning mobile app that connects you with fluent s
   * Voice Memos (like iMessage voice memos)
   * Speech to Text Functions (w/ Google Speech To Text)
   * Corrections for feedback
+  * Firebase Machine Learning (language detection, on-device translation)
 - Learning Features
   * Learning section (eg. basic phrases, alphabet, etc. for major languages)
 - Tracking Features
