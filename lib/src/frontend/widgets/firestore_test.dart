@@ -1,5 +1,5 @@
 import 'package:fluent/src/backend/models/language.dart';
-import 'package:fluent/src/backend/models/data.dart';
+import 'package:fluent/src/backend/models/user.dart';
 import 'package:fluent/src/backend/services/users.dart' as Users;
 import 'package:flutter/material.dart';
 

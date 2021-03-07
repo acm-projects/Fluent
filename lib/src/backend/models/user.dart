@@ -5,7 +5,7 @@ import 'package:fluent/src/backend/models/language.dart';
 import 'package:fluent/src/backend/services/users.dart' as Users;
 
 /// Represents a user. Can be used to access profile information.
-abstract class UserData extends HasUid {
+abstract class User extends HasUid {
   /// Fetches this user's profile data.
   Future<Profile> fetchProfile();
 
@@ -15,7 +15,7 @@ abstract class UserData extends HasUid {
 }
 
 /// Represents a user's public-facing profile.
-class Profile extends UserData {
+class Profile extends User {
   String uid;
 
   /// This user's username.
@@ -42,16 +42,17 @@ class Profile extends UserData {
   /// This user's fluency in their chosen language.
   Fluency fluency;
 
-  Profile(
-      {this.uid,
-      this.username,
-      this.name,
-      this.pfpHash,
-      this.birthDate,
-      this.gender,
-      this.bio,
-      this.language,
-      this.fluency});
+  Profile({
+    this.uid,
+    this.username,
+    this.name,
+    this.pfpHash,
+    this.birthDate,
+    this.gender,
+    this.bio,
+    this.language,
+    this.fluency,
+  });
 
   /// This user's age
   int get age {
@@ -77,7 +78,7 @@ class Profile extends UserData {
 }
 
 /// Represents the currently logged in user.
-class CurrentUser extends UserData {
+class CurrentUser extends User {
   String uid;
 
   /// This user's Firebase authentication credential.
