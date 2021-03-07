@@ -36,7 +36,8 @@ class AppInit extends StatelessWidget {
           }
 
           if (snapshot.connectionState == ConnectionState.done) {
-            return app(MyHomePage(title: 'Flutter Demo Home Page'));
+            return app(LoginPage());
+            //return app(MyHomePage(title: 'Flutter Demo Home Page'));
           }
 
           return app(LoadingPage()); // todo: Implement loading screen
