@@ -3,9 +3,8 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:fluent/config.dart' as Config;
 
-Future<void> init() async {
+Future<void> init({bool useEmulators = false}) async {
   var core = await Firebase.initializeApp();
 
   var auth = FirebaseAuth.instance;
@@ -13,7 +12,7 @@ Future<void> init() async {
   var firestore = FirebaseFirestore.instance;
   var functions = FirebaseFunctions.instance;
 
-  if (Config.useFirebaseEmulators) {
+  if (useEmulators) {
     auth.useEmulator('http://localhost:9099');
     firestore.settings = Settings(
       host: "http://localhost:8080",
