@@ -87,11 +87,13 @@ class CurrentUser extends User {
   /// This user's Firebase authentication credential.
   Auth.User user;
 
-  CurrentUser._(this.user) : super(user.uid);
+  CurrentUser._(this.user) : super(user?.uid);
 
   static void update(Auth.User user) {
-    _instance.user = user;
+    _instance = CurrentUser._(user);
   }
 
   static CurrentUser get instance => _instance;
+
+  User get ref => User(this.uid);
 }
