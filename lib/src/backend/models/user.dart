@@ -3,21 +3,22 @@ import 'package:firebase_auth/firebase_auth.dart' show UserCredential;
 import 'package:fluent/src/backend/models/core.dart';
 import 'package:fluent/src/backend/models/language.dart';
 import 'package:fluent/src/backend/services/users.dart' as Users;
+import 'package:meta/meta.dart';
 
 /// Represents a user. Can be used to access profile information.
-abstract class User extends HasUid {
-  /// Fetches this user's profile data.
-  Future<Profile> fetchProfile();
-
+class User extends HasUid {
   /// This user's unique ID.
   @override
-  String get uid;
+  String uid;
+
+  User(this.uid);
+
+  /// Fetches this user's profile data.
+  Future<Profile> fetchProfile() => Users.fetchProfile(this.uid);
 }
 
 /// Represents a user's public-facing profile.
 class Profile extends User {
-  String uid;
-
   /// This user's username.
   String username;
 
@@ -43,16 +44,16 @@ class Profile extends User {
   Fluency fluency;
 
   Profile({
-    this.uid,
-    this.username,
-    this.name,
-    this.pfpHash,
-    this.birthDate,
-    this.gender,
-    this.bio,
-    this.language,
-    this.fluency,
-  });
+    @required String uid,
+    @required this.username,
+    @required this.name,
+    @required this.pfpHash,
+    @required this.birthDate,
+    @required this.gender,
+    @required this.bio,
+    @required this.language,
+    @required this.fluency,
+  }) : super(uid);
 
   /// This user's age
   int get age {
@@ -79,13 +80,8 @@ class Profile extends User {
 
 /// Represents the currently logged in user.
 class CurrentUser extends User {
-  String uid;
-
   /// This user's Firebase authentication credential.
   UserCredential auth;
 
-  CurrentUser(this.auth) : uid = auth.user.uid;
-
-  @override
-  Future<Profile> fetchProfile() => Users.fetchProfile(this.uid);
+  CurrentUser(this.auth) : super(auth.user.uid);
 }
