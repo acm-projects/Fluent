@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' show UserCredential;
 import 'package:fluent/src/backend/models/core.dart';
 import 'package:fluent/src/backend/models/language.dart';
+import 'package:fluent/src/backend/services/storage.dart';
 import 'package:fluent/src/backend/services/users.dart' as Users;
 import 'package:meta/meta.dart';
 
@@ -55,7 +56,7 @@ class Profile extends User {
     @required this.fluency,
   }) : super(uid);
 
-  /// This user's age
+  /// This user's age.
   int get age {
     var now = DateTime.now();
     var birthDate = this.birthDate.toDate();
@@ -75,7 +76,8 @@ class Profile extends User {
   @override
   Future<Profile> fetchProfile() async => this;
 
-  Future<String> fetchPfpUrl() async => Users.fetchPfpUrl(this.pfpHash);
+  /// Fetches this user's profile picture's URL.
+  Future<String> fetchPfpUrl() async => fetchImageUrl(this.uid);
 }
 
 /// Represents the currently logged in user.
