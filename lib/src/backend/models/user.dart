@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart' show UserCredential;
+import 'package:firebase_auth/firebase_auth.dart' as Auth;
 import 'package:fluent/src/backend/models/core.dart';
 import 'package:fluent/src/backend/models/language.dart';
 import 'package:fluent/src/backend/services/storage.dart';
@@ -82,8 +82,16 @@ class Profile extends User {
 
 /// Represents the currently logged in user.
 class CurrentUser extends User {
-  /// This user's Firebase authentication credential.
-  UserCredential auth;
+  static CurrentUser _instance = CurrentUser._(null);
 
-  CurrentUser(this.auth) : super(auth.user.uid);
+  /// This user's Firebase authentication credential.
+  Auth.User user;
+
+  CurrentUser._(this.user) : super(user.uid);
+
+  static void update(Auth.User user) {
+    _instance.user = user;
+  }
+
+  static CurrentUser get instance => _instance;
 }

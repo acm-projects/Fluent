@@ -5,15 +5,13 @@ import 'package:fluent/src/backend/models/user.dart';
 import 'package:meta/meta.dart';
 
 /// Registers a user using [email] and [password].
-Future<CurrentUser> register({@required String email, @required String password}) async {
-  var auth = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
-  return CurrentUser(auth);
+Future<void> register({@required String email, @required String password}) async {
+  await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
 }
 
 /// Signs in the user using [email] and [password].
-Future<CurrentUser> signIn({@required String email, @required String password}) async {
-  var auth = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-  return CurrentUser(auth);
+Future<void> signIn({@required String email, @required String password}) async {
+  await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
 }
 
 /// Signs out the current user.
