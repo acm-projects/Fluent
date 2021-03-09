@@ -1,4 +1,4 @@
-import 'package:fluent/src/backend/models/language.dart';
+import 'package:fluent/src/backend/models/fluency.dart';
 import 'package:fluent/src/backend/models/user.dart';
 import 'package:fluent/src/backend/services/users.dart' as Users;
 import 'package:flutter/material.dart';
@@ -36,7 +36,7 @@ class _FirestoreTestState extends State<FirestoreTestWidget> {
           return Column(children: [
             Text('${profile.name} (${profile.username}), ${profile.age}'),
             Text(profile.bio),
-            Text('${profile.language.iso639}, ${profile.fluency.displayNumber}'),
+            Text('${profile.language}, ${profile.fluency.displayNumber}'),
             Image.network(pfpUrl),
           ]);
         }

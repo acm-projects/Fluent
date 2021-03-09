@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as Auth;
 import 'package:fluent/src/backend/models/core.dart';
-import 'package:fluent/src/backend/models/language.dart';
+import 'package:fluent/src/backend/models/fluency.dart';
 import 'package:fluent/src/backend/services/storage.dart';
 import 'package:fluent/src/backend/services/users.dart' as Users;
 import 'package:meta/meta.dart';
@@ -36,7 +36,7 @@ class Profile extends User {
   String bio;
 
   /// The language this user wants to practice.
-  Language language;
+  String language;
 
   /// This user's fluency in their chosen language.
   Fluency fluency;
@@ -51,6 +51,28 @@ class Profile extends User {
     @required this.language,
     @required this.fluency,
   }) : super(uid);
+
+  static Future<Profile> create({
+    @required String uid,
+    @required String username,
+    @required String name,
+    @required Timestamp birthDate,
+    @required String gender,
+    @required String bio,
+    @required String language,
+    @required Fluency fluency,
+  }) async {
+    return await Users.createProfile(
+      uid: uid,
+      username: username,
+      name: name,
+      birthDate: birthDate,
+      gender: gender,
+      bio: bio,
+      language: language,
+      fluency: fluency,
+    );
+  }
 
   /// This user's age.
   int get age {
