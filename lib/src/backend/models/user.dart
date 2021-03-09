@@ -26,9 +26,6 @@ class Profile extends User {
   /// This user's real name.
   String name;
 
-  /// The hash of this user's profile picture.
-  String pfpHash;
-
   /// This user's birth date.
   Timestamp birthDate;
 
@@ -48,7 +45,6 @@ class Profile extends User {
     @required String uid,
     @required this.username,
     @required this.name,
-    @required this.pfpHash,
     @required this.birthDate,
     @required this.gender,
     @required this.bio,

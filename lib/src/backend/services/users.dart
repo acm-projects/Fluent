@@ -27,7 +27,6 @@ Future<Profile> fetchProfile(String uid) async {
     uid: uid,
     username: snap.get('username'),
     name: snap.get('name'),
-    pfpHash: snap.get('pfpHash'),
     birthDate: snap.get('birthDate'),
     gender: snap.get('gender'),
     bio: snap.get('bio'),
