@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as Auth;
 import 'package:fluent/src/backend/models/core.dart';
@@ -100,18 +102,14 @@ class Profile extends User {
 
 /// Represents the currently logged in user.
 class CurrentUser extends User {
-  static CurrentUser _instance = CurrentUser._(null);
-
   /// This user's Firebase authentication credential.
   Auth.User user;
 
   CurrentUser._(this.user) : super(user?.uid);
 
-  static void update(Auth.User user) {
-    _instance = CurrentUser._(user);
-  }
-
-  static CurrentUser get instance => _instance;
+  static final Stream<CurrentUser> stream = Auth.FirebaseAuth.instance
+      .userChanges()
+      .map((user) => CurrentUser._(user));
 
   User get ref => User(this.uid);
 }
