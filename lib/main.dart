@@ -25,9 +25,19 @@ class AppInit extends StatelessWidget {
         builder: (context, snapshot) {
           app(Widget home) {
             return MaterialApp(
-              title: 'Flutter Demo',
+              title: 'Fluent Application',
               theme: theme,
-              home: home,
+              //home: home,
+              // '/' is the name of the route to the home page
+                initialRoute: '/',
+                routes: {
+                  // when navigating to the '/' route, build the AppInit() widget
+                  '/': (context) {
+                    return LoginPage();
+                  },
+                  // when navigating to the '/signUp' route, build the SignUpPage() widget
+                  '/signUp': (context) => SignUpPage(),
+                }
             );
           }
 

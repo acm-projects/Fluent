@@ -1,5 +1,6 @@
 import 'package:fluent/src/frontend/widgets/MyTextField.dart';
 import 'package:flutter/material.dart';
+//import 'package:fluent/src/frontend/widgets/SignUpPage.dart';
 
 class LoginPage extends StatefulWidget {
 
@@ -26,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Container(
               decoration: BoxDecoration(
               image: DecorationImage(
-                  image: NetworkImage("https://images.unsplash.com/photo-1531336116302-40e29aad0016?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1051&q=80"),
+                image: AssetImage('lib/src/frontend/assets/water.jpg'),
                   fit: BoxFit.cover,),
         ),
 
@@ -103,11 +104,14 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         ),
                         SizedBox(height: 10.0),
+                        // button for the sign up page
                         Row(
                           children: [
                             Text('New user?'),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/signUp');
+                              },
                               child: Text('Sign up now!'),
                               style: TextButton.styleFrom(
                                 primary: Colors.lightBlue[400],
