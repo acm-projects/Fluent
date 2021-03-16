@@ -45,7 +45,7 @@ class _MyTextFieldState extends State<MyTextField> {
               fontSize: 16.0,
             ),
           ),
-          TextField(
+          TextFormField(
             keyboardType: keyboardType,
             obscureText: isObscured,
             style: TextStyle(
