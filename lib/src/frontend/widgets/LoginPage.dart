@@ -23,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
           }
         },
         child: Scaffold(
+          // singleChildScrollView allows for you to scroll when the keyboard is visible
           body: SingleChildScrollView(
             child: Container(
               decoration: BoxDecoration(
@@ -31,7 +32,6 @@ class _LoginPageState extends State<LoginPage> {
                   fit: BoxFit.cover,),
         ),
 
-            // singleChildScrollView allows for you to scroll when the keyboard is visible
               child: Center(
                 // general padding for the screen
                 child: Padding(

@@ -32,24 +32,30 @@ class _MyTextFieldState extends State<MyTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Text(
-          headerText,
-          style: TextStyle(
-            fontFamily: 'Montserrat',
-            fontSize: 16.0,
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Text(
+            headerText,
+            style: TextStyle(
+              fontFamily: 'Montserrat',
+              fontSize: 16.0,
+            ),
           ),
-        ),
-        TextField(
-          keyboardType: keyboardType,
-          obscureText: isObscured,
-          style: TextStyle(
-            fontFamily: 'Montserrat',
-            fontSize: 14.0,
+          TextField(
+            keyboardType: keyboardType,
+            obscureText: isObscured,
+            style: TextStyle(
+              fontFamily: 'Montserrat',
+              fontSize: 14.0,
+            ),
           ),
-        ),
-      ]
+        ]
+      ),
+      ),
     );
   }
 }
