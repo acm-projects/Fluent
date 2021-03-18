@@ -56,6 +56,7 @@ class _State extends State<SignUpPage> {
                       ),
                     ),
                     TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       keyboardType: TextInputType.emailAddress,
                       style: TextStyle(
                         fontFamily: 'Montserrat',
@@ -93,8 +94,9 @@ class _State extends State<SignUpPage> {
                   ),
                 ),
                 TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   controller: _password,
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.visiblePassword,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 14.0,
@@ -128,8 +130,9 @@ class _State extends State<SignUpPage> {
                       ),
                     ),
                     TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       controller: _confirmPassword,
-                      keyboardType: TextInputType.text,
+                      keyboardType: TextInputType.visiblePassword,
                       style: TextStyle(
                         fontFamily: 'Montserrat',
                         fontSize: 14.0,
@@ -159,6 +162,8 @@ class _State extends State<SignUpPage> {
                             // sending data to database happens here
 
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Creating Your Account')));
+
+                            _formKey.currentState.save();
                           }
                       },
                       child: Text('Create Account',

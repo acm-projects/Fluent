@@ -77,6 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           TextFormField(
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             keyboardType: TextInputType.emailAddress,
                             style: TextStyle(
                               fontFamily: 'Montserrat',
@@ -111,8 +112,9 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           TextFormField(
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             controller: _password,
-                            keyboardType: TextInputType.text,
+                            keyboardType: TextInputType.visiblePassword,
                             obscureText: true,
                             style: TextStyle(
                               fontFamily: 'Montserrat',
@@ -137,6 +139,8 @@ class _LoginPageState extends State<LoginPage> {
                                   // I think validating data with database should happen here
                                   // snackBar probably won't show up in final product
                                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Logging in')));
+
+                                  _formKey.currentState.save();
                                 }
                               },
                             child: Text('Log in',
