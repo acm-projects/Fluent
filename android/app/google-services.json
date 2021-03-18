@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:859142990666:android:6d2db368863eba431dafb3",
+        "mobilesdk_app_id": "1:859142990666:android:f8a789c679354c2c1dafb3",
         "android_client_info": {
           "package_name": "co.acmutd.fluent"
         }
@@ -28,7 +28,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyARcLpGQ1eZ5_p0aRw-kpE_eJK_NgGlQKk"
+          "current_key": "AIzaSyAQMETP82iZxbmXKQcOiTLMaPJFvdt_pqo"
         }
       ],
       "services": {
