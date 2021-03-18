@@ -7,11 +7,11 @@ abstract class AuthService {
 
   Stream<CurrentUser> get currentUser;
 
-  /// Registers a user using [email] and [password].
-  Future<void> register({@required String email, @required String password});
+  /// Registers a user using [email] and [password]. Returns the UID of the created user.
+  Future<String> register({@required String email, @required String password});
 
-  /// Signs in the user using [email] and [password].
-  Future<void> signIn({@required String email, @required String password});
+  /// Signs in the user using [email] and [password]. Returns the UID of the signed in user.
+  Future<String> signIn({@required String email, @required String password});
 
   /// Signs out the current user.
   Future<void> signOut();
