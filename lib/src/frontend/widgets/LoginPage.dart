@@ -9,6 +9,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  // String that will hold a valid email address
+  String _email;
+
+  // objects that will hold the password and confirm password
+  TextEditingController _password = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -37,89 +46,129 @@ class _LoginPageState extends State<LoginPage> {
                 child: Padding(
                 padding: EdgeInsets.fromLTRB(20.0, 130.0, 20.0, 102.0),
                 // note: stuff from Card to the end of padding is new stuff to add the card in
-                child: Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        // Fluent logo
-                       Center(
-                         child: Text(
-                            'Fluent',
-                             style: TextStyle(
-                                 fontFamily: 'Pacifico',
-                               fontSize: 68.0,
-                               letterSpacing: 2.0,
-                             ),
-                            ),
-                       ),
-                        SizedBox(height: 6.0),
-                        //Email textField and heading
-                        //MyTextField(headerText: 'Email', keyboardType: TextInputType.emailAddress, isObscured: false),
-                        Text(
-                          'Email',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        TextField(
-                          keyboardType: TextInputType.emailAddress,
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 14.0,
-                          ),
-                        ),
-                        SizedBox(height: 16.0),
-                        Text(
-                          'Password',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        TextField(
-                          keyboardType: TextInputType.text,
-                          obscureText: true,
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 14.0,
-                          ),
-                        ),
-                        // sign in button
-                        SizedBox(height: 24.0),
-                        ElevatedButton(
-                            onPressed: () {},
-                          child: Text('Log in',
+                child: Form(
+                  key: _formKey,
+                  child: Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          // Fluent logo
+                         Center(
+                           child: Text(
+                              'Fluent',
+                               style: TextStyle(
+                                   fontFamily: 'Pacifico',
+                                 fontSize: 68.0,
+                                 letterSpacing: 2.0,
+                               ),
+                              ),
+                         ),
+                          SizedBox(height: 6.0),
+                          //Email textField and heading
+                          //MyTextField(headerText: 'Email', keyboardType: TextInputType.emailAddress, isObscured: false),
+                          Text(
+                            'Email',
                             style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0,
                             ),
                           ),
-                            style: ElevatedButton.styleFrom(
-                            primary: Colors.lightBlue[400],
-                              minimumSize: Size(330,40),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        ),
-                        ),
-                        SizedBox(height: 10.0),
-                        // button for the sign up page
-                        Row(
-                          children: [
-                            Text('New user?'),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/signUp');
+                          TextFormField(
+                            keyboardType: TextInputType.emailAddress,
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 14.0,
+                            ),
+                              validator: (String text){
+                                if(text.isEmpty)
+                                {
+                                  return "Email is a required field";
+                                }
+
+                                // if the user inputs something that doesn't match the regExp rules for a valid email,
+                                // tell them they must enter something else
+                                if(!RegExp(r"^([a-zA-Z0-9.!#$%&*+/=?^_`~-]+)@([A-Za-z0-9.-]+)\.([a-zA-Z0-9-]+)$").hasMatch(text))
+                                {
+                                  return "Please enter a valid email address";
+                                }
+                                // got through without sending an error message
+                                return null;
                               },
-                              child: Text('Sign up now!'),
-                              style: TextButton.styleFrom(
-                                primary: Colors.lightBlue[400],
+                              // got through validation, save the value
+                              onSaved: (String email)
+                              {
+                                _email = email;
+                              }
+                          ),
+                          SizedBox(height: 16.0),
+                          Text(
+                            'Password',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                            ),
+                          ),
+                          TextFormField(
+                            controller: _password,
+                            keyboardType: TextInputType.text,
+                            obscureText: true,
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 14.0,
+                            ),
+                            validator: (String text){
+                              if(text.isEmpty)
+                              {
+                                return "Password is a required field";
+                              }
+
+                              // got through without sending an error message
+                              return null;
+                            },
+                          ),
+                          // sign in button
+                          SizedBox(height: 24.0),
+                          ElevatedButton(
+                              onPressed: () {
+                                if(_formKey.currentState.validate())
+                                {
+                                  // I think validating data with database should happen here
+                                  // snackBar probably won't show up in final product
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Logging in')));
+                                }
+                              },
+                            child: Text('Log in',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ],
-                        )
-                      ],
+                              style: ElevatedButton.styleFrom(
+                              primary: Colors.lightBlue[400],
+                                minimumSize: Size(330,40),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          ),
+                          ),
+                          SizedBox(height: 10.0),
+                          // button for the sign up page
+                          Row(
+                            children: [
+                              Text('New user?'),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/signUp');
+                                },
+                                child: Text('Sign up now!'),
+                                style: TextButton.styleFrom(
+                                  primary: Colors.lightBlue[400],
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
