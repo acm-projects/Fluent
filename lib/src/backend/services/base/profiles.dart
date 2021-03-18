@@ -60,7 +60,7 @@ class ProfilesService {
       uid: uid,
       username: snap.get('username'),
       name: snap.get('name'),
-      birthDate: snap.get('birthDate'),
+      birthDate: snap.get('birthDate').toDate(),
       gender: snap.get('gender'),
       bio: snap.get('bio'),
       language: snap.get('language'),
