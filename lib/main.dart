@@ -5,22 +5,31 @@ import 'package:fluent/src/frontend/theme/style.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(FutureBuilder<FirebaseServices>(
-    future: FirebaseServices.initialize(),
-    builder: (_, snapshot) {
-      if (snapshot.hasError) {
-        return Center(child: Text('An error occurred.'));
-      }
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MaterialApp(
+    title: 'Fluent',
+    theme: theme,
+    home: FutureBuilder<FirebaseServices>(
+      future: FirebaseServices.initialize(),
+      builder: (_, snapshot) {
+        if (snapshot.hasError) {
+          return Material(child: Center(child: Text('An error occurred.')));
+        }
 
-      if (snapshot.hasData) {
-        return ServicesProvider(
-          services: snapshot.data,
-          child: AppInit(),
-        );
-      }
+        if (snapshot.hasData) {
+          return ServicesProvider(
+            services: Services(
+              storage: snapshot.data.storage,
+              auth: snapshot.data.auth,
+              database: snapshot.data.database,
+            ),
+            child: AppInit(),
+          );
+        }
 
-      return Center(child: Text('Loading'));
-    },
+        return Center(child: CircularProgressIndicator());
+      },
+    ),
   ));
 }
 

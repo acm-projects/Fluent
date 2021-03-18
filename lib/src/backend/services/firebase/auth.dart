@@ -7,16 +7,10 @@ import 'package:meta/meta.dart';
 class FirebaseAuthService implements AuthService {
   final FirebaseAuth _auth;
 
-  final Stream<AuthState> authState;
+  final Stream<CurrentUser> currentUser;
 
   FirebaseAuthService._(this._auth)
-      : authState = _auth.userChanges().map((user) {
-          if (user == null) {
-            return AuthState.signedIn(CurrentUser(user));
-          } else {
-            return AuthState.signedOut;
-          }
-        });
+      : currentUser = _auth.userChanges().map((user) => user == null ? null : CurrentUser(user));
 
   factory FirebaseAuthService.initialize(FirebaseApp app) {
     return FirebaseAuthService._(FirebaseAuth.instanceFor(app: app));
