@@ -1,17 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluent/src/backend/models/fluency.dart';
 import 'package:fluent/src/backend/models/user.dart';
-import 'package:fluent/src/backend/services/base/database.dart';
 import 'package:fluent/src/backend/services/base/storage.dart';
 import 'package:meta/meta.dart';
 
 class ProfilesService {
-  final DatabaseService _database;
+  final FirebaseFirestore _database;
   final StorageService _storage;
 
   ProfilesService._(this._database, this._storage);
 
   factory ProfilesService.initialize(
-    DatabaseService database,
+    FirebaseFirestore database,
     StorageService storage,
   ) {
     return ProfilesService._(database, storage);

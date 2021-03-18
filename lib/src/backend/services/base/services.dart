@@ -1,5 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluent/src/backend/services/base/auth.dart';
-import 'package:fluent/src/backend/services/base/database.dart';
 import 'package:fluent/src/backend/services/base/profiles.dart';
 import 'package:fluent/src/backend/services/base/storage.dart';
 import 'package:flutter/widgets.dart';
@@ -7,7 +7,7 @@ import 'package:flutter/widgets.dart';
 class Services {
   StorageService storage;
   AuthService auth;
-  DatabaseService database;
+  FirebaseFirestore database;
   ProfilesService profiles;
 
   Services({
