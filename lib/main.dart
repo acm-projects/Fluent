@@ -1,7 +1,10 @@
+import 'package:fluent/src/backend/models/user.dart';
+import 'package:fluent/src/backend/services/base/auth.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:fluent/src/backend/services/firebase/services.dart';
 import 'package:fluent/src/frontend/pages.dart';
 import 'package:fluent/src/frontend/theme/style.dart';
+import 'package:fluent/src/frontend/widgets/services_demo.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,23 +14,31 @@ void main() {
     theme: theme,
     home: FutureBuilder<FirebaseServices>(
       future: FirebaseServices.initialize(),
-      builder: (_, snapshot) {
-        if (snapshot.hasError) {
+      builder: (_, firestoreSnapshot) {
+        if (firestoreSnapshot.hasError) {
           return Material(child: Center(child: Text('An error occurred.')));
         }
 
-        if (snapshot.hasData) {
+        if (firestoreSnapshot.hasData) {
           return ServicesProvider(
             services: Services(
-              storage: snapshot.data.storage,
-              auth: snapshot.data.auth,
-              database: snapshot.data.database,
+              storage: firestoreSnapshot.data.storage,
+              auth: firestoreSnapshot.data.auth,
+              database: firestoreSnapshot.data.database,
             ),
-            child: AppInit(),
+            child: StreamBuilder<CurrentUser>(
+              stream: firestoreSnapshot.data.auth.currentUser,
+              builder: (_, currentUserSnapshot) {
+                return AuthState(
+                  currentUser: currentUserSnapshot.data,
+                  child: ServicesDemo(),
+                );
+              },
+            ),
           );
         }
 
-        return Center(child: CircularProgressIndicator());
+        return Material(child: Center(child: CircularProgressIndicator()));
       },
     ),
   ));
