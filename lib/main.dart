@@ -1,5 +1,6 @@
 import 'package:fluent/src/backend/models/user.dart';
 import 'package:fluent/src/backend/services/base/auth.dart';
+import 'package:fluent/src/backend/services/base/chat.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:fluent/src/backend/services/firebase/services.dart';
 import 'package:fluent/src/frontend/pages.dart';
@@ -31,7 +32,10 @@ void main() {
               builder: (_, currentUserSnapshot) {
                 return AuthState(
                   currentUser: currentUserSnapshot.data,
-                  child: ServicesDemo(),
+                  child: ChatServiceProvider(
+                    chatService: ChatService(currentUserSnapshot.data, firestoreSnapshot.data.database),
+                    child: ServicesDemo(),
+                  ),
                 );
               },
             ),
