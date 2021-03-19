@@ -1,9 +1,12 @@
 import 'package:fluent/src/backend/services/firebase.dart' as Firebase;
 import 'package:fluent/src/frontend/pages.dart';
 import 'package:fluent/src/frontend/theme/style.dart';
+import 'package:fluent/src/frontend/widgets/matchpage.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.init();
   runApp(AppInit());
 }
 class InitData {}
@@ -26,7 +29,7 @@ class AppInit extends StatelessWidget {
             return MaterialApp(
               title: 'Flutter Demo',
               theme: theme,
-              home: home,
+              home: MatchingPage(),
             );
           }
 
