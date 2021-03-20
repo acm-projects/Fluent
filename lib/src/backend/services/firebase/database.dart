@@ -1,29 +1,23 @@
-/*import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService{
-
   final String uid;
   DatabaseService({this.uid});
 
   //collection reference
-  final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
+  final CollectionReference userCollection = FirebaseFirestore.instance.collection('profiles');
 
-  Future updateUserData(int age, String bio, String name, String username) async{
+  Future<void> postUserData(String name, DateTime age, String gender, String language, int fluency, String bio) async{
     return await userCollection.doc(uid).set({
-      'age': age,
-      'bio': bio,
+      "UID": uid,
       'name': name,
-      'username': username
-    });
-  }
-
-  void _onPressed() {
-    userCollection.doc("users").get().then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
-        print(result.data());
-      });
+      'age': age,
+      'gender': gender,
+      'language': language,
+      'fluency': fluency,
+      'bio': bio
+    }).then((_){
+      print("success!");
     });
   }
 }
-
- */

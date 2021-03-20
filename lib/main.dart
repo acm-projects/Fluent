@@ -1,6 +1,7 @@
 import 'package:fluent/src/backend/services/firebase.dart' as Firebase;
 import 'package:fluent/src/frontend/pages.dart';
 import 'package:fluent/src/frontend/theme/style.dart';
+import 'package:fluent/src/frontend/widgets/editProfile.dart';
 import 'package:fluent/src/frontend/widgets/matchpage.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +30,7 @@ class AppInit extends StatelessWidget {
             return MaterialApp(
               title: 'Flutter Demo',
               theme: theme,
-              home: MatchingPage(),
+              home: EditProfilePage(),
             );
           }
 
