@@ -70,4 +70,11 @@ class CurrentUser extends User {
   CurrentUser(this.user) : super(user?.uid);
 
   User get ref => User(this.uid);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || other is CurrentUser && runtimeType == other.runtimeType && user == other.user;
+
+  @override
+  int get hashCode => user.hashCode;
 }

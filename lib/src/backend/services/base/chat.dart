@@ -6,16 +6,23 @@ import 'package:flutter/cupertino.dart';
 class ChatService {
   CurrentUser _currentUser;
 
-  CollectionReference chatsRef;
+  CollectionReference _chatsRef;
 
-  CollectionReference messagesRef(String chatUid) => chatsRef.doc(chatUid).collection('messages');
+  CollectionReference messagesRef(String chatUid) => _chatsRef.doc(chatUid).collection('messages');
 
-  ChatService(this._currentUser, FirebaseFirestore database) : chatsRef = database.collection('chats');
+  ChatService(this._currentUser, FirebaseFirestore database) : _chatsRef = database.collection('chats');
+
+  static Message _makeMessage(DocumentSnapshot snap) => Message(
+        uid: snap.id,
+        author: User(snap.get('authorUid')),
+        content: snap.get('content'),
+        timestamp: snap.get('timestamp').toDate(),
+      );
 
   Future<ChatSnap> createChatWith(User other) async {
     var members = [_currentUser, other];
 
-    var chatRef = chatsRef.doc();
+    var chatRef = _chatsRef.doc();
 
     await chatRef.set({
       'memberUids': members.map((user) => user.uid).toList(),
@@ -25,7 +32,7 @@ class ChatService {
   }
 
   Future<ChatSnap> fetchChat(String uid) async {
-    var snap = await chatsRef.doc(uid).get();
+    var snap = await _chatsRef.doc(uid).get();
     return ChatSnap(uid, [for (var uid in snap.get('memberUids')) User(uid)]);
   }
 
@@ -38,14 +45,7 @@ class ChatService {
 
     var querySnap = await query.get();
 
-    return querySnap.docs
-        .map((snap) => Message(
-              uid: snap.id,
-              author: User(snap.get('authorUid')),
-              content: snap.get('content'),
-              timestamp: snap.get('timestamp').toDate(),
-            ))
-        .toList(growable: false);
+    return querySnap.docs.map(_makeMessage).toList(growable: false);
   }
 
   Future<void> sendMessage(String chatUid, String content) {
@@ -55,6 +55,18 @@ class ChatService {
       'author': _currentUser.uid,
     });
   }
+
+  Stream<Iterable<Message>> messages(String chatUid) {
+    return messagesRef(chatUid).orderBy('timestamp').snapshots().map((snap) => snap.docs.map(_makeMessage));
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ChatService && runtimeType == other.runtimeType && _currentUser == other._currentUser;
+
+  @override
+  int get hashCode => _currentUser.hashCode;
 }
 
 class ChatServiceProvider extends InheritedWidget {
@@ -68,6 +80,12 @@ class ChatServiceProvider extends InheritedWidget {
 
   @override
   bool updateShouldNotify(ChatServiceProvider old) {
-    return chatService._currentUser.uid != old.chatService._currentUser.uid;
+    return chatService != old.chatService;
+  }
+
+  static ChatServiceProvider of(BuildContext context) {
+    final ChatServiceProvider result = context.dependOnInheritedWidgetOfExactType<ChatServiceProvider>();
+    assert(result != null, 'No ChatServiceProvider found in context');
+    return result;
   }
 }
