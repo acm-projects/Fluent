@@ -28,7 +28,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   String language = "";
   static int fluency;
-//  String bio = "";
+  String bio = "";
+
+  // so the language selection buttons will change colors on pressed
+  bool pressAttention1 = false;
+  bool pressAttention2 = false;
+  bool pressAttention3 = false;
 
   DateTime selectedDate = DateTime.now();
 
@@ -203,7 +208,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
               TextFormField(
                 decoration: const InputDecoration(
-                  hintText: 'Enter you name',
+                  hintText: 'Enter your name',
                   labelText: 'Name',
                 ),
                 onChanged: (val) {
@@ -217,15 +222,26 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 onPressed: () => _selectDate(context),
                 child: Text('Select date'),
               ),
+              SizedBox(
+                height: 35,
+              ),
 
-              Container(
-                  child: Wrap(
+              Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children:<Widget>[
+                    Text(
+                    'Gender',
+                    style: TextStyle(color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      fontSize: 18.0,
+                    ),
+                  ), Wrap(
                     spacing: 5.0,
                     runSpacing: 5.0,
                     children: <Widget>[
                       choiceChipWidget(chipList,gender),
                     ],
-                  )),
+                  )]),
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 0),
@@ -234,14 +250,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     SizedBox(height: 20.0),
                     ExpansionTile(
                       title: Text(
-                        "langauge Selection",
+                        "Language Selection",
                         style: TextStyle(
                             fontSize: 18.0, fontWeight: FontWeight.bold),
                       ),
                       children: <Widget>[
                         RaisedButton(
                           onPressed: () {
-                            setState(() => language = "french");
+                            setState(() {
+                              language = "french";
+                              pressAttention1 = !pressAttention1;
+                            });
                           },
 
                           padding: const EdgeInsets.symmetric(horizontal:100, vertical: 4),
@@ -251,13 +270,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 fontSize: 18.0, fontWeight: FontWeight.bold),
 
                           ),
-                          color: Colors.lightBlueAccent,
+                          color: pressAttention1 ? Colors.lightBlueAccent[700] : Colors.lightBlueAccent,
                           shape: RoundedRectangleBorder( borderRadius: BorderRadius.all(Radius.circular(30))),
 
                         ),
                         RaisedButton(
                           onPressed: () {
-                            setState(() => language = "french");
+                            setState(() {
+                              language = "french";
+                              pressAttention2 = !pressAttention2;
+                            });
                           },
 
                           padding: const EdgeInsets.symmetric(horizontal:100, vertical: 4),
@@ -267,13 +289,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 fontSize: 18.0, fontWeight: FontWeight.bold),
 
                           ),
-                          color: Colors.lightBlueAccent,
+                            color: pressAttention2 ? Colors.lightBlueAccent[700] : Colors.lightBlueAccent,
                           shape: RoundedRectangleBorder( borderRadius: BorderRadius.all(Radius.circular(30))),
 
                         ),
                         RaisedButton(
                           onPressed: () {
-                            setState(() => language = "french");
+                            setState(() {
+                              language = "french";
+                              pressAttention3 = !pressAttention3;
+                            });
                           },
 
                           padding: const EdgeInsets.symmetric(horizontal:100, vertical: 4),
@@ -283,7 +308,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 fontSize: 18.0, fontWeight: FontWeight.bold),
 
                           ),
-                          color: Colors.lightBlueAccent,
+                            color: pressAttention3 ? Colors.lightBlueAccent[700] : Colors.lightBlueAccent,
                           shape: RoundedRectangleBorder( borderRadius: BorderRadius.all(Radius.circular(30))),
 
                         ),
@@ -293,14 +318,37 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ),
 
-              Container(
-                  child: Wrap(
-                    spacing: 5.0,
-                    runSpacing: 5.0,
-                    children: <Widget>[
-                      choiceChipWidgett(fluencyRating, fluency),
-                    ],
-                  )),
+              SizedBox(height: 20.0),
+              Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children:<Widget>[
+                    Text(
+                      'Fluency',
+                      style: TextStyle(color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                      ),
+                    ), Wrap(
+                      spacing: 5.0,
+                      runSpacing: 5.0,
+                      children: <Widget>[
+                        choiceChipWidgett(fluencyRating, fluency),
+                      ],
+                    )]),
+
+              // bio
+              new TextField(
+                decoration: InputDecoration(
+                    hintText: 'Bio',
+                    border: OutlineInputBorder()
+                ),
+                maxLines: 10,
+                onChanged: (val) {
+                  setState(() => bio = val);
+                },
+              ),
+
+              SizedBox(height: 10.0),
 
               Container(
                 //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
