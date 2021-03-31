@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 
 /// Represents a chat.
 class Chat implements HasUid {
+  /// This chat's unique ID.
   String uid;
 
   Chat(this.uid);
@@ -15,7 +16,10 @@ class ChatSnap extends Chat {
   /// This chat's members.
   List<User> members;
 
-  ChatSnap(String uid, this.members) : super(uid);
+  /// The most recent message in this chat's content.
+  String mostRecentMessage;
+
+  ChatSnap({@required String uid, @required this.members, @required this.mostRecentMessage}) : super(uid);
 }
 
 /// Represents a message.

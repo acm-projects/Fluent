@@ -8,7 +8,8 @@ class ChatService {
 
   CollectionReference _chatsRef;
 
-  CollectionReference messagesRef(String chatUid) => _chatsRef.doc(chatUid).collection('messages');
+  DocumentReference chatRef([String chatUid]) => _chatsRef.doc(chatUid);
+  CollectionReference messagesRef({String uid, DocumentReference ref}) => (ref ?? chatRef(uid)).collection('messages');
 
   ChatService(this._currentUser, FirebaseFirestore database) : _chatsRef = database.collection('chats');
 
@@ -21,23 +22,30 @@ class ChatService {
 
   Future<ChatSnap> createChatWith(User other) async {
     var members = [_currentUser, other];
+    var ref = chatRef();
 
-    var chatRef = _chatsRef.doc();
-
-    await chatRef.set({
+    await ref.set({
       'memberUids': members.map((user) => user.uid).toList(),
     });
 
-    return ChatSnap(chatRef.id, members);
+    return ChatSnap(
+      uid: ref.id,
+      members: members,
+      mostRecentMessage: "",
+    );
   }
 
   Future<ChatSnap> fetchChat(String uid) async {
-    var snap = await _chatsRef.doc(uid).get();
-    return ChatSnap(uid, [for (var uid in snap.get('memberUids')) User(uid)]);
+    var snap = await chatRef(uid).get();
+    return ChatSnap(
+      uid: uid,
+      members: [for (var uid in snap.get('memberUids')) User(uid)],
+      mostRecentMessage: snap.get('mostRecentMessage'),
+    );
   }
 
   Future<List<Message>> fetchMessages(String chatUid, int count, [Message after]) async {
-    var query = messagesRef(chatUid).orderBy('timestamp').limit(count);
+    var query = messagesRef(uid: chatUid).orderBy('timestamp').limit(count);
 
     if (after != null) {
       query = query.startAfter([after.timestamp]);
@@ -49,15 +57,21 @@ class ChatService {
   }
 
   Future<void> sendMessage(String chatUid, String content) {
-    return messagesRef(chatUid).doc().set({
-      'timestamp': FieldValue.serverTimestamp(),
-      'content': content,
-      'author': _currentUser.uid,
-    });
+    var ref = chatRef(chatUid);
+    return Future.wait([
+      ref.update({
+        'mostRecentMessage': content,
+      }),
+      messagesRef(ref: ref).doc().set({
+        'timestamp': FieldValue.serverTimestamp(),
+        'content': content,
+        'author': _currentUser.uid,
+      }),
+    ]);
   }
 
   Stream<Iterable<Message>> messages(String chatUid) {
-    return messagesRef(chatUid).orderBy('timestamp').snapshots().map((snap) => snap.docs.map(_makeMessage));
+    return messagesRef(uid: chatUid).orderBy('timestamp').snapshots().map((snap) => snap.docs.map(_makeMessage));
   }
 
   @override
