@@ -1,5 +1,6 @@
 import 'package:fluent/src/backend/models/user.dart';
 import 'package:fluent/src/backend/services/base/auth.dart';
+import 'package:fluent/src/backend/services/base/chat.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,10 @@ class ServicesProviderInit {
               builder: (context, currentUserSnapshot) {
                 return AuthState(
                   currentUser: currentUserSnapshot.data,
-                  child: builder(context),
+                  child: ChatServiceProvider(
+                    chatService: ChatService(currentUserSnapshot.data, firestoreSnapshot.data.database),
+                    child: builder(context),
+                  ),
                 );
               },
             ),
