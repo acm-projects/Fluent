@@ -1,6 +1,7 @@
 import 'package:fluent/src/backend/services/services_provider.dart';
 import 'package:fluent/src/frontend/pages.dart';
 import 'package:fluent/src/frontend/theme/style.dart';
+import 'package:fluent/src/frontend/widgets/editProfile.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -26,6 +27,8 @@ class AppInit extends StatelessWidget {
               return page(LoginPage());
             case '/signUp':
               return page(SignUpPage());
+            case '/editProfile':
+              return page(EditProfilePage());
             default:
               throw 'Undefined route ${settings.name}';
           }
