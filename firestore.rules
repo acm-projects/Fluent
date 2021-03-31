@@ -1,9 +1,43 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if
-          request.time < timestamp.date(2021, 3, 22);
+    match /{documents=**} {
+      allow read, write: if false;
+    }
+
+    function isRequester(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    match /profiles/{profileUid} {
+      allow read;
+      allow create: if
+        'birthDate' in request.resource.data &&
+        'bio' in request.resource.data &&
+        'gender' in request.resource.data &&
+        'name' in request.resource.data &&
+        'language' in request.resource.data &&
+        'fluency' in request.resource.data &&
+        'username' in request.resource.data;
+      allow update, delete: if isRequester(profileUid);
+    }
+
+    match /chats/{chatUid} {
+      function inChat() {
+        return request.auth != null && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatUid)).data.members;
+      }
+
+      allow create;
+      allow read: if inChat();
+
+      match /messages/{messageUid} {
+        allow read, create: if inChat();
+        allow update, delete: if request.auth != null && resource.data.author == request.auth.uid;
+      }
+
+      match /readReceipts/{userUid} {
+        allow read, write: if isRequester(userUid);
+      }
     }
   }
 }
