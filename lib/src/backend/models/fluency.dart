@@ -16,10 +16,11 @@ enum Fluency {
   Native,
 }
 
-extension FluencyOps on Fluency {
-  /// Retrieves the fluency number associated with this fluency.
-  int get id => this.index + 1;
+Fluency parseFluency(int displayNumber) {
+  return Fluency.values[displayNumber - 1];
+}
 
-  /// Retrieves the fluency associated with the given fluency number.
-  static Fluency byId(int id) => Fluency.values[id - 1];
+extension FluencyOps on Fluency {
+  /// Retrieves the display number associated with this fluency.
+  int get displayNumber => this.index + 1;
 }
