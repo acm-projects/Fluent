@@ -15,4 +15,9 @@ class FirebaseStorageService implements StorageService {
   Future<String> fetchImageUrl(String name) async {
     return _storage.ref('/images/$name.png').getDownloadURL();
   }
+
+  @override
+  Reference ref(String path) {
+    return _storage.ref(path);
+  }
 }
