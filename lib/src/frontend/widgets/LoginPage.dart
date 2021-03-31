@@ -1,3 +1,4 @@
+import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:fluent/src/frontend/widgets/MyTextField.dart';
 import 'package:flutter/material.dart';
 //import 'package:fluent/src/frontend/widgets/SignUpPage.dart';
@@ -133,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                           // sign in button
                           SizedBox(height: 24.0),
                           ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 if(_formKey.currentState.validate())
                                 {
                                   // I think validating data with database should happen here
@@ -141,6 +142,13 @@ class _LoginPageState extends State<LoginPage> {
                                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Logging in')));
 
                                   _formKey.currentState.save();
+
+                                  try {
+                                    final auth = ServicesProvider.of(context).services.auth;
+                                    await auth.signIn(email: _email, password: _password.text);
+                                  } catch (e) {
+                                    print(e.toString());
+                                  }
                                 }
                               },
                             child: Text('Log in',

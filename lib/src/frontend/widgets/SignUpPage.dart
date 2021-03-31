@@ -1,3 +1,4 @@
+import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:flutter/material.dart';
 import 'package:fluent/src/frontend/widgets/SignUpHeader.dart';
 import 'package:fluent/src/frontend/widgets/MyTextField.dart';
@@ -155,7 +156,7 @@ class _State extends State<SignUpPage> {
                     SizedBox(height: 24.0),
                     // Confirm button
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         // code to determine whether the user inputted values successfully
                         if(_formKey.currentState.validate())
                           {
@@ -164,6 +165,13 @@ class _State extends State<SignUpPage> {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Creating Your Account')));
 
                             _formKey.currentState.save();
+
+                            try {
+                              final auth = ServicesProvider.of(context).services.auth;
+                              await auth.register(email: _email, password: _password.text);
+                            } catch (e) {
+                              print(e.toString());
+                            }
                           }
                       },
                       child: Text('Create Account',
