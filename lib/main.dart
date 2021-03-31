@@ -16,7 +16,7 @@ void main() {
 class AppInit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ServicesProviderInit.create((context) {
+    return createServicesProvider((context) {
       return Navigator(
         initialRoute: '/',
         onGenerateRoute: (settings) {

@@ -6,39 +6,37 @@ import 'package:flutter/material.dart';
 
 import 'firebase/services.dart';
 
-class ServicesProviderInit {
-  static Widget create(WidgetBuilder builder) {
-    return FutureBuilder<FirebaseServices>(
-      future: FirebaseServices.initialize(),
-      builder: (_, firestoreSnapshot) {
-        if (firestoreSnapshot.hasError) {
-          return Material(child: Center(child: Text('An error occurred.')));
-        }
+Widget createServicesProvider(WidgetBuilder builder) {
+  return FutureBuilder<FirebaseServices>(
+    future: FirebaseServices.initialize(),
+    builder: (_, firestoreSnapshot) {
+      if (firestoreSnapshot.hasError) {
+        return Material(child: Center(child: Text('An error occurred.')));
+      }
 
-        if (firestoreSnapshot.hasData) {
-          return ServicesProvider(
-            services: Services(
-              storage: firestoreSnapshot.data.storage,
-              auth: firestoreSnapshot.data.auth,
-              database: firestoreSnapshot.data.database,
-            ),
-            child: StreamBuilder<CurrentUser>(
-              stream: firestoreSnapshot.data.auth.currentUser,
-              builder: (context, currentUserSnapshot) {
-                return AuthState(
-                  currentUser: currentUserSnapshot.data,
-                  child: ChatServiceProvider(
-                    chatService: ChatService(currentUserSnapshot.data, firestoreSnapshot.data.database),
-                    child: builder(context),
-                  ),
-                );
-              },
-            ),
-          );
-        }
+      if (firestoreSnapshot.hasData) {
+        return ServicesProvider(
+          services: Services(
+            storage: firestoreSnapshot.data.storage,
+            auth: firestoreSnapshot.data.auth,
+            database: firestoreSnapshot.data.database,
+          ),
+          child: StreamBuilder<CurrentUser>(
+            stream: firestoreSnapshot.data.auth.currentUser,
+            builder: (context, currentUserSnapshot) {
+              return AuthState(
+                currentUser: currentUserSnapshot.data,
+                child: ChatServiceProvider(
+                  chatService: ChatService(currentUserSnapshot.data, firestoreSnapshot.data.database),
+                  child: builder(context),
+                ),
+              );
+            },
+          ),
+        );
+      }
 
-        return Material(child: Center(child: CircularProgressIndicator()));
-      },
-    );
-  }
+      return Material(child: Center(child: CircularProgressIndicator()));
+    },
+  );
 }
