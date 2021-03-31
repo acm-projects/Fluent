@@ -1,44 +1,56 @@
-import 'package:fluent/src/backend/services/firebase.dart' as Firebase;
+import 'package:fluent/src/backend/models/user.dart';
+import 'package:fluent/src/backend/services/base/auth.dart';
+import 'package:fluent/src/backend/services/base/services.dart';
+import 'package:fluent/src/backend/services/firebase/services.dart';
 import 'package:fluent/src/frontend/pages.dart';
 import 'package:fluent/src/frontend/theme/style.dart';
+import 'package:fluent/src/frontend/widgets/services_demo.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(AppInit());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MaterialApp(
+    title: 'Fluent',
+    theme: theme,
+    home: FutureBuilder<FirebaseServices>(
+      future: FirebaseServices.initialize(),
+      builder: (_, firestoreSnapshot) {
+        if (firestoreSnapshot.hasError) {
+          return Material(child: Center(child: Text('An error occurred.')));
+        }
+
+        if (firestoreSnapshot.hasData) {
+          return ServicesProvider(
+            services: Services(
+              storage: firestoreSnapshot.data.storage,
+              auth: firestoreSnapshot.data.auth,
+              database: firestoreSnapshot.data.database,
+            ),
+            child: StreamBuilder<CurrentUser>(
+              stream: firestoreSnapshot.data.auth.currentUser,
+              builder: (_, currentUserSnapshot) {
+                return AuthState(
+                  currentUser: currentUserSnapshot.data,
+                  child: ServicesDemo(),
+                );
+              },
+            ),
+          );
+        }
+
+        return Material(child: Center(child: CircularProgressIndicator()));
+      },
+    ),
+  ));
 }
-class InitData {}
 
 class AppInit extends StatelessWidget {
-  Future<InitData> init() async {
-    await Future.wait(<Future>[
-      Firebase.init(),
-    ]);
-
-    return InitData();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<InitData>(
-        future: init(),
-        builder: (context, snapshot) {
-          app(Widget home) {
-            return MaterialApp(
-              title: 'Flutter Demo',
-              theme: theme,
-              home: home,
-            );
-          }
-
-          if (snapshot.hasError) {
-            return app(ErrorPage(snapshot.error.toString()));
-          }
-
-          if (snapshot.connectionState == ConnectionState.done) {
-            return app(MyHomePage(title: 'Flutter Demo Home Page'));
-          }
-
-          return app(LoadingPage()); // todo: Implement loading screen
-        });
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: theme,
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
+    );
   }
 }
