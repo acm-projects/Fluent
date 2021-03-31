@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluent/src/backend/models/core.dart';
 import 'package:fluent/src/backend/models/user.dart';
 import 'package:meta/meta.dart';
@@ -28,7 +27,7 @@ class Message implements HasUid {
   String uid;
 
   /// Timestamp of when the server received this message.
-  Timestamp timestamp;
+  DateTime timestamp;
 
   /// This message's content.
   String content;
