@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:fluent/src/backend/services/firebase/database.dart';
 import 'dart:io';
+
+import 'package:fluent/src/backend/models/fluency.dart';
+import 'package:fluent/src/backend/services/base/services.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart';
 
 
 class EditProfilePage extends StatefulWidget {
@@ -60,18 +60,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future uploadImageToFirebase(BuildContext context, name) async {
-    Reference firebaseStorageRef = FirebaseStorage.instance.ref().child('uploads/$name');
-    firebaseStorageRef.putFile(_image);
+    final storage = ServicesProvider.of(context).services.storage;
+    return storage.ref('uploads/$name').putFile(_image);
   }
 
   var profilePic;
 
   Future displayImageFromFirebase(BuildContext context, name) async{
-    FirebaseStorage.instance.ref().child('uploads/$name')
-        .getDownloadURL()
-        .then((value) => {
-      profilePic = value
-    });
+    final storage = ServicesProvider.of(context).services.storage;
+    profilePic = await storage.fetchImageUrl('uploads/$name');
   }
 
   void _showPicker(context) {
@@ -356,7 +353,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   child: RaisedButton(
                     onPressed: () async {
                       await uploadImageToFirebase(context, "Gary2");
-                      await DatabaseService(uid: "Gary2").postUserData(name, selectedDate, gender, language, fluency, gender);
+                      ServicesProvider.of(context).services.profiles.createProfile(
+                        uid: "Gary2",
+                        username: "gary2",
+                        name: name,
+                        birthDate: selectedDate,
+                        gender: gender,
+                        bio: bio,
+                        language: language,
+                        fluency: parseFluency(fluency),
+                      );
                     },
                     color: Colors.lightBlueAccent,
                     padding: EdgeInsets.symmetric(horizontal: 50),
