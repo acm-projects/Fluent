@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 
-class EditProfilePage extends StatefulWidget {
+class CreateProfilePage extends StatefulWidget {
   @override
-  _EditProfilePageState createState() => _EditProfilePageState();
+  _CreateProfilePageState createState() => _CreateProfilePageState();
 }
 
-class _EditProfilePageState extends State<EditProfilePage> {
+class _CreateProfilePageState extends State<CreateProfilePage> {
   String name = "";
   String age = "";
 
@@ -139,7 +139,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           child: ListView(
             children: [
               Text(
-                "Edit Profile",
+                "Create Profile",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               ),
               SizedBox(
@@ -227,19 +227,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children:<Widget>[
                     Text(
-                    'Gender',
-                    style: TextStyle(color: Colors.black,
+                      'Gender',
+                      style: TextStyle(color: Colors.black,
                         fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                    ),
-                  ), Wrap(
-                    //spacing: 5.0,
-                    //runSpacing: 5.0,
+                        fontSize: 18.0,
+                      ),
+                    ), Wrap(
+                      //spacing: 5.0,
+                      //runSpacing: 5.0,
                       alignment: WrapAlignment.center,
-                    children: <Widget>[
-                      choiceChipWidget(chipList,gender),
-                    ],
-                  )]),
+                      children: <Widget>[
+                        choiceChipWidget(chipList,gender),
+                      ],
+                    )]),
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 0),
@@ -268,7 +268,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 fontSize: 18.0, fontWeight: FontWeight.bold),
 
                           ),
-                          color: pressAttention3 ? Colors.lightBlueAccent : Colors.grey,
+                          color: pressAttention1 ? Colors.lightBlueAccent : Colors.grey[10],
                           shape: RoundedRectangleBorder( borderRadius: BorderRadius.all(Radius.circular(30))),
 
                         ),
@@ -287,7 +287,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 fontSize: 18.0, fontWeight: FontWeight.bold),
 
                           ),
-                          color: pressAttention3 ? Colors.lightBlueAccent : Colors.grey,
+                          color: pressAttention2 ? Colors.lightBlueAccent : Colors.grey[10],
                           shape: RoundedRectangleBorder( borderRadius: BorderRadius.all(Radius.circular(30))),
 
                         ),
@@ -306,7 +306,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 fontSize: 18.0, fontWeight: FontWeight.bold),
 
                           ),
-                          color: pressAttention3 ? Colors.lightBlueAccent : Colors.grey,
+                          color: pressAttention3 ? Colors.lightBlueAccent : Colors.grey[10],
                           shape: RoundedRectangleBorder( borderRadius: BorderRadius.all(Radius.circular(30))),
 
                         ),
@@ -365,6 +365,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         language: language,
                         fluency: parseFluency(fluency),
                       );
+                      Navigator.pushNamed(context, '/match');
                     },
                     color: Colors.lightBlueAccent,
                     padding: EdgeInsets.symmetric(horizontal: 50),
@@ -417,7 +418,7 @@ class _choiceChipWidgetState extends State<choiceChipWidget> {
           onSelected: (selected) {
             setState((){
               select = item;
-              _EditProfilePageState.gender = item;
+              _CreateProfilePageState.gender = item;
             });
           },
         ),
@@ -469,7 +470,7 @@ class _choiceChipWidgetStatee extends State<choiceChipWidgett> {
             fluency = item;
             setState(() {
               select = item;
-              _EditProfilePageState.fluency = int.parse(item);
+              _CreateProfilePageState.fluency = int.parse(item);
             });
           },
         ),

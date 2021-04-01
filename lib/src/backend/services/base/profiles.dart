@@ -31,6 +31,7 @@ class ProfilesService {
     var ref = _database.collection('profiles').doc(uid);
 
     await ref.set({
+      'UID': uid,
       'username': username,
       'name': name,
       'birthDate': birthDate,

@@ -1,6 +1,8 @@
 import 'package:fluent/src/backend/models/fluency.dart';
 
 class MatchProfile{
+  String uid;
+
   String bio;
 
   String username;
@@ -16,6 +18,7 @@ class MatchProfile{
   int fluencyDifference;
 
   MatchProfile({
+    this.uid,
     this.username,
     this.bio,
     this.name,

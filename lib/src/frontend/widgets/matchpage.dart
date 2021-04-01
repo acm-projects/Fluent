@@ -1,44 +1,46 @@
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-String _testUser = "test1";
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MatchingPage extends StatefulWidget{
   static Widget create(BuildContext context) {
     final matching = ServicesProvider.of(context).services.matching;
     return FutureBuilder(
-      future: matching.getUsers(_testUser),
+      future: matching.getUsers(FirebaseAuth.instance.currentUser.uid),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
+          print(snapshot.error.toString());
           return Center(child: Text(snapshot.error.toString()));
         }
         if (snapshot.hasData) {
-          return MatchingPage(snapshot.data[0].name, snapshot.data[0].language, snapshot.data[0].fluency);
+          return MatchingPage(snapshot.data[0].uid, snapshot.data[0].name, snapshot.data[0].language, snapshot.data[0].fluency);
         }
         return Center(child: CircularProgressIndicator());
       },
     );
   }
 
-  final String potentialName;
-  final String potentialLanguage;
-  final int potentialFluency;
+  String potentialUID;
+  String potentialName;
+  String potentialLanguage;
+  int potentialFluency;
 
-  MatchingPage(this.potentialName, this.potentialLanguage, this.potentialFluency);
+  MatchingPage(this.potentialUID, this.potentialName, this.potentialLanguage, this.potentialFluency);
 
   @override
-  _MatchingPage createState() => _MatchingPage(potentialName, potentialLanguage, potentialFluency);
+  _MatchingPage createState() => _MatchingPage(potentialUID, potentialName, potentialLanguage, potentialFluency);
 }
 
 class _MatchingPage extends State<MatchingPage>{
+  String potentialUID;
   String potentialName;
   String potentialLanguage;
   int potentialFluency;
   var user;
   String search;
 
-  _MatchingPage(this.potentialName, this.potentialLanguage, this.potentialFluency);
+  _MatchingPage(this.potentialUID, this.potentialName, this.potentialLanguage, this.potentialFluency);
 
   Widget build(BuildContext context) {
     final matching = ServicesProvider.of(context).services.matching;
@@ -60,8 +62,8 @@ class _MatchingPage extends State<MatchingPage>{
               ElevatedButton(
                   onPressed: () async {
                     user = await matching.searchUser(search);
-                    //print(user[0].name);
                     setState(() {
+                      potentialUID = user[0].uid;
                       potentialName = user[0].name;
                       potentialFluency = user[0].fluency;
                       potentialLanguage = user[0].language;
@@ -81,7 +83,7 @@ class _MatchingPage extends State<MatchingPage>{
                 padding: const EdgeInsets.only(top: 25),
                 child: Center(
                   child: Text(
-                      "$potentialName $potentialLanguage $potentialFluency",
+                      "$potentialUID $potentialName $potentialLanguage $potentialFluency",
                       textScaleFactor: 1.8, style:
                   TextStyle(color: Colors.blue)),
                 ),
@@ -94,14 +96,13 @@ class _MatchingPage extends State<MatchingPage>{
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
-                    user =
-                    await matching.chooseUser(_testUser, user[0].name);
+                    user = await matching.chooseUser(FirebaseAuth.instance.currentUser.uid, potentialUID);
                     setState(() {
+                      potentialUID = user[0].uid;
                       potentialName = user[0].name;
                       potentialFluency = user[0].fluency;
                       potentialLanguage = user[0].language;
                     });
-                    await matching.getMatches(_testUser);
                   },
                 ),
               ),
@@ -111,12 +112,13 @@ class _MatchingPage extends State<MatchingPage>{
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () async {
-                  user = await matching.skipUser(_testUser, user[0].name);
+                  user = await matching.skipUser(FirebaseAuth.instance.currentUser.uid, user[0].uid);
                   setState(() {
                     potentialName = user[0].name;
                     potentialFluency = user[0].fluency;
                     potentialLanguage = user[0].language;
                   });
+                  //await matching.getMatches(FirebaseAuth.instance.currentUser.uid);
                 },
               ),
             ]

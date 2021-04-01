@@ -1,6 +1,7 @@
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:flutter/material.dart';
 import 'package:fluent/src/frontend/widgets/SignUpHeader.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluent/src/frontend/widgets/MyTextField.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -12,7 +13,7 @@ class _State extends State<SignUpPage> {
 
   // String that will hold a valid email address
   String _email;
-
+  bool error = true;
   // objects that will hold the password and confirm password
   TextEditingController _password = TextEditingController();
   TextEditingController _confirmPassword = TextEditingController();
@@ -169,8 +170,13 @@ class _State extends State<SignUpPage> {
                             try {
                               final auth = ServicesProvider.of(context).services.auth;
                               await auth.register(email: _email, password: _password.text);
+                              error = false;
                             } catch (e) {
+                              error = true;
                               print(e.toString());
+                            }
+                            if(FirebaseAuth.instance.currentUser.uid != null && !error) {
+                              Navigator.pushNamed(context, '/createProfile');
                             }
                           }
                       },

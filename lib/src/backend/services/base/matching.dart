@@ -50,8 +50,8 @@ class MatchingService {
         .get()
         .then((user){
           currentUser.name = user['name'];
-      currentUser.language = user['language'];
-      currentUser.fluency = user['fluency'];
+          currentUser.language = user['language'];
+          currentUser.fluency = user['fluency'];
     });
     return currentUser;
   }
@@ -118,6 +118,7 @@ class MatchingService {
     List<String> notChosenList = await getNotChosenList(uid);
     List<String> matchesList = await getMatchesList(uid);
     MatchProfile currentUser = await getUserData(uid);
+    potentialMatches.clear();
 
     await collection
         .where('language', isEqualTo: currentUser.language)
@@ -129,6 +130,7 @@ class MatchingService {
             && !matchesList.contains(user.id)
             && user.id != uid
         ){potentialMatches.add(MatchProfile(
+          uid: user['UID'],
           name: user['name'],
           //bio: user['bio'],
           //age: user['birthData'],
@@ -140,7 +142,10 @@ class MatchingService {
       }
     });
     potentialMatches.sort((a,b) => a.fluencyDifference - b.fluencyDifference);
-
+    for(int i = 0; i < potentialMatches.length; i++){
+      print(i.toString() + potentialMatches[i].uid);
+    }
+    print(" ");
     return potentialMatches;
   }
 
@@ -150,6 +155,7 @@ class MatchingService {
         .then((users){
       for(var user in users.docs){
         potentialMatches.insert(0, MatchProfile(
+          uid: user['UID'],
           name: user['name'],
           bio: user['bio'],
           age: user['birthData'],
