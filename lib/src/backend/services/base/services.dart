@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluent/src/backend/services/base/auth.dart';
+import 'package:fluent/src/backend/services/base/matching.dart';
 import 'package:fluent/src/backend/services/base/profiles.dart';
 import 'package:fluent/src/backend/services/base/storage.dart';
 import 'package:flutter/widgets.dart';
@@ -9,13 +10,16 @@ class Services {
   AuthService auth;
   FirebaseFirestore database;
   ProfilesService profiles;
+  MatchingService matching;
 
   Services({
     @required this.storage,
     @required this.auth,
     @required this.database,
     ProfilesService profiles,
-  }) : this.profiles = profiles ?? ProfilesService.initialize(database, storage);
+    MatchingService matching,
+  })  : this.profiles = profiles ?? ProfilesService.initialize(database, storage),
+        this.matching = matching ?? MatchingService(database);
 }
 
 class ServicesProvider extends InheritedWidget {

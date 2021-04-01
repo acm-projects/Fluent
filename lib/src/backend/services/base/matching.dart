@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluent/src/backend/models/match.dart';
 
-class GetMatches{
-  var collection = FirebaseFirestore.instance.collection("profiles");
+class MatchingService {
+  CollectionReference collection;
   var potentialMatches = [];
+
+  MatchingService(FirebaseFirestore database) : collection = database.collection('profiles');
 
   Future<List>chooseUser(uid, matchUID) async {
     //store users you've liked

@@ -1,35 +1,47 @@
-import 'package:fluent/src/backend/services/matching.dart';
+import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+String _testUser = "test1";
 
 class MatchingPage extends StatefulWidget{
+  static Widget create(BuildContext context) {
+    final matching = ServicesProvider.of(context).services.matching;
+    return FutureBuilder(
+      future: matching.getUsers(_testUser),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(child: Text(snapshot.error.toString()));
+        }
+        if (snapshot.hasData) {
+          return MatchingPage(snapshot.data[0].name, snapshot.data[0].language, snapshot.data[0].fluency);
+        }
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  final String potentialName;
+  final String potentialLanguage;
+  final int potentialFluency;
+
+  MatchingPage(this.potentialName, this.potentialLanguage, this.potentialFluency);
+
   @override
-  _MatchingPage createState() => _MatchingPage();
+  _MatchingPage createState() => _MatchingPage(potentialName, potentialLanguage, potentialFluency);
 }
 
 class _MatchingPage extends State<MatchingPage>{
-  String potentialName = " ";
-  String potentialLanguage = " ";
+  String potentialName;
+  String potentialLanguage;
   int potentialFluency;
   var user;
   String search;
-  String testUser = "test1";
 
-  @override
-  void initState(){
-    super.initState();
-    asyncMethod();
-  }
-  void asyncMethod() async{
-    user = await GetMatches().getUsers(testUser);
-    setState(() {
-      potentialName = user[0].name;
-      potentialFluency = user[0].fluency;
-      potentialLanguage = user[0].language;
-    });
-  }
+  _MatchingPage(this.potentialName, this.potentialLanguage, this.potentialFluency);
+
   Widget build(BuildContext context) {
+    final matching = ServicesProvider.of(context).services.matching;
     //while (user == null) {
       //return Center(child: CircularProgressIndicator());
     //}
@@ -47,7 +59,7 @@ class _MatchingPage extends State<MatchingPage>{
               ),
               ElevatedButton(
                   onPressed: () async {
-                    user = await GetMatches().searchUser(search);
+                    user = await matching.searchUser(search);
                     //print(user[0].name);
                     setState(() {
                       potentialName = user[0].name;
@@ -83,13 +95,13 @@ class _MatchingPage extends State<MatchingPage>{
                   ),
                   onPressed: () async {
                     user =
-                    await GetMatches().chooseUser(testUser, user[0].name);
+                    await matching.chooseUser(_testUser, user[0].name);
                     setState(() {
                       potentialName = user[0].name;
                       potentialFluency = user[0].fluency;
                       potentialLanguage = user[0].language;
                     });
-                    await GetMatches().getMatches(testUser);
+                    await matching.getMatches(_testUser);
                   },
                 ),
               ),
@@ -99,7 +111,7 @@ class _MatchingPage extends State<MatchingPage>{
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () async {
-                  user = await GetMatches().skipUser(testUser, user[0].name);
+                  user = await matching.skipUser(_testUser, user[0].name);
                   setState(() {
                     potentialName = user[0].name;
                     potentialFluency = user[0].fluency;
