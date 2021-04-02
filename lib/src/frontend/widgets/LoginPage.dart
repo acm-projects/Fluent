@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                                     print(e.toString());
                                   }
                                   if(FirebaseAuth.instance.currentUser.uid != null && !error) {
-                                    Navigator.pushNamed(context, '/match');
+                                    Navigator.pushNamed(context, '/inbox');
                                   }
                                 }
                               },

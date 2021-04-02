@@ -142,10 +142,6 @@ class MatchingService {
       }
     });
     potentialMatches.sort((a,b) => a.fluencyDifference - b.fluencyDifference);
-    for(int i = 0; i < potentialMatches.length; i++){
-      print(i.toString() + potentialMatches[i].uid);
-    }
-    print(" ");
     return potentialMatches;
   }
 

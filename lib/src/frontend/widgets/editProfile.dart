@@ -4,6 +4,9 @@ import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class EditProfilePage extends StatefulWidget {
@@ -64,13 +67,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return storage.ref('uploads/$name').putFile(_image);
   }
 
-  var profilePic;
-
-  Future displayImageFromFirebase(BuildContext context, name) async{
-    final storage = ServicesProvider.of(context).services.storage;
-    profilePic = await storage.fetchImageUrl('uploads/$name');
-  }
-
   void _showPicker(context) {
     showModalBottomSheet(
         context: context,
@@ -114,7 +110,37 @@ class _EditProfilePageState extends State<EditProfilePage> {
       });
   }
 
+  /*var profilePic;
+  ImageProvider displayImage() {
+    name = FirebaseAuth.instance.currentUser.uid;
+    FirebaseStorage.instance
+        .ref()
+        .child('uploads/$name')
+        .getDownloadURL()
+        .then((value) {
+      profilePic = value;
+    });
+    return NetworkImage(profilePic);
+  }*/
+
   @override
+  var profilePic;
+  void initState() {
+    super.initState();
+    asyncMethod();
+  }
+  void asyncMethod() async{
+    name = FirebaseAuth.instance.currentUser.uid;
+    await FirebaseStorage.instance
+        .ref()
+        .child('uploads/$name')
+        .getDownloadURL()
+        .then((value) {
+      profilePic = value;
+    });
+  }
+
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -168,7 +194,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: (_image == null)
-                                ? NetworkImage('https://wallpapercave.com/wp/wp3597484.jpg')//Default Picture
+                                ? ((profilePic == null) ? NetworkImage('https://wallpapercave.com/wp/wp3597484.jpg') : NetworkImage(profilePic))//Default Picture
                                 : FileImage(_image),
                           )),
                     ),

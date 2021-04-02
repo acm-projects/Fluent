@@ -1,6 +1,7 @@
 import 'package:fluent/src/backend/services/services_provider.dart';
 import 'package:fluent/src/frontend/pages.dart';
 import 'package:fluent/src/frontend/theme/style.dart';
+import 'package:fluent/src/frontend/widgets/InboxScreen.dart';
 import 'package:fluent/src/frontend/widgets/createProfile.dart';
 import 'package:fluent/src/frontend/widgets/editProfile.dart';
 import 'package:fluent/src/frontend/widgets/matchpage.dart';
@@ -33,6 +34,8 @@ class AppInit extends StatelessWidget {
               return page(EditProfilePage());
             case '/createProfile':
               return page(CreateProfilePage());
+            case '/inbox':
+              return page(InboxScreen());
             case '/match':
               return page(MatchingPage.create(context));
 
