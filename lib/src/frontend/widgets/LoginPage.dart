@@ -1,17 +1,20 @@
+import 'package:fluent/src/backend/services/base/matching.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:fluent/src/frontend/widgets/MyTextField.dart';
+import 'package:fluent/src/frontend/widgets/editProfile.dart';
+import 'package:fluent/src/frontend/widgets/matchpage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 //import 'package:fluent/src/frontend/widgets/SignUpPage.dart';
 
 class LoginPage extends StatefulWidget {
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-
+  String pfp;
   // String that will hold a valid email address
   String _email;
   bool error = true;
@@ -152,8 +155,20 @@ class _LoginPageState extends State<LoginPage> {
                                     error = true;
                                     print(e.toString());
                                   }
+
+                                  final matching = ServicesProvider.of(context).services.matching;
+                                  var user = await matching.getUserData(FirebaseAuth.instance.currentUser.uid);
                                   if(FirebaseAuth.instance.currentUser.uid != null && !error) {
-                                    Navigator.pushNamed(context, '/inbox');
+                                    Navigator.pushNamed(context,"/match");
+                                    /*Navigator.push(context,
+                                        MaterialPageRoute(
+                                      builder: (context) => MatchingPage(
+                                          //potentialUID: user[0].uid,
+                                          //potentialName: user[0].name,
+                                          //potentialLanguage: user[0].language,
+                                          //potentialFluency: user[0].fluency),
+                                    )
+                                    );*/
                                   }
                                 }
                               },

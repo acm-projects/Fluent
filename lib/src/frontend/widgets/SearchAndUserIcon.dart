@@ -1,13 +1,22 @@
 import 'package:fluent/src/frontend/widgets/ChatScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
-class SearchAndUserIcon extends StatelessWidget {
-  const SearchAndUserIcon({
+class SearchAndUserIcon extends StatefulWidget {
+  final String pfp;
+  SearchAndUserIcon({Key key, @required this.pfp}) : super(key: key);
+  /*const SearchAndUserIcon({
     Key key,
-  }) : super(key: key);
-
+  }) : super(key: key);*/
   @override
+  _SearchAndUserIcon createState() => _SearchAndUserIcon();
+}
+
+class _SearchAndUserIcon extends State<SearchAndUserIcon> {
+  @override
+
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
@@ -43,7 +52,7 @@ class SearchAndUserIcon extends StatelessWidget {
                       ],
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage('lib/src/frontend/assets/giraffe-min.jpg'),
+                        image: NetworkImage("https://firebasestorage.googleapis.com/v0/b/acm-fluent.appspot.com/o/uploads%2FHtFumEzDq1O5Z37x58xZ2bak9uE3?alt=media&token=e7671430-eca8-4de4-999c-e1920aa18883"),
                       )
                   )
               ),

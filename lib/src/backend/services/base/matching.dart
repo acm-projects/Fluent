@@ -49,6 +49,7 @@ class MatchingService {
         .doc(uid)
         .get()
         .then((user){
+          currentUser.pfp = user['pfp'];
           currentUser.name = user['name'];
           currentUser.language = user['language'];
           currentUser.fluency = user['fluency'];
@@ -132,10 +133,11 @@ class MatchingService {
         ){potentialMatches.add(MatchProfile(
           uid: user['UID'],
           name: user['name'],
-          //bio: user['bio'],
+          bio: user['bio'],
+          gender: user['gender'],
           //age: user['birthData'],
-          language: user['language'],
-          fluency: user['fluency'],
+          //language: user['language'],
+          //fluency: user['fluency'],
           fluencyDifference: (currentUser.fluency - user['fluency']).abs(),
         ));
         }
@@ -154,49 +156,56 @@ class MatchingService {
           uid: user['UID'],
           name: user['name'],
           bio: user['bio'],
-          age: user['birthData'],
-          language: user['language'],
-          fluency: user['fluency'],
+          gender: user['gender'],
+          //age: user['birthData'],
+          //language: user['language'],
+          //fluency: user['fluency'],
         ));
       }
     });
     return potentialMatches;
   }
 
-  Future getMatches(name) async{
-    List<String> chosenList = await getChosenList(name);
+  Future getMatches(uid, name, pfp) async{
+    List<String> chosenList = await getChosenList(uid);
     await collection
-        .doc(name)
+        .doc(uid)
         .collection('selected')
         .get()
         .then((docs){
       for(var doc in docs.docs){
         if(chosenList.contains(doc.id)){
           //create new match for both users
-          collection.doc(name)
+          collection.doc(uid)
               .collection('matches')
               .doc(doc.id)
-              .set({});
+              .set({
+            'name': name,
+            'pfp': pfp,
+          });
           collection.doc(doc.id)
               .collection('matches')
-              .doc(name)
-              .set({});
+              .doc(uid)
+              .set({
+            'name': name,
+            'pfp': pfp,
+          });
           //delete matched user from liked and selected data collection
-          collection.doc(name)
+          collection.doc(uid)
               .collection('liked')
               .doc(doc.id)
               .delete();
-          collection.doc(name)
+          collection.doc(uid)
               .collection('selected')
               .doc(doc.id)
               .delete();
           collection.doc(doc.id)
               .collection('liked')
-              .doc(name)
+              .doc(uid)
               .delete();
           collection.doc(doc.id)
               .collection('selected')
-              .doc(name)
+              .doc(uid)
               .delete();
         }
       }

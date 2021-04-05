@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 // later the actual user model should be imported in order to fetch the right info
-//import 'package:fluent/src/frontend/frontendmodels/UITestUserModel.dart';
+import 'package:fluent/src/frontend/frontendmodels/UITestUserModel.dart';
 
 class ChatScreen extends StatefulWidget {
   // This will be replaced with user for backend in order to fetch the proper picture and info for a chat screen
-  //final User chatUser;
+  final User chatUser;
 
   // constructor for ChatScreen to initialize the User
-  //ChatScreen({this.chatUser});
+  ChatScreen({this.chatUser});
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -35,7 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
           },
           child: CircleAvatar(
             radius: 25,
-            //backgroundImage: AssetImage(widget.chatUser.imageUrl),
+            backgroundImage: AssetImage(widget.chatUser.imageUrl),
           ),
         ),
 

@@ -14,7 +14,7 @@ class MatchingPage extends StatefulWidget{
           return Center(child: Text(snapshot.error.toString()));
         }
         if (snapshot.hasData) {
-          return MatchingPage(snapshot.data[0].uid, snapshot.data[0].name, snapshot.data[0].language, snapshot.data[0].fluency);
+          return MatchingPage(snapshot.data[0].uid, snapshot.data[0].name, snapshot.data[0].bio, snapshot.data[0].gender);
         }
         return Center(child: CircularProgressIndicator());
       },
@@ -23,24 +23,24 @@ class MatchingPage extends StatefulWidget{
 
   String potentialUID;
   String potentialName;
-  String potentialLanguage;
-  int potentialFluency;
+  String potentialBio;
+  String potentialGender;
 
-  MatchingPage(this.potentialUID, this.potentialName, this.potentialLanguage, this.potentialFluency);
+  MatchingPage(this.potentialUID, this.potentialName, this.potentialBio, this.potentialGender);
 
   @override
-  _MatchingPage createState() => _MatchingPage(potentialUID, potentialName, potentialLanguage, potentialFluency);
+  _MatchingPage createState() => _MatchingPage(potentialUID, potentialName, potentialBio, potentialGender);
 }
 
 class _MatchingPage extends State<MatchingPage>{
   String potentialUID;
   String potentialName;
-  String potentialLanguage;
-  int potentialFluency;
+  String potentialBio;
+  String potentialGender;
   var user;
   String search;
 
-  _MatchingPage(this.potentialUID, this.potentialName, this.potentialLanguage, this.potentialFluency);
+  _MatchingPage(this.potentialUID, this.potentialName, this.potentialGender, this.potentialBio);
 
   Widget build(BuildContext context) {
     final matching = ServicesProvider.of(context).services.matching;
@@ -65,8 +65,8 @@ class _MatchingPage extends State<MatchingPage>{
                     setState(() {
                       potentialUID = user[0].uid;
                       potentialName = user[0].name;
-                      potentialFluency = user[0].fluency;
-                      potentialLanguage = user[0].language;
+                      potentialGender = user[0].gender;
+                      potentialBio = user[0].bio;
                     });
                   },
                   child: Text("Search")
@@ -83,7 +83,7 @@ class _MatchingPage extends State<MatchingPage>{
                 padding: const EdgeInsets.only(top: 25),
                 child: Center(
                   child: Text(
-                      "$potentialUID $potentialName $potentialLanguage $potentialFluency",
+                      "$potentialUID $potentialName $potentialBio $potentialGender",
                       textScaleFactor: 1.8, style:
                   TextStyle(color: Colors.blue)),
                 ),
@@ -100,8 +100,8 @@ class _MatchingPage extends State<MatchingPage>{
                     setState(() {
                       potentialUID = user[0].uid;
                       potentialName = user[0].name;
-                      potentialFluency = user[0].fluency;
-                      potentialLanguage = user[0].language;
+                      potentialGender = user[0].gender;
+                      potentialBio = user[0].bio;
                     });
                   },
                 ),
@@ -114,9 +114,10 @@ class _MatchingPage extends State<MatchingPage>{
                 onPressed: () async {
                   user = await matching.skipUser(FirebaseAuth.instance.currentUser.uid, user[0].uid);
                   setState(() {
+                    potentialUID = user[0].uid;
                     potentialName = user[0].name;
-                    potentialFluency = user[0].fluency;
-                    potentialLanguage = user[0].language;
+                    potentialGender = user[0].gender;
+                    potentialBio = user[0].bio;
                   });
                   //await matching.getMatches(FirebaseAuth.instance.currentUser.uid);
                 },

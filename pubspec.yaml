@@ -63,6 +63,12 @@ flutter:
   assets:
     - lib/src/frontend/assets/water.jpg
   #   - images/a_dot_ham.jpeg
+  #   - images/a_dot_burr.jpeg
+    - lib/src/frontend/assets/pancakes-min.jpg
+    - lib/src/frontend/assets/giraffe-min.jpg
+    - lib/src/frontend/assets/girlPhoto1-min.jpg
+    - lib/src/frontend/assets/dolphin-min.jpg
+    - lib/src/frontend/assets/taco-min.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

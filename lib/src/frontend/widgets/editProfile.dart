@@ -10,6 +10,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class EditProfilePage extends StatefulWidget {
+  final String pfp;
+  EditProfilePage({Key key, @required this.pfp}) : super(key: key);
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
 }
@@ -110,38 +112,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
       });
   }
 
-  /*var profilePic;
-  ImageProvider displayImage() {
-    name = FirebaseAuth.instance.currentUser.uid;
-    FirebaseStorage.instance
-        .ref()
-        .child('uploads/$name')
-        .getDownloadURL()
-        .then((value) {
-      profilePic = value;
-    });
-    return NetworkImage(profilePic);
-  }*/
-
   @override
-  var profilePic;
-  void initState() {
-    super.initState();
-    asyncMethod();
-  }
-  void asyncMethod() async{
-    name = FirebaseAuth.instance.currentUser.uid;
-    await FirebaseStorage.instance
-        .ref()
-        .child('uploads/$name')
-        .getDownloadURL()
-        .then((value) {
-      profilePic = value;
-    });
-  }
-
-
   Widget build(BuildContext context) {
+    final arguments = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme
@@ -194,7 +167,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: (_image == null)
-                                ? ((profilePic == null) ? NetworkImage('https://wallpapercave.com/wp/wp3597484.jpg') : NetworkImage(profilePic))//Default Picture
+                                ? NetworkImage(widget.pfp) //Default Picture
                                 : FileImage(_image),
                           )),
                     ),
