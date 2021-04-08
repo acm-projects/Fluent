@@ -14,25 +14,27 @@ class MatchingPage extends StatefulWidget{
           return Center(child: Text(snapshot.error.toString()));
         }
         if (snapshot.hasData) {
-          return MatchingPage(snapshot.data[0].uid, snapshot.data[0].name, snapshot.data[0].bio, snapshot.data[0].gender);
+          return MatchingPage(snapshot.data[0].pfp, snapshot.data[0].uid, snapshot.data[0].name, snapshot.data[0].bio, snapshot.data[0].gender);
         }
         return Center(child: CircularProgressIndicator());
       },
     );
   }
 
+  String potentialPFP;
   String potentialUID;
   String potentialName;
   String potentialBio;
   String potentialGender;
 
-  MatchingPage(this.potentialUID, this.potentialName, this.potentialBio, this.potentialGender);
+  MatchingPage(this.potentialPFP, this.potentialUID, this.potentialName, this.potentialBio, this.potentialGender);
 
   @override
-  _MatchingPage createState() => _MatchingPage(potentialUID, potentialName, potentialBio, potentialGender);
+  _MatchingPage createState() => _MatchingPage(potentialPFP, potentialUID, potentialName, potentialBio, potentialGender);
 }
 
 class _MatchingPage extends State<MatchingPage>{
+  String potentialPFP;
   String potentialUID;
   String potentialName;
   String potentialBio;
@@ -40,7 +42,7 @@ class _MatchingPage extends State<MatchingPage>{
   var user;
   String search;
 
-  _MatchingPage(this.potentialUID, this.potentialName, this.potentialGender, this.potentialBio);
+  _MatchingPage(this.potentialPFP, this.potentialUID, this.potentialName, this.potentialBio, this.potentialGender);
 
   Widget build(BuildContext context) {
     final matching = ServicesProvider.of(context).services.matching;
@@ -83,7 +85,7 @@ class _MatchingPage extends State<MatchingPage>{
                 padding: const EdgeInsets.only(top: 25),
                 child: Center(
                   child: Text(
-                      "$potentialUID $potentialName $potentialBio $potentialGender",
+                      "$potentialUID $potentialName $potentialBio $potentialGender $potentialPFP",
                       textScaleFactor: 1.8, style:
                   TextStyle(color: Colors.blue)),
                 ),
@@ -96,13 +98,15 @@ class _MatchingPage extends State<MatchingPage>{
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
-                    user = await matching.chooseUser(FirebaseAuth.instance.currentUser.uid, potentialUID);
+                    user = await matching.chooseUser(potentialUID);
                     setState(() {
                       potentialUID = user[0].uid;
                       potentialName = user[0].name;
                       potentialGender = user[0].gender;
                       potentialBio = user[0].bio;
+                      potentialPFP = user[0].pfp;
                     });
+                    await matching.getMatches(user[0]);
                   },
                 ),
               ),
@@ -119,7 +123,6 @@ class _MatchingPage extends State<MatchingPage>{
                     potentialGender = user[0].gender;
                     potentialBio = user[0].bio;
                   });
-                  //await matching.getMatches(FirebaseAuth.instance.currentUser.uid);
                 },
               ),
             ]

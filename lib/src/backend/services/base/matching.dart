@@ -1,13 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluent/src/backend/models/match.dart';
+import 'package:fluent/src/backend/models/chat.dart';
+import 'package:fluent/src/backend/models/user.dart';
+import 'package:fluent/src/backend/services/base/chat.dart';
+import 'package:fluent/src/backend/services/base/profiles.dart';
+import 'package:fluent/src/backend/services/firebase/auth.dart';
 
 class MatchingService {
   CollectionReference collection;
   var potentialMatches = [];
-
   MatchingService(FirebaseFirestore database) : collection = database.collection('profiles');
 
-  Future<List>chooseUser(uid, matchUID) async {
+
+  Future<List>chooseUser(String matchUID) async {
+    var uid = FirebaseAuth.instance.currentUser.uid;
+    MatchProfile currentUser = await getUserData(uid);
+
     //store users you've liked
     await collection
         .doc(uid)
@@ -20,7 +29,11 @@ class MatchingService {
         .doc(matchUID)
         .collection('selected')
         .doc(uid)
-        .set({});
+        .set({
+      'name': currentUser.name,
+      'pfp': currentUser.pfp,
+      'time': DateTime.now(),
+    });
 
     return getUsers(uid);
   }
@@ -131,13 +144,11 @@ class MatchingService {
             && !matchesList.contains(user.id)
             && user.id != uid
         ){potentialMatches.add(MatchProfile(
+          pfp: user['pfp'],
           uid: user['UID'],
           name: user['name'],
           bio: user['bio'],
           gender: user['gender'],
-          //age: user['birthData'],
-          //language: user['language'],
-          //fluency: user['fluency'],
           fluencyDifference: (currentUser.fluency - user['fluency']).abs(),
         ));
         }
@@ -157,16 +168,15 @@ class MatchingService {
           name: user['name'],
           bio: user['bio'],
           gender: user['gender'],
-          //age: user['birthData'],
-          //language: user['language'],
-          //fluency: user['fluency'],
         ));
       }
     });
     return potentialMatches;
   }
 
-  Future getMatches(uid, name, pfp) async{
+  Future getMatches(MatchProfile user) async{
+    var uid = FirebaseAuth.instance.currentUser.uid;
+    MatchProfile currentUser = await getUserData(uid);
     List<String> chosenList = await getChosenList(uid);
     await collection
         .doc(uid)
@@ -175,20 +185,26 @@ class MatchingService {
         .then((docs){
       for(var doc in docs.docs){
         if(chosenList.contains(doc.id)){
+          //create chat between users
+
           //create new match for both users
           collection.doc(uid)
               .collection('matches')
               .doc(doc.id)
               .set({
-            'name': name,
-            'pfp': pfp,
+            'name': user.name,
+            'pfp': user.pfp,
+            'time': DateTime.now(),
+            //add chat uid
           });
           collection.doc(doc.id)
               .collection('matches')
               .doc(uid)
               .set({
-            'name': name,
-            'pfp': pfp,
+            'name': user.name,
+            'pfp': currentUser.pfp,
+            'time': DateTime.now(),
+            //add chat uid
           });
           //delete matched user from liked and selected data collection
           collection.doc(uid)

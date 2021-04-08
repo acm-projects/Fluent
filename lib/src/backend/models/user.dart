@@ -14,6 +14,7 @@ class User extends HasUid {
 
 /// Represents a user's public-facing profile.
 class Profile extends User {
+  String pfp;
   /// This user's username.
   String username;
 
@@ -36,6 +37,7 @@ class Profile extends User {
   Fluency fluency;
 
   Profile({
+    @required String pfp,
     @required String uid,
     @required this.username,
     @required this.name,

@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fluent/src/backend/models/fluency.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -66,10 +68,22 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
 
   var profilePic;
 
-  Future displayImageFromFirebase(BuildContext context, name) async{
-    final storage = ServicesProvider.of(context).services.storage;
-    profilePic = await storage.fetchImageUrl('uploads/$name');
+  Future<String> uploadImage(BuildContext context, name) async {
+    Reference ref = FirebaseStorage.instance.ref().child('uploads/$name');
+    UploadTask uploadTask = ref.putFile(_image);
+    var url = await (await uploadTask.whenComplete(() => null)).ref.getDownloadURL();
+    profilePic = url.toString();
+    return profilePic;
   }
+
+  //var profilePic;
+  /*
+  Future<String> displayImageFromFirebase(BuildContext context, name) async{
+    final Reference ref = FirebaseStorage.instance.ref().child('users/$name');
+    profilePic = await ref.getDownloadURL().toString();
+    print(profilePic);
+    return profilePic;
+  }*/
 
   void _showPicker(context) {
     showModalBottomSheet(
@@ -354,8 +368,10 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   width: 200.0,
                   child: RaisedButton(
                     onPressed: () async {
-                      await uploadImageToFirebase(context, FirebaseAuth.instance.currentUser.uid);
+                      await uploadImage(context, FirebaseAuth.instance.currentUser.uid);
+                      //await displayImageFromFirebase(context, FirebaseAuth.instance.currentUser.uid);
                       ServicesProvider.of(context).services.profiles.createProfile(
+                        pfp: profilePic,
                         uid: FirebaseAuth.instance.currentUser.uid,
                         username: "gary2",  //need username
                         name: name,

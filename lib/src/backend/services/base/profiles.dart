@@ -19,6 +19,7 @@ class ProfilesService {
 
   /// Creates a profile with the given information in the database.
   Future<Profile> createProfile({
+    @required String pfp,
     @required String uid,
     @required String username,
     @required String name,
@@ -31,6 +32,7 @@ class ProfilesService {
     var ref = _database.collection('profiles').doc(uid);
 
     await ref.set({
+      'pfp': pfp,
       'UID': uid,
       'username': username,
       'name': name,
@@ -42,6 +44,7 @@ class ProfilesService {
     });
 
     return Profile(
+      pfp: pfp,
       uid: uid,
       username: username,
       name: name,
@@ -58,6 +61,7 @@ class ProfilesService {
     var snap = await _database.collection('profiles').doc(uid).get();
 
     return Profile(
+      pfp: snap.get('pfp'),
       uid: uid,
       username: snap.get('username'),
       name: snap.get('name'),

@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 class ChatService {
   CurrentUser _currentUser;
 
+  CollectionReference _profilesRef;
   CollectionReference _chatsRef;
 
   DocumentReference chatRef([String chatUid]) => _chatsRef.doc(chatUid);
@@ -18,14 +19,16 @@ class ChatService {
   DocumentReference readRef({String uid, DocumentReference ref}) =>
       (ref ?? chatRef(uid)).collection('readReceipts').doc(_currentUser.uid);
 
-  ChatService(this._currentUser, FirebaseFirestore database) : _chatsRef = database.collection('chats');
+  ChatService(this._currentUser, FirebaseFirestore database)
+      : _profilesRef = database.collection('profiles'),
+        _chatsRef = database.collection('chats');
 
   static Message _makeMessage(DocumentSnapshot snap) => Message(
-        uid: snap.id,
-        author: User(snap.get('authorUid')),
-        content: snap.get('content'),
-        timestamp: snap.get('timestamp').toDate(),
-      );
+    uid: snap.id,
+    author: User(snap.get('authorUid')),
+    content: snap.get('content'),
+    timestamp: snap.get('timestamp')?.toDate(),
+  );
 
   Future<ChatSnap> createChatWith(User other) async {
     var members = [_currentUser, other];
@@ -40,6 +43,11 @@ class ChatService {
       members: members,
       mostRecentMessage: "",
     );
+  }
+
+  Future<String> fetchChatUidBetween(User a, User b) async {
+    final matchRef = await _profilesRef.doc(a.uid).collection('matches').doc(b.uid).get();
+    return matchRef.get('chat');
   }
 
   Future<ChatSnap> fetchChat(String uid) async {
@@ -75,7 +83,7 @@ class ChatService {
       messagesRef(ref: ref).doc().set({
         'timestamp': FieldValue.serverTimestamp(),
         'content': content,
-        'author': _currentUser.uid,
+        'authorUid': _currentUser.uid,
       }),
     ]);
   }
@@ -93,14 +101,17 @@ class ChatService {
     return message.timestamp.isAfter(latestRead.timestamp);
   }
 
-  Stream<Iterable<Message>> messages(String chatUid) {
-    return messagesRef(uid: chatUid).orderBy('timestamp').snapshots().map((snap) => snap.docs.map(_makeMessage));
+  Stream<List<Message>> messages(String chatUid) {
+    return messagesRef(uid: chatUid)
+        .orderBy('timestamp')
+        .snapshots()
+        .map((snap) => snap.docs.map(_makeMessage).toList(growable: false));
   }
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ChatService && runtimeType == other.runtimeType && _currentUser == other._currentUser;
+          other is ChatService && runtimeType == other.runtimeType && _currentUser == other._currentUser;
 
   @override
   int get hashCode => _currentUser.hashCode;

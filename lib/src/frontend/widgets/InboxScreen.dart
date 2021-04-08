@@ -1,11 +1,11 @@
-import 'package:fluent/src/frontend/widgets/ChatScreen.dart';
+import 'package:fluent/src/backend/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:fluent/src/frontend/widgets/SearchAndUserIcon.dart';
 // later the actual user model will be imported to get the actual user's data
 import 'package:fluent/src/frontend/frontendmodels/UITestMessageModel.dart';
 import 'package:fluent/src/frontend/widgets/ChatScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 class InboxScreen extends StatefulWidget {
   @override
@@ -28,8 +28,9 @@ class _InboxScreenState extends State<InboxScreen> {
             body: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('profiles')
-                    .doc(FirebaseAuth.instance.currentUser.uid)
+                    .doc(auth.FirebaseAuth.instance.currentUser.uid)
                     .collection('matches')
+                    .orderBy('time', descending: true)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.data == null) {
@@ -74,15 +75,7 @@ class _InboxScreenState extends State<InboxScreen> {
                                               onTap: () {
                                                 // this will let you tap to the next page, this will be changed once
                                                 // routes are implemented again
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) => ChatScreen(
-                                                          // get the messages object of type Message, and send the User
-                                                          // (will be changed later to work with backend)
-                                                          chatUser: messages.sender,
-                                                          )),
-                                                );
+                                                Navigator.pushNamed(context, '/chat', arguments: User(snapshot.data.docs[index].id));
                                               },
                                               child: Container(
                                                 padding: EdgeInsets.symmetric(
