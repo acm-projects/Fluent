@@ -75,7 +75,6 @@ class _LoginPageState extends State<LoginPage> {
                          ),
                           SizedBox(height: 6.0),
                           //Email textField and heading
-                          //MyTextField(headerText: 'Email', keyboardType: TextInputType.emailAddress, isObscured: false),
                           Text(
                             'Email',
                             style: TextStyle(
@@ -160,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                                   final matching = ServicesProvider.of(context).services.matching;
                                   var user = await matching.getUserData(FirebaseAuth.instance.currentUser.uid);
                                   if(FirebaseAuth.instance.currentUser.uid != null && !error) {
-                                    Navigator.pushNamed(context,"/match");
+                                    Navigator.pushNamed(context,"/navigation");
                                     /*Navigator.push(context,
                                         MaterialPageRoute(
                                       builder: (context) => MatchingPage(

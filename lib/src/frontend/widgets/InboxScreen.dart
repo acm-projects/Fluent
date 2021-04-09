@@ -13,7 +13,7 @@ class InboxScreen extends StatefulWidget {
 }
 
 class _InboxScreenState extends State<InboxScreen> {
-  int set = 0;
+ // int set = 0;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -221,7 +221,7 @@ class _InboxScreenState extends State<InboxScreen> {
                   }
                 }),
 
-            bottomNavigationBar: BottomNavigationBar(
+            /*bottomNavigationBar: BottomNavigationBar(
             currentIndex: set,
             items:[
               BottomNavigationBarItem(
@@ -242,7 +242,7 @@ class _InboxScreenState extends State<InboxScreen> {
                 set = index;
               });
             }
-        ),
+        ),*/
     ),
     );
 

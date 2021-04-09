@@ -7,13 +7,13 @@ import 'package:fluent/src/frontend/widgets/ChatScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 
-class InboxScreen extends StatefulWidget {
+class MatchRequestPage extends StatefulWidget {
   @override
-  _InboxScreenState createState() => _InboxScreenState();
+  _MatchRequestPageState createState() => _MatchRequestPageState();
 }
 
-class _InboxScreenState extends State<InboxScreen> {
-  int set = 0;
+class _MatchRequestPageState extends State<MatchRequestPage> {
+  //int set = 0;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -221,7 +221,7 @@ class _InboxScreenState extends State<InboxScreen> {
               }
             }),
 
-        bottomNavigationBar: BottomNavigationBar(
+        /*bottomNavigationBar: BottomNavigationBar(
             currentIndex: set,
             items:[
               BottomNavigationBarItem(
@@ -242,7 +242,7 @@ class _InboxScreenState extends State<InboxScreen> {
                 set = index;
               });
             }
-        ),
+        ),*/
       ),
     );
 
