@@ -1,4 +1,5 @@
 import 'package:fluent/src/frontend/widgets/ChatScreen.dart';
+import 'package:fluent/src/frontend/widgets/editProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,7 +38,19 @@ class _SearchAndUserIcon extends State<SearchAndUserIcon> {
               onTap: () {
                 // Navigator should go here. It should navigate to the EditProfile page
                 //Navigator.pushNamed(context, '/editProfile', arguments: "https://firebasestorage.googleapis.com/v0/b/acm-fluent.appspot.com/o/uploads%2FHtFumEzDq1O5Z37x58xZ2bak9uE3?alt=media&token=e7671430-eca8-4de4-999c-e1920aa18883");
-                print("User image is being tapped");
+                Navigator.push(context,
+                MaterialPageRoute(
+                builder: (context) => EditProfilePage(
+                    pfp: "https://firebasestorage.googleapis.com/v0/b/acm-fluent.appspot.com/o/uploads%2FHtFumEzDq1O5Z37x58xZ2bak9uE3?alt=media&token=e7671430-eca8-4de4-999c-e1920aa18883"
+                //potentialUID: user[0].uid,
+                //potentialName: user[0].name,
+                //potentialLanguage: user[0].language,
+                //potentialFluency: user[0].fluency),
+                ),
+                )
+                );
+
+                //print("User image is being tapped");
               },
               child: Container(
                   width: 70,
