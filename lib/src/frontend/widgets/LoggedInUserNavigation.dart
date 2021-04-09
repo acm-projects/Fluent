@@ -7,6 +7,7 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
+
   int set = 0;
   final List<Widget> _navBarPages = [
     InboxScreen(),
@@ -23,6 +24,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: _navBarPages[set],
       bottomNavigationBar: BottomNavigationBar(
