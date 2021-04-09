@@ -149,11 +149,12 @@ class _MatchingPage extends State<MatchingPage>{
         ),
 
       /*bottomNavigationBar: BottomNavigationBar(
-          currentIndex: set,
+          //currentIndex: set,
           items:[
             BottomNavigationBarItem(
                 icon: Icon(Icons.favorite),
-                title: Text('Match')
+                title: Text('Match'),
+
             ),
             BottomNavigationBarItem(
                 icon: Icon(Icons.volunteer_activism),

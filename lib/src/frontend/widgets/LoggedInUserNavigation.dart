@@ -9,12 +9,6 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
 
   int set = 0;
-  final List<Widget> _navBarPages = [
-    InboxScreen(),
-    //MatchingPage.create(context),
-    MatchRequestPage(),
-    InboxScreen(),
-  ];
 
   _onTabTapped(int index) {
     setState(() {
@@ -24,6 +18,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+
+    final List<Widget> _navBarPages = [
+      MatchingPage.create(context),
+      MatchRequestPage(),
+      InboxScreen(),
+    ];
+
 
     return Scaffold(
       body: _navBarPages[set],
