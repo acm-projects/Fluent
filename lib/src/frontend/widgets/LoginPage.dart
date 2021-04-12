@@ -1,6 +1,9 @@
+import 'package:fluent/src/backend/models/match.dart';
 import 'package:fluent/src/backend/models/user.dart';
 import 'package:fluent/src/backend/services/base/matching.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
+import 'package:fluent/src/frontend/pages.dart';
+import 'package:fluent/src/frontend/widgets/LoggedInUserNavigation.dart';
 import 'package:fluent/src/frontend/widgets/MyTextField.dart';
 import 'package:fluent/src/frontend/widgets/editProfile.dart';
 import 'package:fluent/src/frontend/widgets/matchpage.dart';
@@ -157,18 +160,16 @@ class _LoginPageState extends State<LoginPage> {
                                   }
 
                                   final matching = ServicesProvider.of(context).services.matching;
-                                  var user = await matching.getUserData(FirebaseAuth.instance.currentUser.uid);
+                                  MatchProfile user = await matching.getUserData(FirebaseAuth.instance.currentUser.uid);
+
                                   if(FirebaseAuth.instance.currentUser.uid != null && !error) {
-                                    Navigator.pushNamed(context,"/navigation");
-                                    /*Navigator.push(context,
+                                    //Navigator.pushNamed(context,"/navigation", arguments: user);
+                                    Navigator.push(context,
                                         MaterialPageRoute(
-                                      builder: (context) => MatchingPage(
-                                          //potentialUID: user[0].uid,
-                                          //potentialName: user[0].name,
-                                          //potentialLanguage: user[0].language,
-                                          //potentialFluency: user[0].fluency),
+                                      builder: (context) => BottomNavBar(
+                                          pfp: user.pfp
                                     )
-                                    );*/
+                                    ));
                                   }
                                 }
                               },
