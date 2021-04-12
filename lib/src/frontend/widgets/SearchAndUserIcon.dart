@@ -37,7 +37,6 @@ class _SearchAndUserIcon extends State<SearchAndUserIcon> {
             child: GestureDetector(
               onTap: () {
                 // Navigator should go here. It should navigate to the EditProfile page
-                //Navigator.pushNamed(context, '/editProfile', arguments: "https://firebasestorage.googleapis.com/v0/b/acm-fluent.appspot.com/o/uploads%2FHtFumEzDq1O5Z37x58xZ2bak9uE3?alt=media&token=e7671430-eca8-4de4-999c-e1920aa18883");
                 Navigator.push(context,
                 MaterialPageRoute(
                 builder: (context) => EditProfilePage(
