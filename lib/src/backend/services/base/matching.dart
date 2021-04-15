@@ -32,61 +32,37 @@ class MatchingService {
     });
 
     List<String> chosenList = await getChosenList(uid);
-    await collection
-        .doc(uid)
-        .collection('selected')
-        .get()
-        .then((docs){
-      for(var doc in docs.docs){
-        if(chosenList.contains(doc.id)){
-          //create chat between users
+    var docs = await collection.doc(uid).collection('selected').get();
 
-          //create new match for both users
-          collection.doc(uid)
-              .collection('matches')
-              .doc(doc.id)
-              .set({
+    await Future.wait(
+      docs.docs.where((doc) => chosenList.contains(doc.id)).expand((doc) {
+        var chatRef = database.collection('chats').doc();
+
+        return [
+          chatRef.set({
+            'memberUids': [uid, doc.id],
+          }),
+          collection.doc(uid).collection('matches').doc(doc.id).set({
             'name': name,
             'pfp': pfp,
             'time': DateTime.now(),
-            //add chat uid
-          });
-          collection.doc(doc.id)
-              .collection('matches')
-              .doc(uid)
-              .set({
+            'chat': chatRef.id,
+          }),
+          collection.doc(doc.id).collection('matches').doc(uid).set({
             'name': currentUser.name,
             'pfp': currentUser.pfp,
             'time': DateTime.now(),
-            //add chat uid
-          });
-          //delete matched user from liked and selected data collection
-          collection.doc(uid)
-              .collection('liked')
-              .doc(doc.id)
-              .delete();
-          collection.doc(uid)
-              .collection('selected')
-              .doc(doc.id)
-              .delete();
-          collection.doc(doc.id)
-              .collection('liked')
-              .doc(uid)
-              .delete();
-          collection.doc(doc.id)
-              .collection('selected')
-              .doc(uid)
-              .delete();
-        }
-      }
-    }
+            'chat': chatRef.id,
+          }),
+          collection.doc(uid).collection('liked').doc(doc.id).delete(),
+          collection.doc(uid).collection('selected').doc(doc.id).delete(),
+          collection.doc(doc.id).collection('liked').doc(uid).delete(),
+          collection.doc(doc.id).collection('selected').doc(uid).delete(),
+        ];
+      }),
     );
 
-
     return getUsers(uid);
-
-
-
   }
 
   Future<List> skipUser(uid, matchUID) async{
