@@ -99,117 +99,119 @@ class _MatchingPage extends State<MatchingPage> {
             ),
           ),
       ),
-      body: Column(
-        children: <Widget>[
-          SizedBox(height: 30),
-          Container(
-              height: size.height * .6,
-              width: size.width * .95,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: const Color(0xFBFBFC),
-              ),
-              child: Card(
-                  child: Column(children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.all(40),
-                      width: 800,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            image: NetworkImage('$potentialPFP'),
-                            fit: BoxFit.fill),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 30),
+            Container(
+                height: size.height * .6,
+                width: size.width * .95,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: const Color(0xFBFBFC),
+                ),
+                child: Card(
+                    child: Column(children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.all(40),
+                        width: 800,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              image: NetworkImage('$potentialPFP'),
+                              fit: BoxFit.fill),
+                        ),
                       ),
+                      Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Column(children: <Widget>[
+                            Text(
+                              '$potentialName',
+                              style: TextStyle(height: 2, fontSize: 20),
+
+                              // textScaleFactor: 1.8, style:
+                              // TextStyle(color: Colors.blue)),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 100.0),
+                              child: Container(
+                                height: 1.0,
+                                width: 10000000,
+                                color: Colors.black12,
+                              ),
+                            ),
+                            Text(
+                              " $potentialGender",
+                              style: TextStyle(height: 2, fontSize: 20),
+
+                              // textScaleFactor: 1.8, style:
+                              // TextStyle(color: Colors.blue)),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 100.0),
+                              child: Container(
+                                height: 1.0,
+                                width: 10000000,
+                                color: Colors.black12,
+                              ),
+                            ),
+                            Text(
+                              '$potentialBio',
+                              style: TextStyle(height: 2, fontSize: 20),
+
+                              // textScaleFactor: 1.8, style:
+                              // TextStyle(color: Colors.blue)),
+                            ),
+                          ])),
+                    ]),
+                    elevation: 10)),
+            Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.center, //Center Row contents horizontally,
+                children: <Widget>[
+                  IconButton(
+                    icon: new Icon(
+                      Icons.thumb_up,
+                      size: 40.0,
+                      color: Colors.green,
                     ),
-                    Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Column(children: <Widget>[
-                          Text(
-                            '$potentialName',
-                            style: TextStyle(height: 2, fontSize: 20),
+                    onPressed: () async {
+                      user = await matching.chooseUser(
+                          potentialUID, potentialName, potentialPFP);
 
-                            // textScaleFactor: 1.8, style:
-                            // TextStyle(color: Colors.blue)),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 100.0),
-                            child: Container(
-                              height: 1.0,
-                              width: 10000000,
-                              color: Colors.black12,
-                            ),
-                          ),
-                          Text(
-                            " $potentialGender",
-                            style: TextStyle(height: 2, fontSize: 20),
-
-                            // textScaleFactor: 1.8, style:
-                            // TextStyle(color: Colors.blue)),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 100.0),
-                            child: Container(
-                              height: 1.0,
-                              width: 10000000,
-                              color: Colors.black12,
-                            ),
-                          ),
-                          Text(
-                            '$potentialBio',
-                            style: TextStyle(height: 2, fontSize: 20),
-
-                            // textScaleFactor: 1.8, style:
-                            // TextStyle(color: Colors.blue)),
-                          ),
-                        ])),
-                  ]),
-                  elevation: 10)),
-          Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.center, //Center Row contents horizontally,
-              children: <Widget>[
-                IconButton(
-                  icon: new Icon(
-                    Icons.thumb_up,
-                    size: 40.0,
-                    color: Colors.green,
+                      setState(() {
+                        potentialUID = user[0].uid;
+                        potentialName = user[0].name;
+                        potentialGender = user[0].gender;
+                        potentialBio = user[0].bio;
+                        potentialPFP = user[0].pfp;
+                      });
+                    },
                   ),
-                  onPressed: () async {
-                    user = await matching.chooseUser(
-                        potentialUID, potentialName, potentialPFP);
+                  SizedBox(width: 50, height: 100),
+                  IconButton(
+                    icon: new Icon(
+                      Icons.thumb_down,
+                      size: 40.0,
+                      color: Colors.red,
+                    ),
+                    onPressed: () async {
+                      user = await matching.skipUser(
+                          FirebaseAuth.instance.currentUser.uid, user[0].uid);
 
-                    setState(() {
-                      potentialUID = user[0].uid;
-                      potentialName = user[0].name;
-                      potentialGender = user[0].gender;
-                      potentialBio = user[0].bio;
-                      potentialPFP = user[0].pfp;
-                    });
-                  },
-                ),
-                SizedBox(width: 50, height: 100),
-                IconButton(
-                  icon: new Icon(
-                    Icons.thumb_down,
-                    size: 40.0,
-                    color: Colors.red,
+                      setState(() {
+                        potentialUID = user[0].uid;
+                        potentialName = user[0].name;
+                        potentialGender = user[0].gender;
+                        potentialBio = user[0].bio;
+                        potentialPFP = user[0].pfp;
+                      });
+                    },
                   ),
-                  onPressed: () async {
-                    user = await matching.skipUser(
-                        FirebaseAuth.instance.currentUser.uid, user[0].uid);
-
-                    setState(() {
-                      potentialUID = user[0].uid;
-                      potentialName = user[0].name;
-                      potentialGender = user[0].gender;
-                      potentialBio = user[0].bio;
-                      potentialPFP = user[0].pfp;
-                    });
-                  },
-                ),
-              ]),
-        ],
+                ]),
+          ],
+        ),
       ),
     );
   }
