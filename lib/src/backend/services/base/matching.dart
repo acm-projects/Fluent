@@ -9,7 +9,7 @@ class MatchingService {
   MatchingService(this.database) : collection = database.collection('profiles');
 
 
-  Future<List>chooseUser(String matchUID) async {
+  Future<List>chooseUser(String matchUID, String name, String pfp) async {
     var uid = FirebaseAuth.instance.currentUser.uid;
     MatchProfile currentUser = await getUserData(uid);
 
@@ -31,7 +31,62 @@ class MatchingService {
       'time': DateTime.now(),
     });
 
+    List<String> chosenList = await getChosenList(uid);
+    await collection
+        .doc(uid)
+        .collection('selected')
+        .get()
+        .then((docs){
+      for(var doc in docs.docs){
+        if(chosenList.contains(doc.id)){
+          //create chat between users
+
+          //create new match for both users
+          collection.doc(uid)
+              .collection('matches')
+              .doc(doc.id)
+              .set({
+            'name': name,
+            'pfp': pfp,
+            'time': DateTime.now(),
+            //add chat uid
+          });
+          collection.doc(doc.id)
+              .collection('matches')
+              .doc(uid)
+              .set({
+            'name': currentUser.name,
+            'pfp': currentUser.pfp,
+            'time': DateTime.now(),
+            //add chat uid
+          });
+          //delete matched user from liked and selected data collection
+          collection.doc(uid)
+              .collection('liked')
+              .doc(doc.id)
+              .delete();
+          collection.doc(uid)
+              .collection('selected')
+              .doc(doc.id)
+              .delete();
+          collection.doc(doc.id)
+              .collection('liked')
+              .doc(uid)
+              .delete();
+          collection.doc(doc.id)
+              .collection('selected')
+              .doc(uid)
+              .delete();
+        }
+      }
+    }
+    );
+
+
     return getUsers(uid);
+
+
+
   }
 
   Future<List> skipUser(uid, matchUID) async{
@@ -151,6 +206,7 @@ class MatchingService {
       }
     });
     potentialMatches.sort((a,b) => a.fluencyDifference - b.fluencyDifference);
+
     return potentialMatches;
   }
 
