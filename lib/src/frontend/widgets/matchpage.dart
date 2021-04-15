@@ -4,18 +4,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class MatchingPage extends StatefulWidget{
+class MatchingPage extends StatefulWidget {
   static Widget create(BuildContext context) {
     final matching = ServicesProvider.of(context).services.matching;
     return FutureBuilder(
-      future: matching.getUsers(FirebaseAuth.instance.currentUser.uid), //filled in actural UID instead of future function
+      future: matching.getUsers(
+          "NAOk72rUNdeRKOmCps4wTY6sbhe2"), //filled in actural UID instead of future function
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           print(snapshot.error.toString());
           return Center(child: Text(snapshot.error.toString()));
         }
         if (snapshot.hasData) {
-          return MatchingPage(snapshot.data[0].pfp, snapshot.data[0].uid, snapshot.data[0].name, snapshot.data[0].bio, snapshot.data[0].gender);
+          return MatchingPage(
+              snapshot.data[0].pfp,
+              snapshot.data[0].uid,
+              snapshot.data[0].name,
+              snapshot.data[0].bio,
+              snapshot.data[0].gender);
         }
         return Center(child: CircularProgressIndicator());
       },
@@ -28,13 +34,15 @@ class MatchingPage extends StatefulWidget{
   String potentialBio;
   String potentialGender;
 
-  MatchingPage(this.potentialPFP, this.potentialUID, this.potentialName, this.potentialBio, this.potentialGender);
+  MatchingPage(this.potentialPFP, this.potentialUID, this.potentialName,
+      this.potentialBio, this.potentialGender);
 
   @override
-  _MatchingPage createState() => _MatchingPage(potentialPFP, potentialUID, potentialName, potentialBio, potentialGender);
+  _MatchingPage createState() => _MatchingPage(
+      potentialPFP, potentialUID, potentialName, potentialBio, potentialGender);
 }
 
-class _MatchingPage extends State<MatchingPage>{
+class _MatchingPage extends State<MatchingPage> {
   String potentialPFP;
   String potentialUID;
   String potentialName;
@@ -43,7 +51,8 @@ class _MatchingPage extends State<MatchingPage>{
   var user;
   String search;
 
-  _MatchingPage(this.potentialPFP, this.potentialUID, this.potentialName, this.potentialBio, this.potentialGender);
+  _MatchingPage(this.potentialPFP, this.potentialUID, this.potentialName,
+      this.potentialBio, this.potentialGender);
 
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -52,20 +61,124 @@ class _MatchingPage extends State<MatchingPage>{
     //return Center(child: CircularProgressIndicator());
     //}
     return Scaffold(
-        body: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 50),
-                child:
-                TextFormField(
-                  onChanged: (val) {
-                    setState(() => search = val);
-                  },
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.search, color: Colors.black, size: 30),
+              onPressed: () async {
+                user = await matching.searchUser(search);
+                setState(() {
+                  potentialUID = user[0].uid;
+                  potentialName = user[0].name;
+                  potentialGender = user[0].gender;
+                  potentialBio = user[0].bio;
+                  potentialPFP = user[0].pfp;
+                });
+              },
+            ),
+          ],
+          title: Container(
+            height: 40,
+            width: 280,
+            alignment: Alignment.topRight,
+            color: Colors.transparent,
+            child: TextFormField(
+              onChanged: (val) {
+                setState(() => search = val);
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: const BorderRadius.all(const Radius.circular(90.0)),
+                  borderSide: const BorderSide(
+                    color: Colors.transparent,
+                  ),
                 ),
+                //filled: true,
               ),
-              ElevatedButton(
+            ),
+          ),
+      ),
+      body: Column(
+        children: <Widget>[
+          SizedBox(height: 30),
+          Container(
+              height: size.height * .6,
+              width: size.width * .95,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                color: const Color(0xFBFBFC),
+              ),
+              child: Card(
+                  child: Column(children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.all(40),
+                      width: 800,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: NetworkImage('$potentialPFP'),
+                            fit: BoxFit.fill),
+                      ),
+                    ),
+                    Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Column(children: <Widget>[
+                          Text(
+                            '$potentialName',
+                            style: TextStyle(height: 2, fontSize: 20),
+
+                            // textScaleFactor: 1.8, style:
+                            // TextStyle(color: Colors.blue)),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 100.0),
+                            child: Container(
+                              height: 1.0,
+                              width: 10000000,
+                              color: Colors.black12,
+                            ),
+                          ),
+                          Text(
+                            " $potentialGender",
+                            style: TextStyle(height: 2, fontSize: 20),
+
+                            // textScaleFactor: 1.8, style:
+                            // TextStyle(color: Colors.blue)),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 100.0),
+                            child: Container(
+                              height: 1.0,
+                              width: 10000000,
+                              color: Colors.black12,
+                            ),
+                          ),
+                          Text(
+                            '$potentialBio',
+                            style: TextStyle(height: 2, fontSize: 20),
+
+                            // textScaleFactor: 1.8, style:
+                            // TextStyle(color: Colors.blue)),
+                          ),
+                        ])),
+                  ]),
+                  elevation: 10)),
+          Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.center, //Center Row contents horizontally,
+              children: <Widget>[
+                IconButton(
+                  icon: new Icon(
+                    Icons.thumb_up,
+                    size: 40.0,
+                    color: Colors.green,
+                  ),
                   onPressed: () async {
-                    user = await matching.searchUser(search);
+                    user = await matching.chooseUser(
+                        potentialUID, potentialName, potentialPFP);
+
                     setState(() {
                       potentialUID = user[0].uid;
                       potentialName = user[0].name;
@@ -74,95 +187,30 @@ class _MatchingPage extends State<MatchingPage>{
                       potentialPFP = user[0].pfp;
                     });
                   },
-                  child: Text("Search")
-              ),
-
-              Container(
-                  height: size.height * .6,
-                  width: size.width * .95,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    color: const Color(0xFBFBFC),
+                ),
+                SizedBox(width: 50, height: 100),
+                IconButton(
+                  icon: new Icon(
+                    Icons.thumb_down,
+                    size: 40.0,
+                    color: Colors.red,
                   ),
+                  onPressed: () async {
+                    user = await matching.skipUser(
+                        FirebaseAuth.instance.currentUser.uid, user[0].uid);
 
-                  child: Card(
-                      child: Column (children: <Widget> [
-                        Container(
-                          margin: EdgeInsets.all(20),
-                          width: 200,
-                          height: 200,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                image: NetworkImage(potentialPFP),
-                                fit: BoxFit.fill
-                            ),
-                          ),
-                        ),
-                        Align(
-                            alignment: Alignment.bottomLeft,
-                            child: Column (children: <Widget> [
-                              Text(
-                                " $potentialName",
-                                // textScaleFactor: 1.8, style:
-                                // TextStyle(color: Colors.blue)),
-                              ),
-                              Text(
-                                " $potentialBio",
-                                // textScaleFactor: 1.8, style:
-                                // TextStyle(color: Colors.blue)),
-                              ),
-                              Text(
-                                "$potentialGender",
-                                // textScaleFactor: 1.8, style:
-                                // TextStyle(color: Colors.blue)),
-                              ),
-                            ])),
-                      ]), elevation: 15 )),
-              Flexible(
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,//Center Row contents horizontally,
-                  children: <Widget>[
-                    IconButton(
-                      icon: new Icon(Icons.thumb_up, size: 30.0),
-
-                      onPressed: () async {
-                        MatchProfile previous = user[0];
-                        user = await matching.chooseUser(potentialUID);
-                        print(previous.uid);
-                        await matching.getMatches(previous);
-                        setState(() {
-                          potentialUID = user[0].uid;
-                          potentialName = user[0].name;
-                          potentialGender = user[0].gender;
-                          potentialBio = user[0].bio;
-                          potentialPFP = user[0].pfp;
-                        });
-                      },
-                    ),
-
-                    SizedBox(width: 50, height: 100),
-
-                    IconButton(
-                      icon: new Icon(Icons.thumb_down, size: 30.0),
-
-                      onPressed: () async {
-                        // user = await matching.skipUser(FirebaseAuth.instance.currentUser.uid, user[0].uid);
-                        user = await matching.skipUser(FirebaseAuth.instance.currentUser.uid, user[0].uid);
-                        setState(() {
-                          potentialUID = user[0].uid;
-                          potentialName = user[0].name;
-                          potentialGender = user[0].gender;
-                          potentialBio = user[0].bio;
-                          potentialPFP = user[0].pfp;
-                        });
-                      },
-                    ),
-                  ]
-              ),
-              ),
-            ]
-        )
+                    setState(() {
+                      potentialUID = user[0].uid;
+                      potentialName = user[0].name;
+                      potentialGender = user[0].gender;
+                      potentialBio = user[0].bio;
+                      potentialPFP = user[0].pfp;
+                    });
+                  },
+                ),
+              ]),
+        ],
+      ),
     );
   }
 }

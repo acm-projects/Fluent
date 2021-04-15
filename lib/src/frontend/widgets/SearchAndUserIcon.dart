@@ -45,7 +45,8 @@ class _SearchAndUserIcon extends State<SearchAndUserIcon> {
                     MaterialPageRoute(
                       builder: (context) => EditProfilePage(
                           pfp: "https://firebasestorage.googleapis.com/v0/b/acm-fluent.appspot.com/o/uploads%2FHtFumEzDq1O5Z37x58xZ2bak9uE3?alt=media&token=e7671430-eca8-4de4-999c-e1920aa18883"),
-                    ));
+                    )
+                );
 
                 //print(currentUser.);
               },
