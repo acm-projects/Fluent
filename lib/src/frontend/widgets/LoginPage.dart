@@ -163,13 +163,13 @@ class _LoginPageState extends State<LoginPage> {
                                   MatchProfile user = await matching.getUserData(FirebaseAuth.instance.currentUser.uid);
 
                                   if(FirebaseAuth.instance.currentUser.uid != null && !error) {
-                                    //Navigator.pushNamed(context,"/navigation", arguments: user);
+                                    //Navigator.pushNamed(context,"/navigation");
                                     Navigator.push(context,
                                         MaterialPageRoute(
-                                      builder: (context) => BottomNavBar(
-                                          pfp: user.pfp
-                                    )
-                                    ));
+                                            builder: (context) => BottomNavBar(
+                                                pfp: user.pfp
+                                            )
+                                        ));
                                   }
                                 }
                               },
