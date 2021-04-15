@@ -1,6 +1,5 @@
+import 'package:fluent/src/backend/models/match.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
-import 'package:fluent/src/frontend/pages.dart';
-import 'package:fluent/src/frontend/widgets/MatchRequest.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,7 +8,7 @@ class MatchingPage extends StatefulWidget{
   static Widget create(BuildContext context) {
     final matching = ServicesProvider.of(context).services.matching;
     return FutureBuilder(
-      future: matching.getUsers(FirebaseAuth.instance.currentUser.uid),
+      future: matching.getUsers(FirebaseAuth.instance.currentUser.uid), //filled in actural UID instead of future function
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           print(snapshot.error.toString());
@@ -47,126 +46,124 @@ class _MatchingPage extends State<MatchingPage>{
 
   _MatchingPage(this.potentialPFP, this.potentialUID, this.potentialName, this.potentialBio, this.potentialGender);
 
-  /*int set = 0;
-  final List<Widget> _navBarPages = [
-    InboxScreen(),
-    //MatchingPage(potentialPFP, potentialUID, potentialName, potentialBio, potentialGender),
-    MatchRequestPage(),
-    InboxScreen(),
-  ];
-
-  _onTabTapped(int index) {
-    setState(() {
-      set = index;
-    });
-  }*/
-
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final matching = ServicesProvider.of(context).services.matching;
     //while (user == null) {
       //return Center(child: CircularProgressIndicator());
     //}
 
     return Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 50),
-                  child:
-                  TextFormField(
-                    onChanged: (val) {
-                      setState(() => search = val);
-                    },
-                  ),
+        body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 50),
+                child:
+                TextFormField(
+                  onChanged: (val) {
+                    setState(() => search = val);
+                  },
                 ),
-                ElevatedButton(
-                    onPressed: () async {
-                      user = await matching.searchUser(search);
-                      setState(() {
-                        potentialUID = user[0].uid;
-                        potentialName = user[0].name;
-                        potentialGender = user[0].gender;
-                        potentialBio = user[0].bio;
-                      });
-                    },
-                    child: Text("Search")
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 50),
-                  child: Center(
-                      child: Text("Potential Matches",
-                          textScaleFactor: 1.5,
-                          style: TextStyle(color: Colors.blue))
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 25),
-                  child: Center(
-                    child: Text(
-                        "$potentialUID $potentialName $potentialBio $potentialGender $potentialPFP",
-                        textScaleFactor: 1.8, style:
-                    TextStyle(color: Colors.blue)),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 25),
-                  child: ElevatedButton(
-                    child: Text(
-                      'Send Like',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () async {
-                      user = await matching.chooseUser(potentialUID);
-                      setState(() {
-                        potentialUID = user[0].uid;
-                        potentialName = user[0].name;
-                        potentialGender = user[0].gender;
-                        potentialBio = user[0].bio;
-                        potentialPFP = user[0].pfp;
-                      });
-                      await matching.getMatches(user[0]);
-                    },
-                  ),
-                ),
-                ElevatedButton(
-                  child: Text(
-                    'Send dislike',
-                    style: TextStyle(color: Colors.white),
-                  ),
+              ),
+              ElevatedButton(
                   onPressed: () async {
-                    user = await matching.skipUser(FirebaseAuth.instance.currentUser.uid, user[0].uid);
+                    user = await matching.searchUser(search);
                     setState(() {
                       potentialUID = user[0].uid;
                       potentialName = user[0].name;
                       potentialGender = user[0].gender;
                       potentialBio = user[0].bio;
+                      potentialPFP = user[0].pfp;
                     });
                   },
+                  child: Text("Search")
+              ),
+              Container(
+                height: size.height * .6,
+                width: size.width * .95,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: const Color(0xFBFBFC),
                 ),
-              ]
-          ),
-        ),
 
-      /*bottomNavigationBar: BottomNavigationBar(
-          //currentIndex: set,
-          items:[
-            BottomNavigationBarItem(
-                icon: Icon(Icons.favorite),
-                title: Text('Match'),
+                  child: Card(
+                      child: Column (children: <Widget> [
+                        Container(
+                          margin: EdgeInsets.all(20),
+                          width: 200,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: NetworkImage(potentialPFP),
+                                fit: BoxFit.fill
+                            ),
+                          ),
+                        ),
+                        Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Column (children: <Widget> [
+                              Text(
+                                " $potentialName",
+                                // textScaleFactor: 1.8, style:
+                                // TextStyle(color: Colors.blue)),
+                              ),
+                              Text(
+                                " $potentialBio",
+                                // textScaleFactor: 1.8, style:
+                                // TextStyle(color: Colors.blue)),
+                              ),
+                              Text(
+                                "$potentialGender",
+                                // textScaleFactor: 1.8, style:
+                                // TextStyle(color: Colors.blue)),
+                              ),
+                            ])),
+                      ]), elevation: 15 )),
+              Flexible(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,//Center Row contents horizontally,
+                    children: <Widget>[
+                      IconButton(
+                        icon: new Icon(Icons.thumb_up, size: 30.0),
 
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.volunteer_activism),
-                title: Text('Match Requests')
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.chat),
-                title: Text('Inbox')
-            ),
-          ],
-          onTap: _onTabTapped,
-      ),*/
+                        onPressed: () async {
+                          MatchProfile previous = user[0];
+                          user = await matching.chooseUser(potentialUID);
+                          print(previous.uid);
+                          await matching.getMatches(previous);
+                          setState(() {
+                            potentialUID = user[0].uid;
+                            potentialName = user[0].name;
+                            potentialGender = user[0].gender;
+                            potentialBio = user[0].bio;
+                            potentialPFP = user[0].pfp;
+                          });
+                        },
+                      ),
+
+                      SizedBox(width: 50, height: 100),
+
+                      IconButton(
+                        icon: new Icon(Icons.thumb_down, size: 30.0),
+
+                        onPressed: () async {
+                          // user = await matching.skipUser(FirebaseAuth.instance.currentUser.uid, user[0].uid);
+                          user = await matching.skipUser(FirebaseAuth.instance.currentUser.uid, user[0].uid);
+                          setState(() {
+                            potentialUID = user[0].uid;
+                            potentialName = user[0].name;
+                            potentialGender = user[0].gender;
+                            potentialBio = user[0].bio;
+                            potentialPFP = user[0].pfp;
+                          });
+                        },
+                      ),
+                    ]
+                ),
+              ),
+            ]
+        )
     );
   }
 }

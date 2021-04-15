@@ -158,12 +158,13 @@ class MatchingService {
     return potentialMatches;
   }
 
-  Future<List> searchUser(matchUsername) async{
-    await collection.where('username', isEqualTo: matchUsername)
+  Future<List> searchUser(name) async{
+    await collection.where('name', isEqualTo: name)
         .get()
         .then((users){
       for(var user in users.docs){
         potentialMatches.insert(0, MatchProfile(
+          pfp: user['pfp'],
           uid: user['UID'],
           name: user['name'],
           bio: user['bio'],

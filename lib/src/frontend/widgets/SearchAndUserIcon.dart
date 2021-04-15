@@ -1,3 +1,4 @@
+import 'package:fluent/src/backend/models/user.dart' as user;
 import 'package:fluent/src/frontend/widgets/ChatScreen.dart';
 import 'package:fluent/src/frontend/widgets/editProfile.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +17,9 @@ class SearchAndUserIcon extends StatefulWidget {
 }
 
 class _SearchAndUserIcon extends State<SearchAndUserIcon> {
+  //var User = user.User(FirebaseAuth.instance.currentUser.uid);
+  //var currentUser = user.U;
   @override
-
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
@@ -37,19 +39,14 @@ class _SearchAndUserIcon extends State<SearchAndUserIcon> {
             child: GestureDetector(
               onTap: () {
                 // Navigator should go here. It should navigate to the EditProfile page
-                Navigator.push(context,
-                MaterialPageRoute(
-                builder: (context) => EditProfilePage(
-                    pfp: "https://firebasestorage.googleapis.com/v0/b/acm-fluent.appspot.com/o/uploads%2FHtFumEzDq1O5Z37x58xZ2bak9uE3?alt=media&token=e7671430-eca8-4de4-999c-e1920aa18883"
-                //potentialUID: user[0].uid,
-                //potentialName: user[0].name,
-                //potentialLanguage: user[0].language,
-                //potentialFluency: user[0].fluency),
-                ),
-                )
-                );
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditProfilePage(
+                          pfp: "https://firebasestorage.googleapis.com/v0/b/acm-fluent.appspot.com/o/uploads%2FHtFumEzDq1O5Z37x58xZ2bak9uE3?alt=media&token=e7671430-eca8-4de4-999c-e1920aa18883"),
+                ));
 
-                //print("User image is being tapped");
+                //print(currentUser.);
               },
               child: Container(
                   width: 70,
@@ -65,10 +62,9 @@ class _SearchAndUserIcon extends State<SearchAndUserIcon> {
                       ],
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: NetworkImage("https://firebasestorage.googleapis.com/v0/b/acm-fluent.appspot.com/o/uploads%2FHtFumEzDq1O5Z37x58xZ2bak9uE3?alt=media&token=e7671430-eca8-4de4-999c-e1920aa18883"),
-                      )
-                  )
-              ),
+                        image: NetworkImage(
+                            "https://firebasestorage.googleapis.com/v0/b/acm-fluent.appspot.com/o/uploads%2FHtFumEzDq1O5Z37x58xZ2bak9uE3?alt=media&token=e7671430-eca8-4de4-999c-e1920aa18883"),
+                      ))),
             ),
           ),
         ),

@@ -1,19 +1,41 @@
 import 'package:fluent/src/backend/models/user.dart';
+import 'package:fluent/src/frontend/widgets/editProfile.dart';
 import 'package:flutter/material.dart';
+import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:fluent/src/frontend/widgets/SearchAndUserIcon.dart';
 // later the actual user model will be imported to get the actual user's data
 import 'package:fluent/src/frontend/frontendmodels/UITestMessageModel.dart';
+import 'package:fluent/src/frontend/pages.dart';
 import 'package:fluent/src/frontend/widgets/ChatScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 class MatchRequestPage extends StatefulWidget {
+  final String pfp;
+  MatchRequestPage({Key key, @required this.pfp}) : super(key: key);
   @override
   _MatchRequestPageState createState() => _MatchRequestPageState();
 }
 
+class Post {
+  final String name;
+  Post(this.name);
+}
+
 class _MatchRequestPageState extends State<MatchRequestPage> {
   //int set = 0;
+  List<Post> MatchNames = [];
+
+  final SearchBarController<Post> _searchBarController = SearchBarController();
+
+  Future<List<Post>> _getALlPosts(String text) async {
+    List<Post> posts = MatchNames
+        .where((element) =>
+        element.name.contains(text))
+        .toList();
+    return posts;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -42,7 +64,10 @@ class _MatchRequestPageState extends State<MatchRequestPage> {
                       // SingleChildScrollView won't try to go infinitely vertical
                         constraints: BoxConstraints(
                             maxHeight:
-                            MediaQuery.of(context).size.height - 35),
+                            MediaQuery
+                                .of(context)
+                                .size
+                                .height - 35),
                         padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
                         child: Column(
                           // the MainAxisSize.min will tell the Column to be as small as its children will allow
@@ -55,19 +80,87 @@ class _MatchRequestPageState extends State<MatchRequestPage> {
                               Flexible(
                                 fit: FlexFit.loose,
                                 flex: 2,
-                                child: SearchAndUserIcon(),
+                                child: Row(
+                                  children: <Widget>[
+                                    Flexible(
+                                      flex: 2,
+                                      //child: Icon(
+                                      //Icons.search,
+                                      child: SearchBar<Post>(
+                                        onSearch: _getALlPosts,
+                                        searchBarController: _searchBarController,
+                                        hintText: "Search user",
+                                        onItemFound: (Post post, int index) {
+                                          return Container(
+                                            color: Colors.lightBlue,
+                                            child: ListTile(
+                                              title: Text(post.name),
+                                              isThreeLine: true,
+                                              onTap: () {
+                                                Navigator.of(context)
+                                                    .push(MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Detail()));
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    //),
+                                    Flexible(
+                                      flex: 1,
+                                      child: Align(
+                                        alignment: Alignment.topRight,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            // Navigator should go here. It should navigate to the EditProfile page
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EditProfilePage(
+                                                          pfp: widget.pfp),
+                                                ));
+                                          },
+                                          child: Container(
+                                              width: 70,
+                                              height: 70,
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey
+                                                          .withOpacity(0.3),
+                                                      spreadRadius: 2,
+                                                      blurRadius: 5,
+                                                    ),
+                                                  ],
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: NetworkImage(
+                                                        widget.pfp),
+                                                  ))),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ),
+
 
                               // for the user's picture, name, text message display, timestamp, etc.
                               Flexible(
                                   fit: FlexFit.loose,
                                   flex: 12,
                                   child: ListView.separated(
-                                      separatorBuilder: (context, builder) => Divider(
-                                        color: Colors.black,
+                                      separatorBuilder: (context, builder) =>
+                                          Divider(
+                                            color: Colors.black,
                                       ),
                                       itemCount: snapshot.data.docs.length,
                                       itemBuilder: (context, index) {
+                                        MatchNames.add(Post(snapshot.data.docs[index]['name']));
                                         // change this object to backend stuff
                                         final Message messages =
                                         chats[index];
@@ -75,7 +168,11 @@ class _MatchRequestPageState extends State<MatchRequestPage> {
                                           onTap: () {
                                             // this will let you tap to the next page, this will be changed once
                                             // routes are implemented again
-                                            Navigator.pushNamed(context, '/chat', arguments: User(snapshot.data.docs[index].id));
+                                            Navigator.pushNamed(
+                                                context, '/chat',
+                                                arguments: User(
+                                                    snapshot.data.docs[index]
+                                                        .id));
                                           },
                                           child: Container(
                                             padding: EdgeInsets.symmetric(
@@ -136,14 +233,17 @@ class _MatchRequestPageState extends State<MatchRequestPage> {
                                                   ),
                                                   child: CircleAvatar(
                                                     radius: 30,
-                                                    backgroundImage: NetworkImage(snapshot.data.docs[index]['pfp']),
+                                                    backgroundImage: NetworkImage(
+                                                        snapshot.data
+                                                            .docs[index]['pfp']),
                                                   ),
                                                 ),
 
                                                 // this next container is for the username
                                                 Container(
                                                   width:
-                                                  MediaQuery.of(context)
+                                                  MediaQuery
+                                                      .of(context)
                                                       .size
                                                       .width *
                                                       0.65,
@@ -158,7 +258,9 @@ class _MatchRequestPageState extends State<MatchRequestPage> {
                                                             .spaceBetween,
                                                         children: <Widget>[
                                                           Flexible(
-                                                            child: Text(snapshot.data.docs[index]['name'],
+                                                            child: Text(
+                                                                snapshot.data
+                                                                    .docs[index]['name'],
                                                                 style:
                                                                 TextStyle(
                                                                   fontSize:
@@ -179,7 +281,8 @@ class _MatchRequestPageState extends State<MatchRequestPage> {
                                                             // dimensions and not overflow to the right
                                                             Flexible(
                                                               child: Text(
-                                                                " ", //messages.text,
+                                                                " ",
+                                                                //messages.text,
                                                                 // this is so that once it reaches 2 lines, it will put an ellipses after the text
                                                                 overflow:
                                                                 TextOverflow
@@ -220,31 +323,27 @@ class _MatchRequestPageState extends State<MatchRequestPage> {
                             ])));
               }
             }),
-
-        /*bottomNavigationBar: BottomNavigationBar(
-            currentIndex: set,
-            items:[
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.favorite),
-                  title: Text('Match')
-              ),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.volunteer_activism),
-                  title: Text('Match Requests')
-              ),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.chat),
-                  title: Text('Inbox')
-              ),
-            ],
-            onTap: (index) {
-              setState(() {
-                set = index;
-              });
-            }
-        ),*/
       ),
     );
-
   }
 }
+class Detail extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            Text("Detail"),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+

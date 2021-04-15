@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:fluent/src/backend/models/fluency.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluent/src/frontend/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -126,9 +127,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             Icons.arrow_back,
             color: Colors.lightBlueAccent,
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () {Navigator.pop(context);},
         ),
       ),
       body: Container(
@@ -379,11 +378,39 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           letterSpacing: 2.2,
                           color: Colors.white),
                     ),
-                  ))
+                  )),
+            Container(
+              //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                width: 200.0,
+                child: RaisedButton(
+                  onPressed: () async {
+                    final auth = ServicesProvider.of(context).services.auth;
+                    auth.signOut();
+
+                    Navigator.push(context,
+                        MaterialPageRoute(
+                            builder: (context) => LoginPage()
+                        ));
+
+                  },
+                  color: Colors.redAccent,
+                  padding: EdgeInsets.symmetric(horizontal: 50),
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Text(
+                    "Sign Out",
+                    style: TextStyle(
+                        fontSize: 14,
+                        letterSpacing: 2.2,
+                        color: Colors.white),
+                  ),
+                ))
             ],
           ),
         ),
       ),
+
     );
   }
 }

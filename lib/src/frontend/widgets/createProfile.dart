@@ -4,6 +4,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fluent/src/backend/models/fluency.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluent/src/frontend/pages.dart';
+import 'package:fluent/src/frontend/widgets/editProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -73,6 +75,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
     UploadTask uploadTask = ref.putFile(_image);
     var url = await (await uploadTask.whenComplete(() => null)).ref.getDownloadURL();
     profilePic = url.toString();
+    print(profilePic);
     return profilePic;
   }
 
@@ -370,7 +373,10 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                     onPressed: () async {
                       await uploadImage(context, FirebaseAuth.instance.currentUser.uid);
                       //await displayImageFromFirebase(context, FirebaseAuth.instance.currentUser.uid);
-                      ServicesProvider.of(context).services.profiles.createProfile(
+                      InboxScreen(pfp: profilePic);
+                      MatchRequestPage(pfp:profilePic);
+                      EditProfilePage(pfp:profilePic);
+                      var profile = ServicesProvider.of(context).services.profiles.createProfile(
                         pfp: profilePic,
                         uid: FirebaseAuth.instance.currentUser.uid,
                         username: "gary2",  //need username
