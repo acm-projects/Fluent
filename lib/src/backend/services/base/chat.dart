@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 class ChatService {
   CurrentUser _currentUser;
 
+  FirebaseFirestore _database;
   CollectionReference _profilesRef;
   CollectionReference _chatsRef;
 
@@ -19,9 +20,9 @@ class ChatService {
   DocumentReference readRef({String uid, DocumentReference ref}) =>
       (ref ?? chatRef(uid)).collection('readReceipts').doc(_currentUser.uid);
 
-  ChatService(this._currentUser, FirebaseFirestore database)
-      : _profilesRef = database.collection('profiles'),
-        _chatsRef = database.collection('chats');
+  ChatService(this._currentUser, this._database)
+      : _profilesRef = _database.collection('profiles'),
+        _chatsRef = _database.collection('chats');
 
   static Message _makeMessage(DocumentSnapshot snap) => Message(
     uid: snap.id,
@@ -77,6 +78,29 @@ class ChatService {
   Future<void> sendMessage(String chatUid, String content) {
     var ref = chatRef(chatUid);
     return Future.wait([
+      ref.get().then((chatSnap) {
+        var otherUserId = chatSnap
+            .get('memberUids')
+            .where((uid) => uid != _currentUser.uid)
+            .first;
+
+        return Future.wait([
+          _database.collection('profiles')
+              .doc(_currentUser.uid)
+              .collection('matches')
+              .doc(otherUserId)
+              .update({
+            'time': FieldValue.serverTimestamp(),
+          }),
+          _database.collection('profiles')
+              .doc(otherUserId)
+              .collection('matches')
+              .doc(_currentUser.uid)
+              .update({
+            'time': FieldValue.serverTimestamp(),
+          }),
+        ]);
+      }),
       ref.update({
         'mostRecentMessage': content,
       }),
