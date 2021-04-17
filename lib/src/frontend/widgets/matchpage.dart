@@ -16,12 +16,16 @@ class MatchingPage extends StatefulWidget {
           return Center(child: Text(snapshot.error.toString()));
         }
         if (snapshot.hasData) {
-          return MatchingPage(
-              snapshot.data[0].pfp,
-              snapshot.data[0].uid,
-              snapshot.data[0].name,
-              snapshot.data[0].bio,
-              snapshot.data[0].gender);
+          if (snapshot.data.length > 0) {
+            return MatchingPage(
+                snapshot.data[0].pfp,
+                snapshot.data[0].uid,
+                snapshot.data[0].name,
+                snapshot.data[0].bio,
+                snapshot.data[0].gender);
+          } else {
+            return Center(child: Text("No users found."));
+          }
         }
         return Center(child: CircularProgressIndicator());
       },
