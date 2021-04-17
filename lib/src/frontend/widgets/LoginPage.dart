@@ -166,10 +166,10 @@ class _LoginPageState extends State<LoginPage> {
                                     //Navigator.pushNamed(context,"/navigation");
                                     Navigator.push(context,
                                         MaterialPageRoute(
-                                            builder: (context) => BottomNavBar(
-                                                pfp: user.pfp
-                                            )
-                                        ));
+                                      builder: (context) => BottomNavBar(
+                                          pfp: user.pfp
+                                    )
+                                    ));
                                   }
                                 }
                               },

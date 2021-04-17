@@ -110,13 +110,14 @@ class _InboxScreenState extends State<InboxScreen> {
                                       flex: 2,
                                       //child: Icon(
                                       //Icons.search,
-                                      child: SearchBar<Post>(
+                                       child: SearchBar<Post>(
                                         onSearch: _getALlPosts,
                                         //searchBarController: _searchBarController,
                                         hintText: "Search user",
                                         onItemFound: (Post post, int index) {
                                           print(post.name);
-                                          return new DropdownMenuItem<String>(
+                                          return
+                                            new DropdownMenuItem<String>(
                                               value: post.name,
                                               child: Row(
                                                 children: <Widget>[
@@ -125,7 +126,8 @@ class _InboxScreenState extends State<InboxScreen> {
                                                           Colors.primaries[3]),
                                                   new Text(post.name)
                                                 ],
-                                              ));
+                                              )
+                                            );
                                           //   return ListTile(
                                           //     title: Text(post.name),
                                           //     //isThreeLine: true,
