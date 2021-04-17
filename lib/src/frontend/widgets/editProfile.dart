@@ -278,7 +278,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         );
                       }).toList(),
                       hint:Text(
-                        "Please choose a langauage",
+                        "Please choose a language",
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 16,
