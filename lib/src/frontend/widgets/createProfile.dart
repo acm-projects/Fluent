@@ -344,7 +344,8 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                         language: _chosenValue,
                         fluency: parseFluency(fluency+1),
                       );
-                      Navigator.pushNamed(context, '/match');
+                      // navigation will take it to the matching page here
+                      Navigator.pushNamed(context, '/navigation');
                     },
                     color: Colors.lightBlueAccent,
                     padding: EdgeInsets.symmetric(horizontal: 50),

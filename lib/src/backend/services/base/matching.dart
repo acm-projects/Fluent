@@ -8,6 +8,7 @@ class MatchingService {
   var potentialMatches = [];
   MatchingService(this.database) : collection = database.collection('profiles');
 
+  int years = 365;
 
   Future<List>chooseUser(String matchUID, String name, String pfp) async {
     var uid = FirebaseAuth.instance.currentUser.uid;
@@ -26,8 +27,11 @@ class MatchingService {
         .collection('selected')
         .doc(uid)
         .set({
+      'uid': currentUser.uid,
       'name': currentUser.name,
       'pfp': currentUser.pfp,
+      'gender': currentUser.gender,
+      'bio': currentUser.bio,
       'time': DateTime.now(),
     });
 
@@ -89,8 +93,11 @@ class MatchingService {
         .doc(uid)
         .get()
         .then((user){
+          currentUser.uid = user['UID'];
           currentUser.pfp = user['pfp'];
           currentUser.name = user['name'];
+          currentUser.gender = ((DateTime.now().difference(user['birthDate'].toDate()).inDays).toInt() / years).floor().toString();
+          currentUser.bio = user['bio'];
           currentUser.language = user['language'];
           currentUser.fluency = user['fluency'];
     });
@@ -175,7 +182,7 @@ class MatchingService {
           uid: user['UID'],
           name: user['name'],
           bio: user['bio'],
-          gender: user['gender'],
+          gender: ((DateTime.now().difference(user['birthDate'].toDate()).inDays).toInt() / years).floor().toString(),
           fluencyDifference: (currentUser.fluency - user['fluency']).abs(),
         ));
         }

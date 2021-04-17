@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class MatchingPage extends StatefulWidget {
+class MatchingRequestCard extends StatefulWidget {
   static Widget create(BuildContext context) {
     final matching = ServicesProvider.of(context).services.matching;
     return FutureBuilder(
@@ -16,7 +16,7 @@ class MatchingPage extends StatefulWidget {
           return Center(child: Text(snapshot.error.toString()));
         }
         if (snapshot.hasData) {
-          return MatchingPage(
+          return MatchingRequestCard(
               snapshot.data[0].pfp,
               snapshot.data[0].uid,
               snapshot.data[0].name,
@@ -34,24 +34,23 @@ class MatchingPage extends StatefulWidget {
   String potentialBio;
   String potentialGender;
 
-  MatchingPage(this.potentialPFP, this.potentialUID, this.potentialName,
+  MatchingRequestCard(this.potentialPFP, this.potentialUID, this.potentialName,
       this.potentialBio, this.potentialGender);
 
   @override
-  _MatchingPage createState() => _MatchingPage(
+  _MatchingRequestCard createState() => _MatchingRequestCard(
       potentialPFP, potentialUID, potentialName, potentialBio, potentialGender);
 }
 
-class _MatchingPage extends State<MatchingPage> {
+class _MatchingRequestCard extends State<MatchingRequestCard> {
   String potentialPFP;
   String potentialUID;
   String potentialName;
   String potentialBio;
   String potentialGender;
   var user;
-  String search;
 
-  _MatchingPage(this.potentialPFP, this.potentialUID, this.potentialName,
+  _MatchingRequestCard(this.potentialPFP, this.potentialUID, this.potentialName,
       this.potentialBio, this.potentialGender);
 
   Widget build(BuildContext context) {
@@ -62,47 +61,6 @@ class _MatchingPage extends State<MatchingPage> {
     //return Center(child: CircularProgressIndicator());
     //}
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search, color: Colors.black, size: 30),
-            onPressed: () async {
-              user = await matching.searchUser(search);
-              setState(() {
-                potentialUID = user[0].uid;
-                potentialName = user[0].name;
-                potentialGender = user[0].gender;
-                potentialBio = user[0].bio;
-                potentialPFP = user[0].pfp;
-              });
-            },
-          ),
-        ],
-        title: Container(
-          height: 40,
-          width: 280,
-          alignment: Alignment.topRight,
-          color: Colors.transparent,
-          child: Align(
-            alignment: Alignment.centerLeft,
-          child: TextFormField(
-            onChanged: (val) {
-              setState(() => search = val);
-            },
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius:
-                    const BorderRadius.all(const Radius.circular(90.0)),
-                borderSide: const BorderSide(
-                  color: Colors.transparent,
-                ),
-              ),
-              //filled: true,
-            ),
-          ),),
-        ),
-      ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -157,30 +115,29 @@ class _MatchingPage extends State<MatchingPage> {
                                     flex: 2,
                                     child: Center(
                                         child: Container(
-                                            // adding margin
+                                          // adding margin
                                             margin: const EdgeInsets.only(left:5.0, right: 5.0),
                                             // adding padding
                                             padding: const EdgeInsets.all(3.0),
                                             child: Expanded(
                                               child: SingleChildScrollView(
                                                   child:
-                                                      Column(children: <Widget>[
+                                                  Column(children: <Widget>[
+                                                    Text(
+                                                      '$potentialBio',
+                                                      style: TextStyle(
+                                                          fontFamily:
+                                                          'AirbnbCereal',
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                          FontWeight.normal,
+                                                          color: Colors.white),
+                                                      //TextStyle(height: 2, fontSize: 20),
 
-                                                  Text(
-                                                    '$potentialBio',
-                                                    textAlign: TextAlign.left,
-                                                    style: TextStyle(
-                                                        fontFamily:
-                                                            'AirbnbCereal',
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color: Colors.white),
-                                                    //TextStyle(height: 2, fontSize: 20),
-                                                    // textScaleFactor: 1.8, style:
-                                                    // TextStyle(color: Colors.blue)),
-                                                  ),
-                                              ])),
+                                                      // textScaleFactor: 1.8, style:
+                                                      // TextStyle(color: Colors.blue)),
+                                                    ),
+                                                  ])),
                                             )))),
                                 SizedBox(height: 10),
                               ])),
@@ -200,13 +157,7 @@ class _MatchingPage extends State<MatchingPage> {
                       user = await matching.chooseUser(
                           potentialUID, potentialName, potentialPFP);
 
-                      setState(() {
-                        potentialUID = user[0].uid;
-                        potentialName = user[0].name;
-                        potentialGender = user[0].gender;
-                        potentialBio = user[0].bio;
-                        potentialPFP = user[0].pfp;
-                      });
+
                     },
                   ),
                   SizedBox(width: 50, height: 100),
@@ -220,13 +171,7 @@ class _MatchingPage extends State<MatchingPage> {
                       user = await matching.skipUser(
                           FirebaseAuth.instance.currentUser.uid, user[0].uid);
 
-                      setState(() {
-                        potentialUID = user[0].uid;
-                        potentialName = user[0].name;
-                        potentialGender = user[0].gender;
-                        potentialBio = user[0].bio;
-                        potentialPFP = user[0].pfp;
-                      });
+
                     },
                   ),
                 ]),

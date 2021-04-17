@@ -58,7 +58,7 @@ class ProfilesService {
 
   /// Fetches the profile for the user with uid [uid].
   Future<Profile> fetchProfile(String uid) async {
-    var snap = await _database.collection('profiles').doc(uid).get();
+    var snap = await _database.collection('uploads').doc(uid).get();
 
     return Profile(
       pfp: snap.get('pfp'),

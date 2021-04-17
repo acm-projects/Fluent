@@ -4,6 +4,7 @@ import 'package:fluent/src/frontend/pages.dart';
 import 'package:fluent/src/frontend/theme/style.dart';
 import 'package:fluent/src/frontend/widgets/InboxScreen.dart';
 import 'package:fluent/src/frontend/widgets/LoggedInUserNavigation.dart';
+import 'package:fluent/src/frontend/widgets/MatchRequestCard.dart';
 import 'package:fluent/src/frontend/widgets/createProfile.dart';
 import 'package:fluent/src/frontend/widgets/ChatScreen.dart';
 import 'package:fluent/src/frontend/widgets/editProfile.dart';
@@ -47,6 +48,7 @@ class AppInit extends StatelessWidget {
               return page(MatchingPage.create(context));
             case '/navigation':
               return page(BottomNavBar());
+
 
             default:
               throw 'Undefined route ${settings.name}';

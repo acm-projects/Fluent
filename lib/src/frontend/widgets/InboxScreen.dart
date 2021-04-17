@@ -26,6 +26,34 @@ class _InboxScreenState extends State<InboxScreen> {
   List<Post> MatchNames = [];
   int size = 2;
   final SearchBarController<Post> _searchBarController = SearchBarController();
+  String chatUID;
+
+  // String readTimestamp(int timestamp) {
+  //   var now = DateTime.now();
+  //   var format = DateFormat('HH:mm a');
+  //   var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+  //   var diff = now.difference(date);
+  //   var time = '';
+  //
+  //   if (diff.inSeconds <= 0 || diff.inSeconds > 0 && diff.inMinutes == 0 || diff.inMinutes > 0 && diff.inHours == 0 || diff.inHours > 0 && diff.inDays == 0) {
+  //     time = format.format(date);
+  //   } else if (diff.inDays > 0 && diff.inDays < 7) {
+  //     if (diff.inDays == 1) {
+  //       time = diff.inDays.toString() + ' DAY AGO';
+  //     } else {
+  //       time = diff.inDays.toString() + ' DAYS AGO';
+  //     }
+  //   } else {
+  //     if (diff.inDays == 7) {
+  //       time = (diff.inDays / 7).floor().toString() + ' WEEK AGO';
+  //     } else {
+  //
+  //       time = (diff.inDays / 7).floor().toString() + ' WEEKS AGO';
+  //     }
+  //   }
+  //
+  //   return time;
+  // }
 
   Future<List<Post>> _getALlPosts(String search) async {
     await Future.delayed(Duration(seconds: 1));
@@ -82,14 +110,13 @@ class _InboxScreenState extends State<InboxScreen> {
                                       flex: 2,
                                       //child: Icon(
                                       //Icons.search,
-                                       child: SearchBar<Post>(
+                                      child: SearchBar<Post>(
                                         onSearch: _getALlPosts,
                                         //searchBarController: _searchBarController,
                                         hintText: "Search user",
                                         onItemFound: (Post post, int index) {
                                           print(post.name);
-                                          return
-                                            new DropdownMenuItem<String>(
+                                          return new DropdownMenuItem<String>(
                                               value: post.name,
                                               child: Row(
                                                 children: <Widget>[
@@ -98,8 +125,7 @@ class _InboxScreenState extends State<InboxScreen> {
                                                           Colors.primaries[3]),
                                                   new Text(post.name)
                                                 ],
-                                              )
-                                            );
+                                              ));
                                           //   return ListTile(
                                           //     title: Text(post.name),
                                           //     //isThreeLine: true,
@@ -169,6 +195,7 @@ class _InboxScreenState extends State<InboxScreen> {
                                             snapshot.data.docs[index]['name']));
                                         // change this object to backend stuff
                                         final Message messages = chats[index];
+                                        chatUID = snapshot.data.docs[index]['chat'];
                                         return GestureDetector(
                                           onTap: () {
                                             // this will let you tap to the next page, this will be changed once
@@ -256,8 +283,7 @@ class _InboxScreenState extends State<InboxScreen> {
                                                           Flexible(
                                                             child: Text(
                                                                 snapshot.data
-                                                                            .docs[
-                                                                        index]
+                                                                    .docs[index]
                                                                     ['name'],
                                                                 style:
                                                                     TextStyle(
@@ -266,6 +292,19 @@ class _InboxScreenState extends State<InboxScreen> {
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w600,
+                                                                )),
+                                                          ),
+                                                          Flexible(
+                                                            child: Text((
+                                                                snapshot.data.docs[index]
+                                                                ['time'].toDate()).toString(),
+                                                                style:
+                                                                TextStyle(
+                                                                  fontSize:
+                                                                  16.0,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
                                                                 )),
                                                           ),
                                                         ],
@@ -293,19 +332,31 @@ class _InboxScreenState extends State<InboxScreen> {
                                                               ),
                                                             ),
                                                             // put an extra space in the front of the time text for formatting purposes
-                                                            Text(
-                                                                "messages.time",
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize:
-                                                                      11.0,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w300,
-                                                                  color: Colors
-                                                                          .grey[
-                                                                      600],
-                                                                )),
+
+                                                            StreamBuilder(
+                                                                stream: FirebaseFirestore
+                                                                    .instance
+                                                                    .collection('chats')
+                                                                    .doc(chatUID)
+                                                                    .snapshots(),
+                                                                builder: (context,
+                                                                    snapshot) {
+                                                                  if (snapshot.data == null) {
+                                                                    return Text("NEW MATCH");
+                                                                  } else {
+                                                                    return Text(
+                                                                        snapshot.data["mostRecentMessage"],
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              14.0,
+                                                                          fontWeight:
+                                                                              FontWeight.w300,
+                                                                          color:
+                                                                              Colors.grey[600],
+                                                                        ));
+                                                                  }
+                                                                }),
                                                           ],
                                                         ),
                                                       ),

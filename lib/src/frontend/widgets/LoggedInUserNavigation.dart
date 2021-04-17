@@ -5,10 +5,10 @@ import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:fluent/src/backend/models/match.dart';
 
 class BottomNavBar extends StatefulWidget {
-  // This wil  // final MatchProfile currentUser;
+  // final MatchProfile currentUser;
   //   //
   //   // // constructor for ChatScreen to initialize the User
-  //   // BottomNavBar({this.currentUser});l be replaced with user for backend in order to fetch the proper picture and info for a chat screen
+  //   // BottomNavBar({this.currentUser});
 
   final String pfp;
   BottomNavBar({Key key, @required this.pfp}) : super(key: key);

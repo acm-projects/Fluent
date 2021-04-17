@@ -1,9 +1,10 @@
 import 'package:fluent/src/backend/models/user.dart';
+import 'package:fluent/src/backend/services/base/services.dart';
+import 'package:fluent/src/frontend/widgets/MatchRequestCard.dart';
 import 'package:fluent/src/frontend/widgets/editProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:fluent/src/frontend/widgets/SearchAndUserIcon.dart';
-// later the actual user model will be imported to get the actual user's data
 import 'package:fluent/src/frontend/frontendmodels/UITestMessageModel.dart';
 import 'package:fluent/src/frontend/widgets/ChatScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,6 +38,7 @@ class _MatchRequestPage extends State<MatchRequestPage> {
 
   @override
   Widget build(BuildContext context) {
+    final matching = ServicesProvider.of(context).services.matching;
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -160,161 +162,147 @@ class _MatchRequestPage extends State<MatchRequestPage> {
                                       itemBuilder: (context, index) {
                                         MatchNames.add(Post(snapshot.data.docs[index]['name']));
                                         // change this object to backend stuff
-                                        final Message messages =
-                                        chats[index];
-                                        return GestureDetector(
-                                          onTap: () {
-                                            // this will let you tap to the next page, this will be changed once
-                                            // routes are implemented again
-                                            Navigator.pushNamed(
-                                                context, '/chat',
-                                                arguments: User(
-                                                    snapshot.data.docs[index]
-                                                        .id));
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 15.0,
-                                                horizontal: 0.0),
-                                            child: Row(
-                                              children: <Widget>[
-                                                Container(
-                                                  padding:
-                                                  EdgeInsets.all(2.0),
-                                                  // if the message is unread, show blue border
-                                                  decoration: messages
-                                                      .unread
-                                                      ? BoxDecoration(
-                                                    // Note that the border should only appear around the user whose messages
-                                                    // you haven't read yet
-                                                    borderRadius: BorderRadius
-                                                        .all(Radius
-                                                        .circular(
-                                                        40)),
-                                                    border:
-                                                    Border.all(
-                                                      width: 2,
+                                        //final Message messages =
+                                        //chats[index];
+                                        return Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 15.0,
+                                              horizontal: 0.0),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Container(
+                                                padding:
+                                                EdgeInsets.all(2.0),
+                                                // if the message is unread, show blue border
+                                                decoration: BoxDecoration(
+                                                  // if you've read their messages, show the boxShape only with no border
+                                                  shape: BoxShape
+                                                      .circle,
+                                                  boxShadow: [
+                                                    BoxShadow(
                                                       color: Colors
-                                                          .lightBlue[
-                                                      400],
+                                                          .grey
+                                                          .withOpacity(
+                                                          0.3),
+                                                      spreadRadius:
+                                                      1,
+                                                      blurRadius: 3,
                                                     ),
-                                                    // if you've read their messages, show the boxShape only with no border
-                                                    //shape: BoxShape.circle,
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors
-                                                            .grey
-                                                            .withOpacity(
-                                                            0.3),
-                                                        spreadRadius:
-                                                        2,
-                                                        blurRadius: 5,
-                                                      ),
-                                                    ],
-                                                    // otherwise, don't show the blue border
-                                                  )
-                                                      : BoxDecoration(
-                                                    // if you've read their messages, show the boxShape only with no border
-                                                    shape: BoxShape
-                                                        .circle,
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors
-                                                            .grey
-                                                            .withOpacity(
-                                                            0.3),
-                                                        spreadRadius:
-                                                        1,
-                                                        blurRadius: 3,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  child: CircleAvatar(
-                                                    radius: 30,
-                                                    backgroundImage: NetworkImage(
-                                                        snapshot.data
-                                                            .docs[index]['pfp']),
-                                                  ),
+                                                  ],
                                                 ),
+                                                child: CircleAvatar(
+                                                  radius: 30,
+                                                  backgroundImage: NetworkImage(
+                                                      snapshot.data
+                                                          .docs[index]['pfp']),
+                                                ),
+                                              ),
 
-                                                // this next container is for the username
-                                                Container(
-                                                  width:
-                                                  MediaQuery
-                                                      .of(context)
-                                                      .size
-                                                      .width *
-                                                      0.65,
-                                                  padding:
-                                                  EdgeInsets.fromLTRB(
-                                                      20.0, 0, 0, 0),
-                                                  child: Column(
-                                                    children: [
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                        children: <Widget>[
+                                              // this next container is for the username
+                                              Container(
+                                                width:
+                                                MediaQuery
+                                                    .of(context)
+                                                    .size
+                                                    .width *
+                                                    0.65,
+                                                padding:
+                                                EdgeInsets.fromLTRB(
+                                                    20.0, 0, 0, 0),
+                                                child: Column(
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                      children: <Widget>[
+                                                        Flexible(
+                                                          child: Text(
+                                                              snapshot.data
+                                                                  .docs[index]['name'],
+                                                              style:
+                                                              TextStyle(
+                                                                fontSize:
+                                                                16.0,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .w600,
+                                                              )),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    // Next row which contains all the buttons
+                                                    Container(
+                                                      child: Row(
+                                                        children: [
                                                           Flexible(
-                                                            child: Text(
-                                                                snapshot.data
-                                                                    .docs[index]['name'],
-                                                                style:
-                                                                TextStyle(
-                                                                  fontSize:
-                                                                  16.0,
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                                )),
+                                                            child: IconButton(
+                                                                icon: new Icon(
+                                                                  Icons.thumb_up,
+                                                                  size: 30.0,
+                                                                  color: Colors.green,
+                                                                ),
+
+                                                                // creates chat with user and takes them to the chat page
+                                                                onPressed: () async {
+                                                                  await matching.skipUser(
+                                                                      auth.FirebaseAuth.instance.currentUser.uid, snapshot.data.docs[index].id);
+                                                                  // This takes them to the chat page for the user
+                                                                  Navigator.pushNamed(context, '/chat',
+                                                                      arguments: User(snapshot
+                                                                          .data.docs[index].id));
+                                                                }
+                                                            ),
+                                                          ),
+                                                          Flexible(
+                                                            child: IconButton(
+                                                                icon: new Icon(
+                                                                  Icons.thumb_down,
+                                                                  size: 30.0,
+                                                                  color: Colors.red,
+                                                                ),
+
+                                                                // removes them from the list
+                                                                onPressed: () async {
+                                                                  await matching.skipUser(
+                                                                      auth.FirebaseAuth.instance.currentUser.uid, snapshot.data.docs[index].id);
+                                                                  //MatchNames.remove(Post(snapshot.data.docs[index]));
+                                                                }
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 10.0),
+                                                          ElevatedButton(
+                                                            onPressed: () {
+                                                              Navigator.push(context,
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) => MatchingRequestCard(
+                                                                        snapshot.data.docs[index]['pfp'],
+                                                                        snapshot.data.docs[index]['uid'],
+                                                                        snapshot.data.docs[index]['name'],
+                                                                        snapshot.data.docs[index]['bio'],
+                                                                        snapshot.data.docs[index]['gender'],
+                                                                      )
+                                                                  ));
+                                                            },
+                                                            child: Text('Profile',
+                                                              style: TextStyle(
+                                                                fontSize: 14.0,
+                                                                fontWeight: FontWeight.bold,
+                                                              ),
+                                                            ),
+                                                            style: ElevatedButton.styleFrom(
+                                                              primary: Colors.lightBlue[400],
+                                                              minimumSize: Size(50,20),
+                                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                                            ),
                                                           ),
                                                         ],
                                                       ),
-                                                      SizedBox(height: 5),
-                                                      // For formatting the latest text and time
-                                                      Container(
-                                                        child: Row(
-                                                          children: [
-                                                            // Text is wrapped in Flexible Widget so that it will follow the container's
-                                                            // dimensions and not overflow to the right
-                                                            Flexible(
-                                                              child: Text(
-                                                                " ",
-                                                                //messages.text,
-                                                                // this is so that once it reaches 2 lines, it will put an ellipses after the text
-                                                                overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                                maxLines: 2,
-                                                                style:
-                                                                TextStyle(
-                                                                  fontSize:
-                                                                  14,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            // put an extra space in the front of the time text for formatting purposes
-                                                            Text(
-                                                                "messages.time",
-                                                                style:
-                                                                TextStyle(
-                                                                  fontSize:
-                                                                  11.0,
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .w300,
-                                                                  color: Colors
-                                                                      .grey[
-                                                                  600],
-                                                                )),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
                                         );
                                       }))
@@ -343,4 +331,3 @@ class Detail extends StatelessWidget {
     );
   }
 }
-

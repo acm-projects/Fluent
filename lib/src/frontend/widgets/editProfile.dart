@@ -135,7 +135,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             Icons.arrow_back,
             color: Colors.lightBlueAccent,
           ),
-          onPressed: () {},
+          onPressed: () {Navigator.pop(context);},
         ),
       ),
       body: Container(
@@ -235,19 +235,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children:<Widget>[
                     Text(
-                    'Gender',
-                    style: TextStyle(color: Colors.black,
+                      'Gender',
+                      style: TextStyle(color: Colors.black,
                         fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                    ),
-                  ), Wrap(
-                    //spacing: 5.0,
-                    //runSpacing: 5.0,
+                        fontSize: 18.0,
+                      ),
+                    ), Wrap(
+                      //spacing: 5.0,
+                      //runSpacing: 5.0,
                       alignment: WrapAlignment.center,
-                    children: <Widget>[
-                      choiceChipWidget(chipList,gender),
-                    ],
-                  )]),
+                      children: <Widget>[
+                        choiceChipWidget(chipList,gender),
+                      ],
+                    )]),
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 0),
@@ -369,10 +369,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       final auth = ServicesProvider.of(context).services.auth;
                       auth.signOut();
 
-                        Navigator.push(context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginPage()
-                            ));
+                      Navigator.push(context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginPage()
+                          ));
 
                     },
                     color: Colors.redAccent,
