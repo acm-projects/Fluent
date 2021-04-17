@@ -19,7 +19,10 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
 
-  Widget _chatBubble(String chatUserProfileUrl, Message chatScreenMessages, bool isCurrentUser, bool isConsecutiveMessage) {
+  // determines whether the user is blocked or not
+  bool isBlocked;
+
+  Widget _chatBubble(String chatUserProfileUrl, Message chatScreenMessages, bool isCurrentUser) {
     if (chatScreenMessages.timestamp == null) {
       return null;
     }
@@ -35,8 +38,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 Row(
                   children: <Widget>[
                     // USER IMAGE
-                    // if the same user is sending a message consecutively, don't print the user's picture
-                    !isConsecutiveMessage ? Container(
+                     Container(
                       padding: EdgeInsets.only(left: 10.0),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
@@ -52,8 +54,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         radius: 20,
                         backgroundImage: NetworkImage(chatUserProfileUrl),
                       ),
-                    ) :
-                    Container(padding: EdgeInsets.only(left: 10.0), child: null),
+                    ),
 
                     // CHAT BOX
                     Column(
@@ -81,7 +82,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   padding: EdgeInsets.only(left: 40),
                   margin: EdgeInsets.only(bottom: 10),
                   child: Text(
-                    chatScreenMessages.timestamp.toString(), //todo: display relative time (like 3 hours ago)
+                  (chatScreenMessages.timestamp ?? DateTime.now()).toString(), //todo: display relative time (like 3 hours ago)
                     style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   ),
                 ),
@@ -120,7 +121,7 @@ class _ChatScreenState extends State<ChatScreen> {
               padding: EdgeInsets.only(right: 30),
               margin: EdgeInsets.only(bottom: 10),
               child: Text(
-                chatScreenMessages.timestamp.toString(), //todo: display relative time (like 3 hours ago)
+              (chatScreenMessages.timestamp ?? DateTime.now()).toString(), //todo: display relative time (like 3 hours ago)
                 style: TextStyle(fontSize: 12, color: Colors.grey[600]),
               ),
             ),
@@ -128,6 +129,36 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ],
     );
+  }
+
+  // pop up notification to confirm blocking a user
+  confirmBlock(BuildContext context) {
+    return showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        title: Text("Are you really sure you want to block this user?",
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        actions: <Widget>[
+          MaterialButton(
+              onPressed: () {
+                isBlocked = true;
+                Navigator.of(context).pop();
+              },
+              child: Text("Yes",
+              style: TextStyle(color: Colors.blue,
+              fontSize: 18.0)),
+          ),
+          MaterialButton(
+            onPressed: () {
+              isBlocked = false;
+              Navigator.of(context).pop();
+            },
+            child: Text("No",
+            style: TextStyle(color: Colors.blue,
+            fontSize: 18.0)),
+          ),
+        ]
+      );
+    });
   }
 
   @override
@@ -141,8 +172,8 @@ class _ChatScreenState extends State<ChatScreen> {
     ScrollController _scrollController = ScrollController();
 
     // for the listbuilder to be able to detect consecutive messages from the same user
-    int consecutiveUserMessages = 0;
-    int consecutiveOtherMessages = 0;
+    //int consecutiveUserMessages = 0;
+   // int consecutiveOtherMessages = 0;
     // to tap out of the chat box
     return FutureBuilder<List<dynamic>>(
         future: Future.wait([
@@ -181,6 +212,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 title: GestureDetector(
                   onTap: () {
                     print("tapping the top user widget");
+                    // OTHER USER'S PROFILE PAGE SHOULD GO HERE
+                    // IT PROBABLY WON'T BE EDIT PROFILE
+                    //Navigator.pushNamed(context, '/editProfile');
                   },
                   child: CircleAvatar(
                     radius: 25,
@@ -189,36 +223,38 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
 
                 flexibleSpace: SafeArea(
-                  child: Container(
-                    padding: EdgeInsets.only(top: 5),
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: Icon(
-                            Icons.arrow_back,
-                            color: Colors.lightBlueAccent[400],
+                    child: Container(
+                      padding: EdgeInsets.only(top: 5),
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              Icons.arrow_back,
+                              color: Colors.lightBlueAccent[400],
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
                           ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
 
-                        SizedBox(width: 180),
-                        IconButton(
-                          icon: Icon(
-                            Icons.record_voice_over,
-                            size: 30,
-                            color: Colors.lightBlueAccent[400],
+                          SizedBox(width: 180),
+                          // button to block user
+                          IconButton(
+                            icon: Icon(
+                              Icons.block,
+                              size: 30,
+                              color: Colors.lightBlueAccent[400],
+                            ),
+                            onPressed: () {
+                              confirmBlock(context);
+                              print(isBlocked);
+                            },
                           ),
-                          onPressed: () {
-                            print("Button to take you to voice chat");
-                          },
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
 
               body: Column(
                 children: <Widget>[
@@ -244,77 +280,59 @@ class _ChatScreenState extends State<ChatScreen> {
                                     // get the info for one chat message
                                     final Message chatMessage = messages[index];
                                     bool isCurrentUser;
-                                    bool isConsecutiveMessage;
                                     // if else to figure out whether the currentUser or the other user is talking
                                     if (chatMessage.author.uid == currentUser.uid) {
                                       isCurrentUser = true;
-                                      consecutiveUserMessages++;
-                                      consecutiveOtherMessages = 0;
                                     }
                                     else {
                                       isCurrentUser = false;
-                                      consecutiveUserMessages = 0;
-                                      consecutiveOtherMessages++;
                                     }
-                                    // 2 if else branches to determine if the same user is sending a consecutive message
 
-                                    // you are sending consecutive messages
-                                    if (consecutiveUserMessages > 1)
-                                      isConsecutiveMessage = true;
-                                    else
-                                      isConsecutiveMessage = false;
-
-                                    // other user is sending consecutive messages
-                                    if (consecutiveOtherMessages > 1)
-                                      isConsecutiveMessage = true;
-                                    else
-                                      isConsecutiveMessage = false;
-
-                                    return _chatBubble(chatUserProfileUrl, chatMessage, isCurrentUser, isConsecutiveMessage);
+                                    return _chatBubble(chatUserProfileUrl, chatMessage, isCurrentUser);
                                   }
                               );
                             }
 
-                            return Center(child: CircularProgressIndicator()); //todo different loading?
-                          }
+                          return Center(child: CircularProgressIndicator()); //todo different loading?
+                        }
                       )
-                  ),
-                  // TEXT AREA
-                  Container(
-                    height: 60,
-                    padding: EdgeInsets.fromLTRB(5,2,5,5),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: "Write a message!",
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                            ),
+                    ),
+                    // TEXT AREA
+                   Container(
+                     height: 60,
+                     padding: EdgeInsets.fromLTRB(5,2,5,5),
+                     child: Row(
+                       children: <Widget>[
+                         Expanded(
+                           child: TextField(
+                             decoration: InputDecoration(
+                               hintText: "Write a message!",
+                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                             ),
 
-                            // to determine if the text is empty when trying to send
-                            controller: _textController,
-                          ),
-                        ),
-                        IconButton(
-                          padding: EdgeInsets.only(left: 7),
-                          icon: Icon(Icons.send, color: Colors.indigo),
-                          onPressed: () {
-                            if(_textController.text.isNotEmpty) {
-                              print("Sends the text to the chat");
+                             // to determine if the text is empty when trying to send
+                             controller: _textController,
+                           ),
+                         ),
+                         IconButton(
+                           padding: EdgeInsets.only(left: 7),
+                           icon: Icon(Icons.send, color: Colors.indigo),
+                           onPressed: () {
+                             if(_textController.text.isNotEmpty) {
+                               print("Sends the text to the chat");
 
-                              // do some sending around here
-                              chat.sendMessage(chatUid, _textController.text);
+                               // do some sending around here
+                               chat.sendMessage(chatUid, _textController.text);
 
-                              // clear out the text area
-                              _textController.text = '';
+                               // clear out the text area
+                               _textController.text = '';
 
                               // scroll down to see the new message
                              Timer(Duration(seconds: 1),
                              () =>
                               _scrollController.animateTo(
                                   _scrollController.position.maxScrollExtent,
-                                  duration: Duration(milliseconds: 400),
+                                  duration: Duration(milliseconds: 600),
                                   curve: Curves.ease)
                              );
                             }
