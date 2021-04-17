@@ -253,7 +253,7 @@ class _MatchRequestPage extends State<MatchRequestPage> {
                                                                   // creates chat with user and takes them to the chat page
                                                                   onPressed: () async {
                                                                     await matching.chooseUser(
-                                                                        currentUser.uid, snapshot.data.docs[index]['name'], snapshot.data.docs[index]['pfp']);
+                                                                        snapshot.data.docs[index]['uid'], snapshot.data.docs[index]['name'], snapshot.data.docs[index]['pfp']);
                                                                     // This takes them to the chat page for the user
                                                                     Navigator.pushNamed(context, '/chat',
                                                                         arguments: User(snapshot
@@ -271,6 +271,8 @@ class _MatchRequestPage extends State<MatchRequestPage> {
 
                                                                   // removes them from the list
                                                                   onPressed: () async {
+                                                                    await matching.skipUser(
+                                                                        snapshot.data.docs[index]['pfp'], snapshot.data.docs[index]['name']);
                                                                     //MatchNames.remove(Post(snapshot.data.docs[index]));
                                                                   }
                                                               ),

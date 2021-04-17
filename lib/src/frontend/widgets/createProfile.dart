@@ -2,9 +2,11 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fluent/src/backend/models/fluency.dart';
+import 'package:fluent/src/backend/models/match.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluent/src/frontend/pages.dart';
+import 'package:fluent/src/frontend/widgets/LoggedInUserNavigation.dart';
 import 'package:fluent/src/frontend/widgets/editProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -46,7 +48,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
 
   _imgFromCamera() async {
     var image = await ImagePicker.platform.pickImage(
-        source: ImageSource.camera, imageQuality: 50
+        source: ImageSource.camera, imageQuality: 10
     );
 
     setState(() {
@@ -56,7 +58,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
 
   _imgFromGallery() async {
     var image = await  ImagePicker.platform.pickImage(
-        source: ImageSource.gallery, imageQuality: 50
+        source: ImageSource.gallery, imageQuality: 10
     );
 
     setState(() {
@@ -345,7 +347,17 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                         fluency: parseFluency(fluency+1),
                       );
                       // navigation will take it to the matching page here
-                      Navigator.pushNamed(context, '/navigation');
+
+                      final matching = ServicesProvider.of(context).services.matching;
+                      MatchProfile user = await matching.getUserData(FirebaseAuth.instance.currentUser.uid);
+                        //Navigator.pushNamed(context,"/navigation");
+                        Navigator.push(context,
+                            MaterialPageRoute(
+                                builder: (context) => BottomNavBar(
+                                    pfp: user.pfp
+                                )
+                            ));
+
                     },
                     color: Colors.lightBlueAccent,
                     padding: EdgeInsets.symmetric(horizontal: 50),
