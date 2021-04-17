@@ -295,9 +295,9 @@ class _InboxScreenState extends State<InboxScreen> {
                                                                 )),
                                                           ),
                                                           Flexible(
-                                                            child: Text((
+                                                            child: Text(snapshot.data.docs[index].data().containsKey("time") ? (
                                                                 snapshot.data.docs[index]
-                                                                ['time'].toDate()).toString(),
+                                                                ['time']?.toDate() ?? DateTime.now()).toString() : "Now",
                                                                 style:
                                                                 TextStyle(
                                                                   fontSize:
