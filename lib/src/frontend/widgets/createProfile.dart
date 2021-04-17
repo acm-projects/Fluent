@@ -33,6 +33,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
   String language = "";
   static int fluency;
   String bio = "";
+  var _chosenValue;
 
   // so the language selection buttons will change colors on pressed
   bool pressAttention1 = false;
@@ -78,15 +79,6 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
     print(profilePic);
     return profilePic;
   }
-
-  //var profilePic;
-  /*
-  Future<String> displayImageFromFirebase(BuildContext context, name) async{
-    final Reference ref = FirebaseStorage.instance.ref().child('users/$name');
-    profilePic = await ref.getDownloadURL().toString();
-    print(profilePic);
-    return profilePic;
-  }*/
 
   void _showPicker(context) {
     showModalBottomSheet(
@@ -262,72 +254,41 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                 padding: const EdgeInsets.symmetric(horizontal: 0),
                 child: Column(
                   children: <Widget>[
-                    SizedBox(height: 20.0),
-                    ExpansionTile(
-                      title: Text(
-                        "Language Selection",
+                    SizedBox(height: 10.0),
+                    DropdownButton<String>(
+                      isExpanded: true,
+                      focusColor:Colors.white,
+                      value: _chosenValue,
+                      //elevation: 5,
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      iconEnabledColor:Colors.black,
+                      items: <String>[
+                        'English',
+                        'Spanish',
+                        'French',
+                        'Mandarin',
+                        'Arabic',
+                        'Japanese',
+                        'Korean',
+                        'Russian'
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value,style:TextStyle(color:Colors.black),),
+                        );
+                      }).toList(),
+                      hint:Text(
+                        "Please choose a langauage",
                         style: TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.bold),
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500),
                       ),
-                      children: <Widget>[
-                        RaisedButton(
-                          onPressed: () {
-                            setState(() {
-                              language = "Spanish";
-                              pressAttention1 = !pressAttention1;
-                            });
-                          },
-
-                          padding: const EdgeInsets.symmetric(horizontal:100, vertical: 4),
-                          child: new Text(
-                            "Spanish",
-                            style: TextStyle(
-                                fontSize: 18.0, fontWeight: FontWeight.bold),
-
-                          ),
-                          color: pressAttention1 ? Colors.lightBlueAccent : Colors.grey[10],
-                          shape: RoundedRectangleBorder( borderRadius: BorderRadius.all(Radius.circular(30))),
-
-                        ),
-                        RaisedButton(
-                          onPressed: () {
-                            setState(() {
-                              language = "French";
-                              pressAttention2 = !pressAttention2;
-                            });
-                          },
-
-                          padding: const EdgeInsets.symmetric(horizontal:100, vertical: 4),
-                          child: new Text(
-                            "French",
-                            style: TextStyle(
-                                fontSize: 18.0, fontWeight: FontWeight.bold),
-
-                          ),
-                          color: pressAttention2 ? Colors.lightBlueAccent : Colors.grey[10],
-                          shape: RoundedRectangleBorder( borderRadius: BorderRadius.all(Radius.circular(30))),
-
-                        ),
-                        RaisedButton(
-                          onPressed: () {
-                            setState(() {
-                              language = "Mandarin";
-                              pressAttention3 = !pressAttention3;
-                            });
-                          },
-
-                          padding: const EdgeInsets.symmetric(horizontal:100, vertical: 4),
-                          child: new Text(
-                            "Mandarin",
-                            style: TextStyle(
-                                fontSize: 18.0, fontWeight: FontWeight.bold),
-
-                          ),
-                          color: pressAttention3 ? Colors.lightBlueAccent : Colors.grey[10],
-                          shape: RoundedRectangleBorder( borderRadius: BorderRadius.all(Radius.circular(30))),
-
-                        ),
-                      ],
+                      onChanged: (String value) {
+                        setState(() {
+                          _chosenValue = value;
+                        });
+                      },
                     ),
                   ],
                 ),
@@ -372,10 +333,6 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   child: RaisedButton(
                     onPressed: () async {
                       await uploadImage(context, FirebaseAuth.instance.currentUser.uid);
-                      //await displayImageFromFirebase(context, FirebaseAuth.instance.currentUser.uid);
-                      InboxScreen(pfp: profilePic);
-                      MatchRequestPage(pfp:profilePic);
-                      EditProfilePage(pfp:profilePic);
                       var profile = ServicesProvider.of(context).services.profiles.createProfile(
                         pfp: profilePic,
                         uid: FirebaseAuth.instance.currentUser.uid,
@@ -384,8 +341,8 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                         birthDate: selectedDate,
                         gender: gender,
                         bio: bio,
-                        language: language,
-                        fluency: parseFluency(fluency),
+                        language: _chosenValue,
+                        fluency: parseFluency(fluency+1),
                       );
                       // navigation will take it to the matching page here
                       Navigator.pushNamed(context, '/navigation');

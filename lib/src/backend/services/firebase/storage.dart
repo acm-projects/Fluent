@@ -13,7 +13,7 @@ class FirebaseStorageService implements StorageService {
 
   @override
   Future<String> fetchImageUrl(String name) async {
-    return _storage.ref('/images/$name.png').getDownloadURL();
+    return _storage.ref('/uploads/$name').getDownloadURL();
   }
 
   @override

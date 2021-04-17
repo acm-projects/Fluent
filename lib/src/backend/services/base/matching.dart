@@ -1,19 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluent/src/backend/models/match.dart';
-import 'package:fluent/src/backend/models/chat.dart';
-import 'package:fluent/src/backend/models/user.dart';
-import 'package:fluent/src/backend/services/base/chat.dart';
-import 'package:fluent/src/backend/services/base/profiles.dart';
-import 'package:fluent/src/backend/services/firebase/auth.dart';
 
 class MatchingService {
+  FirebaseFirestore database;
   CollectionReference collection;
   var potentialMatches = [];
-  MatchingService(FirebaseFirestore database) : collection = database.collection('profiles');
+  MatchingService(this.database) : collection = database.collection('profiles');
 
 
-  Future<List>chooseUser(String matchUID) async {
+  Future<List>chooseUser(String matchUID, String name, String pfp) async {
     var uid = FirebaseAuth.instance.currentUser.uid;
     MatchProfile currentUser = await getUserData(uid);
 
@@ -34,6 +30,37 @@ class MatchingService {
       'pfp': currentUser.pfp,
       'time': DateTime.now(),
     });
+
+    List<String> chosenList = await getChosenList(uid);
+    var docs = await collection.doc(uid).collection('selected').get();
+
+    await Future.wait(
+      docs.docs.where((doc) => chosenList.contains(doc.id)).expand((doc) {
+        var chatRef = database.collection('chats').doc();
+
+        return [
+          chatRef.set({
+            'memberUids': [uid, doc.id],
+          }),
+          collection.doc(uid).collection('matches').doc(doc.id).set({
+            'name': name,
+            'pfp': pfp,
+            'time': DateTime.now(),
+            'chat': chatRef.id,
+          }),
+          collection.doc(doc.id).collection('matches').doc(uid).set({
+            'name': currentUser.name,
+            'pfp': currentUser.pfp,
+            'time': DateTime.now(),
+            'chat': chatRef.id,
+          }),
+          collection.doc(uid).collection('liked').doc(doc.id).delete(),
+          collection.doc(uid).collection('selected').doc(doc.id).delete(),
+          collection.doc(doc.id).collection('liked').doc(uid).delete(),
+          collection.doc(doc.id).collection('selected').doc(uid).delete(),
+        ];
+      }),
+    );
 
     return getUsers(uid);
   }
@@ -155,6 +182,7 @@ class MatchingService {
       }
     });
     potentialMatches.sort((a,b) => a.fluencyDifference - b.fluencyDifference);
+
     return potentialMatches;
   }
 
@@ -175,58 +203,39 @@ class MatchingService {
     return potentialMatches;
   }
 
-  Future getMatches(MatchProfile user) async{
+  Future getMatches(MatchProfile user) async {
     var uid = FirebaseAuth.instance.currentUser.uid;
     MatchProfile currentUser = await getUserData(uid);
     List<String> chosenList = await getChosenList(uid);
-    await collection
-        .doc(uid)
-        .collection('selected')
-        .get()
-        .then((docs){
-      for(var doc in docs.docs){
-        if(chosenList.contains(doc.id)){
-          //create chat between users
 
-          //create new match for both users
-          collection.doc(uid)
-              .collection('matches')
-              .doc(doc.id)
-              .set({
+    var docs = await collection.doc(uid).collection('selected').get();
+
+    return Future.wait(
+      docs.docs.where((doc) => chosenList.contains(doc.id)).expand((doc) {
+        var chatRef = database.collection('chats').doc();
+
+        return [
+          chatRef.set({
+            'memberUids': [uid, doc.id],
+          }),
+          collection.doc(uid).collection('matches').doc(doc.id).set({
             'name': user.name,
             'pfp': user.pfp,
             'time': DateTime.now(),
-            //add chat uid
-          });
-          collection.doc(doc.id)
-              .collection('matches')
-              .doc(uid)
-              .set({
-            'name': user.name,
+            'chat': chatRef.id,
+          }),
+          collection.doc(doc.id).collection('matches').doc(uid).set({
+            'name': currentUser.name,
             'pfp': currentUser.pfp,
             'time': DateTime.now(),
-            //add chat uid
-          });
-          //delete matched user from liked and selected data collection
-          collection.doc(uid)
-              .collection('liked')
-              .doc(doc.id)
-              .delete();
-          collection.doc(uid)
-              .collection('selected')
-              .doc(doc.id)
-              .delete();
-          collection.doc(doc.id)
-              .collection('liked')
-              .doc(uid)
-              .delete();
-          collection.doc(doc.id)
-              .collection('selected')
-              .doc(uid)
-              .delete();
-        }
-      }
-    }
+            'chat': chatRef.id,
+          }),
+          collection.doc(uid).collection('liked').doc(doc.id).delete(),
+          collection.doc(uid).collection('selected').doc(doc.id).delete(),
+          collection.doc(doc.id).collection('liked').doc(uid).delete(),
+          collection.doc(doc.id).collection('selected').doc(uid).delete(),
+        ];
+      }),
     );
   }
 }

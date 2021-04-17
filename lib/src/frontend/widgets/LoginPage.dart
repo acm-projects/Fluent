@@ -4,7 +4,6 @@ import 'package:fluent/src/backend/services/base/matching.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:fluent/src/frontend/pages.dart';
 import 'package:fluent/src/frontend/widgets/LoggedInUserNavigation.dart';
-import 'package:fluent/src/frontend/pages.dart';
 import 'package:fluent/src/frontend/widgets/MyTextField.dart';
 import 'package:fluent/src/frontend/widgets/editProfile.dart';
 import 'package:fluent/src/frontend/widgets/matchpage.dart';
@@ -167,10 +166,10 @@ class _LoginPageState extends State<LoginPage> {
                                     //Navigator.pushNamed(context,"/navigation");
                                     Navigator.push(context,
                                         MaterialPageRoute(
-                                            builder: (context) => BottomNavBar(
-                                                pfp: user.pfp
-                                            )
-                                        ));
+                                      builder: (context) => BottomNavBar(
+                                          pfp: user.pfp
+                                    )
+                                    ));
                                   }
                                 }
                               },

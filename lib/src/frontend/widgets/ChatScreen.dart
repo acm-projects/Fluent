@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fluent/src/backend/services/base/auth.dart';
 import 'package:fluent/src/backend/services/base/chat.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
@@ -308,10 +310,13 @@ class _ChatScreenState extends State<ChatScreen> {
                               _textController.text = '';
 
                               // scroll down to see the new message
+                             Timer(Duration(seconds: 1),
+                             () =>
                               _scrollController.animateTo(
                                   _scrollController.position.maxScrollExtent,
                                   duration: Duration(milliseconds: 400),
-                                  curve: Curves.ease);
+                                  curve: Curves.ease)
+                             );
                             }
                           },
                         ),
