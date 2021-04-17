@@ -274,6 +274,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               return ListView.builder(
                                 // so that the list will scroll down when new input is added
                                   controller: _scrollController,
+                                  shrinkWrap: true,
 
                                   itemCount: messages.length,
                                   itemBuilder: (BuildContext context, int index) {
@@ -328,11 +329,11 @@ class _ChatScreenState extends State<ChatScreen> {
                                _textController.text = '';
 
                               // scroll down to see the new message
-                             Timer(Duration(seconds: 1),
+                             Timer(Duration(microseconds: 600),
                              () =>
                               _scrollController.animateTo(
                                   _scrollController.position.maxScrollExtent,
-                                  duration: Duration(milliseconds: 600),
+                                  duration: Duration(milliseconds: 800),
                                   curve: Curves.ease)
                              );
                             }
