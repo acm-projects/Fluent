@@ -39,29 +39,29 @@ class MatchingService {
     var docs = await collection.doc(uid).collection('selected').get();
 
     await Future.wait(
-      docs.docs.where((doc) => chosenList.contains(doc.id)).expand((doc) {
+      docs.docs.where((doc) => chosenList.contains(matchUID)).expand((doc) {
         var chatRef = database.collection('chats').doc();
 
         return [
           chatRef.set({
-            'memberUids': [uid, doc.id],
+            'memberUids': [uid, matchUID],
           }),
-          collection.doc(uid).collection('matches').doc(doc.id).set({
+          collection.doc(uid).collection('matches').doc(matchUID).set({
             'name': name,
             'pfp': pfp,
             'time': DateTime.now(),
             'chat': chatRef.id,
           }),
-          collection.doc(doc.id).collection('matches').doc(uid).set({
+          collection.doc(matchUID).collection('matches').doc(uid).set({
             'name': currentUser.name,
             'pfp': currentUser.pfp,
             'time': DateTime.now(),
             'chat': chatRef.id,
           }),
-          collection.doc(uid).collection('liked').doc(doc.id).delete(),
-          collection.doc(uid).collection('selected').doc(doc.id).delete(),
-          collection.doc(doc.id).collection('liked').doc(uid).delete(),
-          collection.doc(doc.id).collection('selected').doc(uid).delete(),
+          collection.doc(uid).collection('liked').doc(matchUID).delete(),
+          collection.doc(uid).collection('selected').doc(matchUID).delete(),
+          collection.doc(matchUID).collection('liked').doc(uid).delete(),
+          collection.doc(matchUID).collection('selected').doc(uid).delete(),
         ];
       }),
     );
