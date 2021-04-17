@@ -29,16 +29,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-
-    final List<Widget> _navBarPages = [
-      MatchingPage.create(context),
-      MatchRequestPage(pfp: widget.pfp),
-      InboxScreen(pfp: widget.pfp),
+    final List<WidgetBuilder> _navBarPages = [
+      (context) => MatchingPage.create(context),
+      (context) => MatchRequestPage(pfp: widget.pfp),
+      (context) => InboxScreen(pfp: widget.pfp),
     ];
 
-
     return Scaffold(
-      body: _navBarPages[set],
+      body: _navBarPages[set](context),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: set,
         items:[
