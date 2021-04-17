@@ -341,7 +341,7 @@ class _InboxScreenState extends State<InboxScreen> {
                                                                     .snapshots(),
                                                                 builder: (context,
                                                                     snapshot) {
-                                                                  if (snapshot.data == null) {
+                                                                  if (!snapshot.hasData || !snapshot.data.data().containsKey("mostRecentMessage")) {
                                                                     return Text("NEW MATCH");
                                                                   } else {
                                                                     return Text(
