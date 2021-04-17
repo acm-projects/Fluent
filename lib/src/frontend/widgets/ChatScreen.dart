@@ -150,6 +150,10 @@ class _ChatScreenState extends State<ChatScreen> {
           chat.fetchChatUidBetween(currentUser, widget.chatUser),
         ]),
         builder: (context, initialSnapshot) {
+          if (initialSnapshot.hasError) {
+            return Center(child: Text(initialSnapshot.error.toString()));
+          }
+
           if (!initialSnapshot.hasData) {
             return Center(child: CircularProgressIndicator()); //todo different on loading?
           }

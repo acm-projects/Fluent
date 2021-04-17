@@ -1,4 +1,6 @@
 import 'package:fluent/src/backend/models/user.dart';
+import 'package:fluent/src/backend/services/base/auth.dart';
+import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:fluent/src/frontend/widgets/editProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
@@ -36,6 +38,8 @@ class _MatchRequestPage extends State<MatchRequestPage> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = AuthState.of(context).currentUser;
+
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -48,11 +52,17 @@ class _MatchRequestPage extends State<MatchRequestPage> {
         body: StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('profiles')
-                .doc(auth.FirebaseAuth.instance.currentUser.uid)
+                .doc(currentUser.uid)
                 .collection('selected')
                 .orderBy('time', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
+              final matching = ServicesProvider.of(context).services.matching;
+
+              if (snapshot.hasError) {
+                return Center(child: Text(snapshot.error.toString()));
+              }
+
               if (snapshot.data == null) {
                 return Center(child: CircularProgressIndicator());
               } else {
@@ -242,6 +252,8 @@ class _MatchRequestPage extends State<MatchRequestPage> {
 
                                                                   // creates chat with user and takes them to the chat page
                                                                   onPressed: () async {
+                                                                    await matching.chooseUser(
+                                                                        currentUser.uid, snapshot.data.docs[index]['name'], snapshot.data.docs[index]['pfp']);
                                                                     // This takes them to the chat page for the user
                                                                     Navigator.pushNamed(context, '/chat',
                                                                         arguments: User(snapshot
