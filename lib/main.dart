@@ -17,6 +17,7 @@ void main() {
     title: 'Fluent',
     theme: theme,
     home: AppInit(),
+    debugShowCheckedModeBanner: false,
   ));
 }
 
