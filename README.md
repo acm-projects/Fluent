@@ -11,10 +11,11 @@ A socially-oriented language learning mobile app that connects you with fluent s
 - Ability to search for and find a specific user
 - Inbox to see current conversations
 - In-app text chat
-- In-app voice chat
+- Ability to block another user
 
 ## Stretch Goals
 - Chat Features
+  * In-app voice chat
   * In-app video chat
   * Group chats/forums
   * Chatbot assistant to help generate more conversation/add structure
@@ -28,7 +29,6 @@ A socially-oriented language learning mobile app that connects you with fluent s
 - Tracking Features
   * Daily interaction streak
 - Social Features
-  * Ability to block another user
   * Geolocation: filter by people near me
   
 ## Resources
