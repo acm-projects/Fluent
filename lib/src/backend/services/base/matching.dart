@@ -203,40 +203,4 @@ class MatchingService {
     });
     return potentialMatches;
   }
-
-  Future getMatches(MatchProfile user) async {
-    var uid = FirebaseAuth.instance.currentUser.uid;
-    MatchProfile currentUser = await getUserData(uid);
-    List<String> chosenList = await getChosenList(uid);
-
-    var docs = await collection.doc(uid).collection('selected').get();
-
-    return Future.wait(
-      docs.docs.where((doc) => chosenList.contains(doc.id)).expand((doc) {
-        var chatRef = database.collection('chats').doc();
-
-        return [
-          chatRef.set({
-            'memberUids': [uid, doc.id],
-          }),
-          collection.doc(uid).collection('matches').doc(doc.id).set({
-            'name': user.name,
-            'pfp': user.pfp,
-            'time': DateTime.now(),
-            'chat': chatRef.id,
-          }),
-          collection.doc(doc.id).collection('matches').doc(uid).set({
-            'name': currentUser.name,
-            'pfp': currentUser.pfp,
-            'time': DateTime.now(),
-            'chat': chatRef.id,
-          }),
-          collection.doc(uid).collection('liked').doc(doc.id).delete(),
-          collection.doc(uid).collection('selected').doc(doc.id).delete(),
-          collection.doc(doc.id).collection('liked').doc(uid).delete(),
-          collection.doc(doc.id).collection('selected').doc(uid).delete(),
-        ];
-      }),
-    );
-  }
 }
