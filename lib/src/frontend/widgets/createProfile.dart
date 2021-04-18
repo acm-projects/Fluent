@@ -344,7 +344,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                         gender: gender,
                         bio: bio,
                         language: _chosenValue,
-                        fluency: parseFluency(fluency+1),
+                        fluency: parseFluency(fluency),
                       );
                       // navigation will take it to the matching page here
 
