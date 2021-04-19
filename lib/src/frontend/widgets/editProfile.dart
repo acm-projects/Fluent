@@ -6,7 +6,6 @@ import 'package:fluent/src/backend/models/fluency.dart';
 import 'package:fluent/src/backend/models/match.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:fluent/src/frontend/routes.dart';
-import 'package:fluent/src/frontend/widgets/LoggedInUserNavigation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 

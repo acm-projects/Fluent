@@ -156,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                                   MatchProfile user = await matching.getUserData(FirebaseAuth.instance.currentUser.uid);
 
                                   if(FirebaseAuth.instance.currentUser.uid != null && !error) {
-                                    Navigator.pushReplacementNamed(context, Routes.home, arguments: user.pfp);
+                                    Navigator.pushReplacementNamed(context, Routes.home, arguments: user);
                                   }
                                 }
                               },

@@ -21,7 +21,6 @@ class ProfilesService {
   Future<Profile> createProfile({
     @required String pfp,
     @required String uid,
-    @required String username,
     @required String name,
     @required DateTime birthDate,
     @required String gender,
@@ -34,7 +33,6 @@ class ProfilesService {
     await ref.set({
       'pfp': pfp,
       'UID': uid,
-      'username': username,
       'name': name,
       'birthDate': birthDate,
       'gender': gender,
@@ -46,7 +44,6 @@ class ProfilesService {
     return Profile(
       pfp: pfp,
       uid: uid,
-      username: username,
       name: name,
       birthDate: birthDate,
       gender: gender,
@@ -63,7 +60,6 @@ class ProfilesService {
     return Profile(
       pfp: snap.get('pfp'),
       uid: uid,
-      username: snap.get('username'),
       name: snap.get('name'),
       birthDate: snap.get('birthDate').toDate(),
       gender: snap.get('gender'),

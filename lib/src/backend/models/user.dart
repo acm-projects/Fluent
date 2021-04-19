@@ -15,8 +15,6 @@ class User extends HasUid {
 /// Represents a user's public-facing profile.
 class Profile extends User {
   String pfp;
-  /// This user's username.
-  String username;
 
   /// This user's real name.
   String name;
@@ -39,7 +37,6 @@ class Profile extends User {
   Profile({
     @required String pfp,
     @required String uid,
-    @required this.username,
     @required this.name,
     @required this.birthDate,
     @required this.gender,

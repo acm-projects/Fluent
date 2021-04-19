@@ -1,3 +1,4 @@
+import 'package:fluent/src/backend/models/match.dart';
 import 'package:fluent/src/backend/models/user.dart';
 import 'package:fluent/src/backend/services/services_provider.dart';
 import 'package:fluent/src/frontend/routes.dart';
@@ -27,12 +28,12 @@ class AppInit extends StatelessWidget {
     Routes.login: _page((_) => LoginPage()),
     Routes.signUp: _page((_) => SignUpPage()),
     Routes.editProfile:
-        _page((settings) => EditProfilePage(pfp: settings.arguments as String)),
+        _page((settings) => EditProfilePage(currentUser: settings.arguments as MatchProfile)),
     Routes.createProfile: _page((_) => CreateProfilePage()),
     Routes.chat:
         _page((settings) => ChatScreen(chatUser: settings.arguments as User)),
     Routes.home:
-        _page((settings) => BottomNavBar(pfp: settings.arguments as String)),
+        _page((settings) => BottomNavBar(currentUser: settings.arguments as MatchProfile)),
   };
 
   @override

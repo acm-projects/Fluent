@@ -347,7 +347,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
 
                       final matching = ServicesProvider.of(context).services.matching;
                       MatchProfile user = await matching.getUserData(FirebaseAuth.instance.currentUser.uid);
-                      Navigator.pushReplacementNamed(context, Routes.home, arguments: user.pfp);
+                      Navigator.pushReplacementNamed(context, Routes.home, arguments: user);
                     },
                     color: Colors.lightBlueAccent,
                     padding: EdgeInsets.symmetric(horizontal: 50),

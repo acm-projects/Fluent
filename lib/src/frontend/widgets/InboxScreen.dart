@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
+import 'package:fluent/src/backend/models/match.dart';
 import 'package:fluent/src/backend/models/user.dart';
 import 'package:fluent/src/backend/services/base/auth.dart';
 import 'package:fluent/src/frontend/routes.dart';
@@ -136,7 +137,7 @@ class _InboxScreenState extends State<InboxScreen> {
                                             Navigator.pushNamed(
                                               context,
                                               Routes.editProfile,
-                                              arguments: widget.pfp,
+                                              arguments: widget.currentUser,
                                             );
                                           },
                                           child: Container(
