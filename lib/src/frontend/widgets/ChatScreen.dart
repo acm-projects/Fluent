@@ -133,6 +133,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   // pop up notification to confirm blocking a user
   confirmBlock(BuildContext context) {
+    final matching = ServicesProvider.of(context).services.matching;
+
     return showDialog(context: context, builder: (context) {
       return AlertDialog(
         title: Text("Are you really sure you want to block this user?",
@@ -142,7 +144,6 @@ class _ChatScreenState extends State<ChatScreen> {
               onPressed: () async {
                 isBlocked = true;
 
-                final matching = ServicesProvider.of(context).services.matching;
                 await matching.blockUser(widget.chatUser.uid);
 
                 Navigator.pop(context);
