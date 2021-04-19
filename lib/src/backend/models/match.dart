@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fluent/src/backend/models/fluency.dart';
 
 class MatchProfile{
   String pfp;

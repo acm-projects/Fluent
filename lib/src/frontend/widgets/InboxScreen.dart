@@ -1,15 +1,12 @@
-import 'package:fluent/src/backend/models/match.dart';
-import 'package:fluent/src/backend/models/user.dart' as model;
-import 'package:fluent/src/frontend/frontendmodels/UITestUserModel.dart';
-import 'package:fluent/src/frontend/widgets/editProfile.dart';
-import 'package:flutter/material.dart';
-import 'package:flappy_search_bar/flappy_search_bar.dart';
-import 'package:fluent/src/frontend/widgets/SearchAndUserIcon.dart';
-// later the actual user model will be imported to get the actual user's data
-import 'package:fluent/src/frontend/frontendmodels/UITestMessageModel.dart';
-import 'package:fluent/src/frontend/widgets/ChatScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:flappy_search_bar/flappy_search_bar.dart';
+import 'package:fluent/src/backend/models/match.dart';
+import 'package:fluent/src/backend/models/user.dart' as model;
+// later the actual user model will be imported to get the actual user's data
+import 'package:fluent/src/frontend/frontendmodels/UITestMessageModel.dart';
+import 'package:fluent/src/frontend/widgets/editProfile.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class InboxScreen extends StatefulWidget {

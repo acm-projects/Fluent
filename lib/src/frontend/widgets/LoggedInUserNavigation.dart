@@ -1,10 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluent/src/backend/models/match.dart';
-import 'package:fluent/src/backend/models/user.dart';
-import 'package:fluent/src/backend/services/firebase/auth.dart';
-import 'package:flutter/material.dart';
 import 'package:fluent/src/frontend/pages.dart';
-import 'package:fluent/src/backend/services/base/services.dart';
+import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatefulWidget {
   // final MatchProfile currentUser;

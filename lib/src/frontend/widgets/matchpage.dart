@@ -1,8 +1,7 @@
-import 'package:fluent/src/backend/models/match.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class MatchingPage extends StatefulWidget {
   static Widget create(BuildContext context) {

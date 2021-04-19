@@ -1,15 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:fluent/src/backend/models/match.dart';
 import 'package:fluent/src/backend/models/user.dart';
 import 'package:fluent/src/backend/services/base/auth.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:fluent/src/frontend/widgets/editProfile.dart';
 import 'package:flutter/material.dart';
-import 'package:flappy_search_bar/flappy_search_bar.dart';
-import 'package:fluent/src/frontend/widgets/SearchAndUserIcon.dart';
-import 'package:fluent/src/frontend/frontendmodels/UITestMessageModel.dart';
-import 'package:fluent/src/frontend/widgets/ChatScreen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 class MatchRequestPage extends StatefulWidget {
   //final String pfp;
