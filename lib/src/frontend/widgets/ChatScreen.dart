@@ -139,8 +139,12 @@ class _ChatScreenState extends State<ChatScreen> {
             style: TextStyle(fontWeight: FontWeight.bold)),
         actions: <Widget>[
           MaterialButton(
-              onPressed: () {
+              onPressed: () async {
                 isBlocked = true;
+
+                final matching = ServicesProvider.of(context).services.matching;
+                await matching.blockUser(widget.chatUser.uid);
+
                 Navigator.pop(context);
               },
               child: Text("Yes",

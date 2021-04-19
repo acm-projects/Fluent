@@ -10,6 +10,16 @@ class MatchingService {
 
   int years = 365;
 
+  Future<void> blockUser(String blockUid) async {
+    var uid = FirebaseAuth.instance.currentUser.uid;
+
+    return Future.wait([
+      collection.doc(uid).collection("blocked").doc(blockUid).set({}),
+      collection.doc(uid).collection("matches").doc(blockUid).delete(),
+      collection.doc(blockUid).collection("matches").doc(uid).delete(),
+    ]);
+  }
+
   Future<List>chooseUser(String matchUID, String name, String pfp) async {
     var uid = FirebaseAuth.instance.currentUser.uid;
     MatchProfile currentUser = await getUserData(uid);
@@ -167,8 +177,12 @@ class MatchingService {
     await collection
         .where('language', isEqualTo: currentUser.language)
         .get()
-        .then((users){
+        .then((users) async {
       for (var user in users.docs){
+        if ((await collection.doc(user.id).collection("blocked").doc(uid).get()).exists) {
+          continue;
+        }
+
         if(!chosenList.contains(user.id)
             && !notChosenList.contains(user.id)
             && !matchesList.contains(user.id)
