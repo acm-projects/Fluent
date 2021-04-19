@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluent/src/backend/models/match.dart';
+import 'package:fluent/src/backend/models/user.dart';
+import 'package:fluent/src/backend/services/firebase/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluent/src/frontend/pages.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
-import 'package:fluent/src/backend/models/match.dart';
 
 class BottomNavBar extends StatefulWidget {
   // final MatchProfile currentUser;
@@ -10,15 +12,15 @@ class BottomNavBar extends StatefulWidget {
   //   // // constructor for ChatScreen to initialize the User
   //   // BottomNavBar({this.currentUser});
 
-  final String pfp;
-  BottomNavBar({Key key, @required this.pfp}) : super(key: key);
+  MatchProfile currentUser;
+  //final String pfp;
+  BottomNavBar({Key key, @required this.currentUser}) : super(key: key);
 
   @override
   _BottomNavBarState createState() => _BottomNavBarState();
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
-
   int set = 0;
 
   _onTabTapped(int index) {
@@ -29,10 +31,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+
+    print(widget.currentUser.uid);
+
     final List<WidgetBuilder> _navBarPages = [
       (context) => MatchingPage.create(context),
-      (context) => MatchRequestPage(pfp: widget.pfp),
-      (context) => InboxScreen(pfp: widget.pfp),
+      (context) => MatchRequestPage(currentUser: widget.currentUser),
+      (context) => InboxScreen(currentUser: widget.currentUser),
     ];
 
     return Scaffold(

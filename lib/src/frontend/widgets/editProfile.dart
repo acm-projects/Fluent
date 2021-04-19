@@ -3,6 +3,8 @@ import 'package:fluent/src/backend/models/fluency.dart';
 import 'package:fluent/src/backend/models/match.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluent/src/backend/services/firebase/services.dart';
+import 'package:fluent/src/frontend/frontendmodels/UITestUserModel.dart';
 import 'package:fluent/src/frontend/pages.dart';
 import 'package:fluent/src/frontend/widgets/LoggedInUserNavigation.dart';
 import 'package:flutter/material.dart';
@@ -13,15 +15,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class EditProfilePage extends StatefulWidget {
-  final String pfp;
-  EditProfilePage({Key key, @required this.pfp}) : super(key: key);
+  //final String pfp;
+  MatchProfile currentUser;
+  EditProfilePage({Key key, @required this.currentUser}) : super(key: key);
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  String name = "";
-  String age = "";
+  static String name;
+  //String age;
 
   List<String> chipList = [
     "Male",
@@ -32,26 +35,26 @@ class _EditProfilePageState extends State<EditProfilePage> {
     "1","2","3","4","5"
   ];
 
-  static String gender = "";
+  static String gender;
 
-  String language = "";
+  static String language;
   static int fluency;
-  String bio = "";
+  static String bio;
 
-  var _chosenValue;
+  static var _chosenValue;
 
   // so the language selection buttons will change colors on pressed
   bool pressAttention1 = false;
   bool pressAttention2 = false;
   bool pressAttention3 = false;
 
-  DateTime selectedDate = DateTime.now();
+  static DateTime selectedDate;
 
-  File _image;
+  static File _image;
 
   _imgFromCamera() async {
     var image = await ImagePicker.platform.pickImage(
-        source: ImageSource.camera, imageQuality: 10
+        source: ImageSource.camera, imageQuality: 20
     );
 
     setState(() {
@@ -61,7 +64,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   _imgFromGallery() async {
     var image = await  ImagePicker.platform.pickImage(
-        source: ImageSource.gallery, imageQuality: 10
+        source: ImageSource.gallery, imageQuality: 20
     );
 
     setState(() {
@@ -114,7 +117,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: selectedDate,
+        initialDate: selectedDate == null ? widget.currentUser.age.toDate() : selectedDate,
         firstDate: DateTime(1900),
         lastDate: DateTime(2022));
     if (picked != null && picked != selectedDate)
@@ -145,7 +148,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
               Navigator.push(context,
                   MaterialPageRoute(
                       builder: (context) => BottomNavBar(
-                          pfp: user.pfp
+                        currentUser: user,
+                        //pfp: user.pfp
                       )
                   ));
           },
@@ -189,7 +193,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: (_image == null)
-                                ? NetworkImage(widget.pfp) //Default Picture
+                                ? NetworkImage(widget.currentUser.pfp) //Default Picture
                                 : FileImage(_image),
                           )),
                     ),
@@ -225,12 +229,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 height: 35,
               ),
               TextFormField(
+                initialValue: widget.currentUser.name,
+                //controller: TextEditingController(text: name),
                 decoration: const InputDecoration(
-                  hintText: 'Enter your name',
-                  labelText: 'Name',
+                  //hintText: name,
+                  labelText: "Name",
                 ),
-                onChanged: (val) {
-                  setState(() => name = val);
+                onChanged: (val){
+                  setState(() {
+                      name = val;
+                  });
                 },
               ),
               SizedBox(
@@ -271,7 +279,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     DropdownButton<String>(
                       isExpanded: true,
                       focusColor:Colors.white,
-                      value: _chosenValue,
+                      value: _chosenValue == null ? widget.currentUser.language : _chosenValue,
                       //elevation: 5,
                       style: TextStyle(color: Colors.white, fontSize: 16),
                       iconEnabledColor:Colors.black,
@@ -299,7 +307,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       ),
                       onChanged: (String value) {
                         setState(() {
-                          _chosenValue = value;
+                            _chosenValue = value;
                         });
                       },
                     ),
@@ -330,14 +338,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     )]),
 
               // bio
-              new TextField(
+              new TextFormField(
+                initialValue: widget.currentUser.bio,
                 decoration: InputDecoration(
                     hintText: 'Bio',
                     border: OutlineInputBorder()
                 ),
                 maxLines: 10,
                 onChanged: (val) {
-                  setState(() => bio = val);
+                  setState((){
+                    bio = val;
+                  });
                 },
               ),
 
@@ -352,13 +363,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       ServicesProvider.of(context).services.profiles.createProfile(
                         pfp: profilePic,
                         uid: FirebaseAuth.instance.currentUser.uid,
-                        username: "gary2",  //need username
-                        name: name,
-                        birthDate: selectedDate,
-                        gender: gender,
-                        bio: bio,
-                        language: _chosenValue,
-                        fluency: parseFluency(fluency+1),
+                        name: name == null ? widget.currentUser.name : name,
+                        birthDate: selectedDate == null ? widget.currentUser.age : selectedDate,
+                        gender: gender == null ? widget.currentUser.Gender : gender,
+                        bio: bio == null ? widget.currentUser.bio : bio,
+                        language: _chosenValue == null ? widget.currentUser.language : _chosenValue,
+                        fluency: fluency == null ? widget.currentUser.fluency : parseFluency(fluency+1),
                       );
                     },
                     color: Colors.lightBlueAccent,

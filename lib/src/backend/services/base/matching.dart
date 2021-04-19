@@ -97,6 +97,8 @@ class MatchingService {
           currentUser.pfp = user['pfp'];
           currentUser.name = user['name'];
           currentUser.gender = ((DateTime.now().difference(user['birthDate'].toDate()).inDays).toInt() / years).floor().toString();
+          currentUser.Gender = user['gender'];
+          currentUser.age = user['birthDate'];
           currentUser.bio = user['bio'];
           currentUser.language = user['language'];
           currentUser.fluency = user['fluency'];

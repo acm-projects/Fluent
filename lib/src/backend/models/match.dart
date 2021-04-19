@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluent/src/backend/models/fluency.dart';
 
 class MatchProfile{
@@ -15,9 +16,11 @@ class MatchProfile{
 
   String language;
 
+  String Gender;
+
   int fluency;
 
-  int age;
+  Timestamp age;
 
   int fluencyDifference;
 
@@ -27,6 +30,7 @@ class MatchProfile{
     this.username,
     this.bio,
     this.gender,
+    this.Gender,
     this.name,
     this.age,
     this.language,

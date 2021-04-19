@@ -48,7 +48,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
 
   _imgFromCamera() async {
     var image = await ImagePicker.platform.pickImage(
-        source: ImageSource.camera, imageQuality: 10
+        source: ImageSource.camera, imageQuality: 20
     );
 
     setState(() {
@@ -58,7 +58,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
 
   _imgFromGallery() async {
     var image = await  ImagePicker.platform.pickImage(
-        source: ImageSource.gallery, imageQuality: 10
+        source: ImageSource.gallery, imageQuality: 20
     );
 
     setState(() {
@@ -338,7 +338,6 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                       var profile = ServicesProvider.of(context).services.profiles.createProfile(
                         pfp: profilePic,
                         uid: FirebaseAuth.instance.currentUser.uid,
-                        username: "gary2",  //need username
                         name: name,
                         birthDate: selectedDate,
                         gender: gender,
@@ -354,7 +353,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                         Navigator.push(context,
                             MaterialPageRoute(
                                 builder: (context) => BottomNavBar(
-                                    pfp: user.pfp
+                                    currentUser: user
                                 )
                             ));
 

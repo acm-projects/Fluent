@@ -1,4 +1,6 @@
-import 'package:fluent/src/backend/models/user.dart';
+import 'package:fluent/src/backend/models/match.dart';
+import 'package:fluent/src/backend/models/user.dart' as model;
+import 'package:fluent/src/frontend/frontendmodels/UITestUserModel.dart';
 import 'package:fluent/src/frontend/widgets/editProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
@@ -8,10 +10,12 @@ import 'package:fluent/src/frontend/frontendmodels/UITestMessageModel.dart';
 import 'package:fluent/src/frontend/widgets/ChatScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:intl/intl.dart';
 
 class InboxScreen extends StatefulWidget {
-  final String pfp;
-  InboxScreen({Key key, @required this.pfp}) : super(key: key);
+  //final String pfp;
+  MatchProfile currentUser;
+  InboxScreen({Key key, @required this.currentUser}) : super(key: key);
   @override
   _InboxScreenState createState() => _InboxScreenState();
 }
@@ -28,32 +32,13 @@ class _InboxScreenState extends State<InboxScreen> {
   final SearchBarController<Post> _searchBarController = SearchBarController();
   String chatUID;
 
-  // String readTimestamp(int timestamp) {
-  //   var now = DateTime.now();
-  //   var format = DateFormat('HH:mm a');
-  //   var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-  //   var diff = now.difference(date);
-  //   var time = '';
-  //
-  //   if (diff.inSeconds <= 0 || diff.inSeconds > 0 && diff.inMinutes == 0 || diff.inMinutes > 0 && diff.inHours == 0 || diff.inHours > 0 && diff.inDays == 0) {
-  //     time = format.format(date);
-  //   } else if (diff.inDays > 0 && diff.inDays < 7) {
-  //     if (diff.inDays == 1) {
-  //       time = diff.inDays.toString() + ' DAY AGO';
-  //     } else {
-  //       time = diff.inDays.toString() + ' DAYS AGO';
-  //     }
-  //   } else {
-  //     if (diff.inDays == 7) {
-  //       time = (diff.inDays / 7).floor().toString() + ' WEEK AGO';
-  //     } else {
-  //
-  //       time = (diff.inDays / 7).floor().toString() + ' WEEKS AGO';
-  //     }
-  //   }
-  //
-  //   return time;
-  // }
+  String convertDateTimeDisplay(String date) {
+    final DateFormat displayFormater = DateFormat('yyyy-MM-dd HH:mm:ss.SSS');
+    final DateFormat serverFormater = DateFormat('MM-dd-yyyy');
+    final DateTime displayDate = displayFormater.parse(date);
+    final String formatted = serverFormater.format(displayDate);
+    return formatted;
+  }
 
   Future<List<Post>> _getALlPosts(String search) async {
     await Future.delayed(Duration(seconds: 1));
@@ -154,7 +139,8 @@ class _InboxScreenState extends State<InboxScreen> {
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       EditProfilePage(
-                                                          pfp: widget.pfp)),
+                                                          currentUser: widget.currentUser,
+                                                      )),
                                             );
                                           },
                                           child: Container(
@@ -173,7 +159,7 @@ class _InboxScreenState extends State<InboxScreen> {
                                                   image: DecorationImage(
                                                     fit: BoxFit.cover,
                                                     image: NetworkImage(
-                                                        widget.pfp),
+                                                        widget.currentUser.pfp),
                                                   ))),
                                         ),
                                       ),
@@ -204,7 +190,7 @@ class _InboxScreenState extends State<InboxScreen> {
                                             // routes are implemented again
                                             Navigator.pushNamed(
                                                 context, '/chat',
-                                                arguments: User(snapshot
+                                                arguments: model.User(snapshot
                                                     .data.docs[index].id));
                                           },
                                           child: Container(
@@ -298,12 +284,12 @@ class _InboxScreenState extends State<InboxScreen> {
                                                           ),
                                                           Flexible(
                                                             child: Text(snapshot.data.docs[index].data().containsKey("time") ? (
-                                                                snapshot.data.docs[index]
-                                                                ['time']?.toDate() ?? DateTime.now()).toString() : "Now",
+                                                                convertDateTimeDisplay(snapshot.data.docs[index]
+                                                                ['time']?.toDate().toString()) ?? DateTime.now()).toString() : "Now",
                                                                 style:
                                                                 TextStyle(
                                                                   fontSize:
-                                                                  16.0,
+                                                                  14.0,
                                                                   fontWeight:
                                                                   FontWeight
                                                                       .w600,

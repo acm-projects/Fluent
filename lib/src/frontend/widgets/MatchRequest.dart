@@ -1,3 +1,4 @@
+import 'package:fluent/src/backend/models/match.dart';
 import 'package:fluent/src/backend/models/user.dart';
 import 'package:fluent/src/backend/services/base/auth.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
@@ -11,8 +12,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 class MatchRequestPage extends StatefulWidget {
-  final String pfp;
-  MatchRequestPage({Key key, @required this.pfp}) : super(key: key);
+  //final String pfp;
+  MatchProfile currentUser;
+  MatchRequestPage({Key key, @required this.currentUser}) : super(key: key);
   @override
   _MatchRequestPage createState() => _MatchRequestPage();
 }
@@ -128,7 +130,7 @@ class _MatchRequestPage extends State<MatchRequestPage> {
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         EditProfilePage(
-                                                            pfp: widget.pfp),
+                                                            currentUser: widget.currentUser,),
                                                   ));
                                             },
                                             child: Container(
@@ -147,7 +149,7 @@ class _MatchRequestPage extends State<MatchRequestPage> {
                                                     image: DecorationImage(
                                                       fit: BoxFit.cover,
                                                       image: NetworkImage(
-                                                          widget.pfp),
+                                                          widget.currentUser.pfp),
                                                     ))),
                                           ),
                                         ),
