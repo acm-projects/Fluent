@@ -2,7 +2,7 @@ import 'package:fluent/src/backend/models/match.dart';
 import 'package:fluent/src/backend/models/user.dart';
 import 'package:fluent/src/backend/services/base/matching.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
-import 'package:fluent/src/frontend/pages.dart';
+import 'package:fluent/src/frontend/routes.dart';
 import 'package:fluent/src/frontend/widgets/LoggedInUserNavigation.dart';
 import 'package:fluent/src/frontend/widgets/MyTextField.dart';
 import 'package:fluent/src/frontend/widgets/editProfile.dart';
@@ -163,13 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                                   MatchProfile user = await matching.getUserData(FirebaseAuth.instance.currentUser.uid);
 
                                   if(FirebaseAuth.instance.currentUser.uid != null && !error) {
-                                    //Navigator.pushNamed(context,"/navigation");
-                                    Navigator.push(context,
-                                        MaterialPageRoute(
-                                      builder: (context) => BottomNavBar(
-                                          pfp: user.pfp
-                                    )
-                                    ));
+                                    Navigator.pushReplacementNamed(context, Routes.home, arguments: user.pfp);
                                   }
                                 }
                               },
@@ -192,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
                               Text('New user?'),
                               TextButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/signUp');
+                                  Navigator.pushReplacementNamed(context, Routes.signUp);
                                 },
                                 child: Text('Sign up now!'),
                                 style: TextButton.styleFrom(

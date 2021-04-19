@@ -1,14 +1,11 @@
 import 'package:fluent/src/backend/models/user.dart';
 import 'package:fluent/src/backend/services/services_provider.dart';
-import 'package:fluent/src/frontend/pages.dart';
+import 'package:fluent/src/frontend/routes.dart';
 import 'package:fluent/src/frontend/theme/style.dart';
-import 'package:fluent/src/frontend/widgets/InboxScreen.dart';
-import 'package:fluent/src/frontend/widgets/LoggedInUserNavigation.dart';
-import 'package:fluent/src/frontend/widgets/MatchRequestCard.dart';
-import 'package:fluent/src/frontend/widgets/createProfile.dart';
 import 'package:fluent/src/frontend/widgets/ChatScreen.dart';
+import 'package:fluent/src/frontend/widgets/LoggedInUserNavigation.dart';
+import 'package:fluent/src/frontend/widgets/createProfile.dart';
 import 'package:fluent/src/frontend/widgets/editProfile.dart';
-import 'package:fluent/src/frontend/widgets/matchpage.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -22,37 +19,32 @@ void main() {
 }
 
 class AppInit extends StatelessWidget {
+  static RouteFactory _page(Widget Function(RouteSettings) builder) =>
+      (RouteSettings settings) => MaterialPageRoute(
+          settings: settings, builder: (context) => builder(settings));
+
+  static final _routes = <String, RouteFactory>{
+    Routes.login: _page((_) => LoginPage()),
+    Routes.signUp: _page((_) => SignUpPage()),
+    Routes.editProfile:
+        _page((settings) => EditProfilePage(pfp: settings.arguments as String)),
+    Routes.createProfile: _page((_) => CreateProfilePage()),
+    Routes.chat:
+        _page((settings) => ChatScreen(chatUser: settings.arguments as User)),
+    Routes.home:
+        _page((settings) => BottomNavBar(pfp: settings.arguments as String)),
+  };
+
   @override
   Widget build(BuildContext context) {
     return createServicesProvider((context) {
-
       return Navigator(
-        initialRoute: '/',
+        initialRoute: Routes.login,
         onGenerateRoute: (settings) {
-          page(child) => MaterialPageRoute(builder: (context) => child);
-
-          switch (settings.name) {
-            case '/':
-              return page(LoginPage());
-            case '/signUp':
-              return page(SignUpPage());
-            case '/editProfile':
-              return page(EditProfilePage());
-            case '/createProfile':
-              return page(CreateProfilePage());
-            case '/inbox':
-              return page(InboxScreen());
-            case '/chat':
-              return page(ChatScreen(chatUser: settings.arguments as User));
-            case '/match':
-              //return page(MatchingPage());
-              return page(MatchingPage.create(context));
-            case '/navigation':
-              return page(BottomNavBar());
-
-
-            default:
-              throw 'Undefined route ${settings.name}';
+          if (_routes.containsKey(settings.name)) {
+            return _routes[settings.name](settings);
+          } else {
+            throw 'Undefined route: ${settings.name}';
           }
         },
       );

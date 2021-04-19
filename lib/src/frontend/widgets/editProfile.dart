@@ -3,7 +3,7 @@ import 'package:fluent/src/backend/models/fluency.dart';
 import 'package:fluent/src/backend/models/match.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluent/src/frontend/pages.dart';
+import 'package:fluent/src/frontend/routes.dart';
 import 'package:fluent/src/frontend/widgets/LoggedInUserNavigation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -93,14 +93,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       title: new Text('Photo Library'),
                       onTap: () {
                         _imgFromGallery();
-                        Navigator.of(context).pop();
+                        Navigator.pop(context);
                       }),
                   new ListTile(
                     leading: new Icon(Icons.photo_camera),
                     title: new Text('Camera'),
                     onTap: () {
                       _imgFromCamera();
-                      Navigator.of(context).pop();
+                      Navigator.pop(context);
                     },
                   ),
                 ],
@@ -125,7 +125,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final arguments = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme
@@ -138,16 +137,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             color: Colors.lightBlueAccent,
           ),
           onPressed: () async {
-            final matching = ServicesProvider.of(context).services.matching;
-            MatchProfile user = await matching.getUserData(FirebaseAuth.instance.currentUser.uid);
-
-              //Navigator.pushNamed(context,"/navigation");
-              Navigator.push(context,
-                  MaterialPageRoute(
-                      builder: (context) => BottomNavBar(
-                          pfp: user.pfp
-                      )
-                  ));
+            Navigator.pop(context);
           },
         ),
       ),
@@ -382,11 +372,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       final auth = ServicesProvider.of(context).services.auth;
                       auth.signOut();
 
-                      Navigator.push(context,
-                          MaterialPageRoute(
-                              builder: (context) => LoginPage()
-                          ));
-
+                      var navigator = Navigator.of(context);
+                      navigator.popUntil((route) => false);
+                      navigator.pushNamed(Routes.login);
                     },
                     color: Colors.redAccent,
                     padding: EdgeInsets.symmetric(horizontal: 50),

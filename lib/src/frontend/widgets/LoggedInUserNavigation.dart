@@ -1,6 +1,6 @@
 import 'package:fluent/src/backend/models/match.dart';
 import 'package:flutter/material.dart';
-import 'package:fluent/src/frontend/pages.dart';
+import 'package:fluent/src/frontend/routes.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:fluent/src/backend/models/match.dart';
 

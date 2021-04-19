@@ -5,7 +5,7 @@ import 'package:fluent/src/backend/models/fluency.dart';
 import 'package:fluent/src/backend/models/match.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluent/src/frontend/pages.dart';
+import 'package:fluent/src/frontend/routes.dart';
 import 'package:fluent/src/frontend/widgets/LoggedInUserNavigation.dart';
 import 'package:fluent/src/frontend/widgets/editProfile.dart';
 import 'package:flutter/material.dart';
@@ -95,14 +95,14 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                       title: new Text('Photo Library'),
                       onTap: () {
                         _imgFromGallery();
-                        Navigator.of(context).pop();
+                        Navigator.pop(context);
                       }),
                   new ListTile(
                     leading: new Icon(Icons.photo_camera),
                     title: new Text('Camera'),
                     onTap: () {
                       _imgFromCamera();
-                      Navigator.of(context).pop();
+                      Navigator.pop(context);
                     },
                   ),
                 ],
@@ -350,14 +350,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
 
                       final matching = ServicesProvider.of(context).services.matching;
                       MatchProfile user = await matching.getUserData(FirebaseAuth.instance.currentUser.uid);
-                        //Navigator.pushNamed(context,"/navigation");
-                        Navigator.push(context,
-                            MaterialPageRoute(
-                                builder: (context) => BottomNavBar(
-                                    pfp: user.pfp
-                                )
-                            ));
-
+                      Navigator.pushReplacementNamed(context, Routes.home, arguments: user.pfp);
                     },
                     color: Colors.lightBlueAccent,
                     padding: EdgeInsets.symmetric(horizontal: 50),

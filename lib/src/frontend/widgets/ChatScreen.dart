@@ -141,7 +141,7 @@ class _ChatScreenState extends State<ChatScreen> {
           MaterialButton(
               onPressed: () {
                 isBlocked = true;
-                Navigator.of(context).pop();
+                Navigator.pop(context);
               },
               child: Text("Yes",
               style: TextStyle(color: Colors.blue,
@@ -150,7 +150,7 @@ class _ChatScreenState extends State<ChatScreen> {
           MaterialButton(
             onPressed: () {
               isBlocked = false;
-              Navigator.of(context).pop();
+              Navigator.pop(context);
             },
             child: Text("No",
             style: TextStyle(color: Colors.blue,

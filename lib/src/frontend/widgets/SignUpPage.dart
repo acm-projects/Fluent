@@ -1,5 +1,6 @@
 import 'package:fluent/src/backend/models/match.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
+import 'package:fluent/src/frontend/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:fluent/src/frontend/widgets/SignUpHeader.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -177,7 +178,7 @@ class _State extends State<SignUpPage> {
                               print(e.toString());
                             }
                             if(FirebaseAuth.instance.currentUser.uid != null && !error) {
-                              Navigator.pushNamed(context, '/createProfile');
+                              Navigator.pushNamed(context, Routes.createProfile);
                             }
                           }
                       },

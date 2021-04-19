@@ -1,4 +1,6 @@
 import 'package:fluent/src/backend/models/user.dart';
+import 'package:fluent/src/backend/services/base/auth.dart';
+import 'package:fluent/src/frontend/routes.dart';
 import 'package:fluent/src/frontend/widgets/editProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
@@ -66,6 +68,11 @@ class _InboxScreenState extends State<InboxScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var currentUser = AuthState.of(context).currentUser;
+    if (currentUser == null) {
+      return Container(width: 0, height: 0); // should only happen when logging out
+    }
+
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -78,7 +85,7 @@ class _InboxScreenState extends State<InboxScreen> {
         body: StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('profiles')
-                .doc(auth.FirebaseAuth.instance.currentUser.uid)
+                .doc(currentUser.uid)
                 .collection('matches')
                 .orderBy('time', descending: true)
                 .snapshots(),
@@ -149,12 +156,10 @@ class _InboxScreenState extends State<InboxScreen> {
                                         child: GestureDetector(
                                           onTap: () {
                                             // Navigator should go here. It should navigate to the EditProfile page
-                                            Navigator.push(
+                                            Navigator.pushNamed(
                                               context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EditProfilePage(
-                                                          pfp: widget.pfp)),
+                                              Routes.editProfile,
+                                              arguments: widget.pfp,
                                             );
                                           },
                                           child: Container(
@@ -203,7 +208,7 @@ class _InboxScreenState extends State<InboxScreen> {
                                             // this will let you tap to the next page, this will be changed once
                                             // routes are implemented again
                                             Navigator.pushNamed(
-                                                context, '/chat',
+                                                context, Routes.chat,
                                                 arguments: User(snapshot
                                                     .data.docs[index].id));
                                           },
@@ -387,7 +392,7 @@ class Detail extends StatelessWidget {
           children: <Widget>[
             IconButton(
               icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.pop(context),
             ),
             Text("Detail"),
           ],
