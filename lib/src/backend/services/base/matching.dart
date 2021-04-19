@@ -204,10 +204,15 @@ class MatchingService {
   }
 
   Future<List> searchUser(name) async{
+    var uid = FirebaseAuth.instance.currentUser.uid;
     await collection.where('name', isEqualTo: name)
         .get()
-        .then((users){
+        .then((users) async {
       for(var user in users.docs){
+        if ((await collection.doc(user.id).collection("blocked").doc(uid).get()).exists) {
+          continue;
+        }
+
         potentialMatches.insert(0, MatchProfile(
           pfp: user['pfp'],
           uid: user['UID'],
