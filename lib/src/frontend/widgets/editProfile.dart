@@ -54,7 +54,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   _imgFromCamera() async {
     var image = await ImagePicker.platform.pickImage(
-        source: ImageSource.camera, imageQuality: 20
+        source: ImageSource.camera, imageQuality: 40
     );
 
     setState(() {
@@ -64,7 +64,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   _imgFromGallery() async {
     var image = await  ImagePicker.platform.pickImage(
-        source: ImageSource.gallery, imageQuality: 20
+        source: ImageSource.gallery, imageQuality: 40
     );
 
     setState(() {
