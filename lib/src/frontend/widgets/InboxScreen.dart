@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:fluent/src/backend/models/user.dart';
 import 'package:fluent/src/backend/services/base/auth.dart';
-// later the actual user model will be imported to get the actual user's data
-import 'package:fluent/src/frontend/frontendmodels/UITestMessageModel.dart';
 import 'package:fluent/src/frontend/routes.dart';
 import 'package:flutter/material.dart';
 
@@ -196,8 +194,6 @@ class _InboxScreenState extends State<InboxScreen> {
                                       itemBuilder: (context, index) {
                                         MatchNames.add(Post(
                                             snapshot.data.docs[index]['name']));
-                                        // change this object to backend stuff
-                                        final Message messages = chats[index];
                                         chatUID = snapshot.data.docs[index]['chat'];
                                         return GestureDetector(
                                           onTap: () {
@@ -217,7 +213,8 @@ class _InboxScreenState extends State<InboxScreen> {
                                                 Container(
                                                   padding: EdgeInsets.all(2.0),
                                                   // if the message is unread, show blue border
-                                                  decoration: messages.unread
+                                                  decoration:
+                                                      /*messages.unread
                                                       ? BoxDecoration(
                                                           // Note that the border should only appear around the user whose messages
                                                           // you haven't read yet
@@ -244,7 +241,7 @@ class _InboxScreenState extends State<InboxScreen> {
                                                           ],
                                                           // otherwise, don't show the blue border
                                                         )
-                                                      : BoxDecoration(
+                                                      :*/ BoxDecoration(
                                                           // if you've read their messages, show the boxShape only with no border
                                                           shape:
                                                               BoxShape.circle,
