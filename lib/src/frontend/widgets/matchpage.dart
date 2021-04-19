@@ -156,7 +156,10 @@ class _MatchingPage extends State<MatchingPage> {
                           Container(
                             decoration: BoxDecoration(
                               color: Color.fromRGBO(0, 0, 0, 0.5),
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.zero,
+                                bottom: Radius.circular(15),
+                              ),
                             ),
                             padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: Column(
