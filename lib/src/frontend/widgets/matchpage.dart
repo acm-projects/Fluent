@@ -221,7 +221,7 @@ class _MatchingPage extends State<MatchingPage> {
                     ),
                     onPressed: () async {
                       user = await matching.skipUser(
-                          FirebaseAuth.instance.currentUser.uid, user[0].uid);
+                          FirebaseAuth.instance.currentUser.uid, potentialUID);
 
                       setState(() {
                         potentialUID = user[0].uid;

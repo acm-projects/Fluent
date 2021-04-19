@@ -1,5 +1,5 @@
+import 'package:fluent/src/frontend/routes.dart';
 import 'package:fluent/src/backend/models/match.dart';
-import 'package:fluent/src/frontend/pages.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatefulWidget {

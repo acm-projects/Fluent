@@ -4,7 +4,7 @@ import 'package:fluent/src/backend/models/match.dart';
 import 'package:fluent/src/backend/models/user.dart';
 import 'package:fluent/src/backend/services/base/auth.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
-import 'package:fluent/src/frontend/widgets/editProfile.dart';
+import 'package:fluent/src/frontend/routes.dart';
 import 'package:flutter/material.dart';
 
 class MatchRequestPage extends StatefulWidget {
@@ -37,6 +37,9 @@ class _MatchRequestPage extends State<MatchRequestPage> {
   @override
   Widget build(BuildContext context) {
     final currentUser = AuthState.of(context).currentUser;
+    if (currentUser == null) {
+      return Container(width: 0, height: 0);; // should only happen when logging out
+    }
 
     return GestureDetector(
       onTap: () {
@@ -121,13 +124,11 @@ class _MatchRequestPage extends State<MatchRequestPage> {
                                           child: GestureDetector(
                                             onTap: () {
                                               // Navigator should go here. It should navigate to the EditProfile page
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        EditProfilePage(
-                                                            currentUser: widget.currentUser,),
-                                                  ));
+                                              Navigator.pushNamed(
+                                                context,
+                                                Routes.editProfile,
+                                                arguments: widget.currentUser,
+                                              );
                                             },
                                             child: Container(
                                                 width: 70,
@@ -253,7 +254,7 @@ class _MatchRequestPage extends State<MatchRequestPage> {
                                                                     await matching.chooseUser(
                                                                         snapshot.data.docs[index]['uid'], snapshot.data.docs[index]['name'], snapshot.data.docs[index]['pfp']);
                                                                     // This takes them to the chat page for the user
-                                                                    Navigator.pushNamed(context, '/chat',
+                                                                    Navigator.pushNamed(context, Routes.chat,
                                                                         arguments: User(snapshot
                                                                             .data.docs[index].id));
                                                                   }
@@ -316,7 +317,7 @@ class Detail extends StatelessWidget {
           children: <Widget>[
             IconButton(
               icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.pop(context),
             ),
             Text("Detail"),
           ],
