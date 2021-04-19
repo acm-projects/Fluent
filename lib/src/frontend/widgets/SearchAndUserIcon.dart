@@ -1,11 +1,6 @@
-import 'package:fluent/src/backend/models/user.dart' as user;
-import 'package:fluent/src/frontend/routes.dart';
-import 'package:fluent/src/frontend/widgets/ChatScreen.dart';
-import 'package:fluent/src/frontend/widgets/editProfile.dart';
-import 'package:flutter/material.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:fluent/src/frontend/routes.dart';
+import 'package:flutter/material.dart';
 
 class SearchAndUserIcon extends StatefulWidget {
   final String pfp;
