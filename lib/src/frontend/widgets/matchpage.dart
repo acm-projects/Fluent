@@ -134,59 +134,85 @@ class _MatchingPage extends State<MatchingPage> {
                           ),
                         ),
                       ),
-                      Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                Flexible(
-                                  flex:10,
-                                  child: Text(
-                                    ' $potentialName, $potentialGender',
-                                    style: TextStyle(
-                                        fontFamily: 'AirbnbCerealBold',
-                                        fontSize: 36,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                    //TextStyle(height: 2, fontSize: 20),
-
-                                    // textScaleFactor: 1.8, style:
-                                    // TextStyle(color: Colors.blue)),
-                                  ),
+                      Column(
+                        children: [
+                          Spacer(),
+                          SizedBox(
+                            height: 30,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                  stops: [0, 1],
+                                  colors: [
+                                    Color.fromRGBO(0, 0, 0, 0.5),
+                                    Color.fromRGBO(0, 0, 0, 0)
+                                  ],
                                 ),
-                                Flexible(
-                                    flex: 2,
-                                    child: Center(
-                                        child: Container(
-                                            // adding margin
-                                            margin: const EdgeInsets.only(left:5.0, right: 5.0),
-                                            // adding padding
-                                            padding: const EdgeInsets.all(3.0),
-                                            child: Expanded(
-                                              child: SingleChildScrollView(
-                                                  child:
-                                                      Column(children: <Widget>[
+                              ),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Color.fromRGBO(0, 0, 0, 0.5),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    Flexible(
+                                      flex:10,
+                                      child: Text(
+                                        ' $potentialName, $potentialGender',
+                                        style: TextStyle(
+                                            fontFamily: 'AirbnbCerealBold',
+                                            fontSize: 36,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white),
+                                        //TextStyle(height: 2, fontSize: 20),
 
-                                                  Text(
-                                                    '$potentialBio',
-                                                    textAlign: TextAlign.left,
-                                                    style: TextStyle(
-                                                        fontFamily:
-                                                            'AirbnbCereal',
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color: Colors.white),
-                                                    //TextStyle(height: 2, fontSize: 20),
-                                                    // textScaleFactor: 1.8, style:
-                                                    // TextStyle(color: Colors.blue)),
-                                                  ),
-                                              ])),
-                                            )))),
-                                SizedBox(height: 10),
-                              ])),
+                                        // textScaleFactor: 1.8, style:
+                                        // TextStyle(color: Colors.blue)),
+                                      ),
+                                    ),
+                                    Flexible(
+                                        flex: 2,
+                                        child: Center(
+                                            child: Container(
+                                                // adding margin
+                                                margin: const EdgeInsets.only(left:5.0, right: 5.0),
+                                                // adding padding
+                                                padding: const EdgeInsets.all(3.0),
+                                                child: Expanded(
+                                                  child: SingleChildScrollView(
+                                                      child:
+                                                          Column(children: <Widget>[
+
+                                                      Text(
+                                                        '$potentialBio',
+                                                        textAlign: TextAlign.left,
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                'AirbnbCereal',
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight.normal,
+                                                            color: Colors.white),
+                                                        //TextStyle(height: 2, fontSize: 20),
+                                                        // textScaleFactor: 1.8, style:
+                                                        // TextStyle(color: Colors.blue)),
+                                                      ),
+                                                  ])),
+                                                )))),
+                                    SizedBox(height: 10),
+                                  ]),
+                          ),
+                        ],
+                      ),
                     ]),
                     elevation: 10)),
             Row(
