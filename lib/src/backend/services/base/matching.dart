@@ -199,7 +199,7 @@ class MatchingService {
           uid: user['UID'],
           name: user['name'],
           bio: user['bio'],
-          gender: user['gender'],
+          gender: ((DateTime.now().difference(user['birthDate'].toDate()).inDays).toInt() / years).floor().toString(),
         ));
       }
     });

@@ -5,6 +5,7 @@ import 'package:fluent/src/backend/models/user.dart';
 import 'package:fluent/src/backend/services/base/auth.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
 import 'package:fluent/src/frontend/routes.dart';
+import 'package:fluent/src/frontend/widgets/MatchRequestCard.dart';
 import 'package:flutter/material.dart';
 
 class MatchRequestPage extends StatefulWidget {
@@ -166,10 +167,15 @@ class _MatchRequestPage extends State<MatchRequestPage> {
                                           ),
                                       itemCount: snapshot.data.docs.length,
                                       itemBuilder: (context, index) {
-                                        MatchNames.add(Post(snapshot.data.docs[index]['name']));
+                                        //MatchNames.add(Post(snapshot.data.docs[index]['name']));
                                         // change this object to backend stuff
                                         //final Message messages =
                                         //chats[index];
+                                        print(snapshot.data
+                                            .docs[index]['uid']);
+                                        print(snapshot.data
+                                            .docs[index]['gender']);
+
                                         return Container(
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 15.0,
@@ -278,7 +284,12 @@ class _MatchRequestPage extends State<MatchRequestPage> {
                                                             ),
                                                             SizedBox(width: 10.0),
                                                             ElevatedButton(
-                                                              onPressed: () {},
+                                                              onPressed: () {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(builder: (context) => MatchingRequestCard(snapshot.data.docs[index]['pfp'], snapshot.data.docs[index]['uid'], snapshot.data.docs[index]['name'], snapshot.data.docs[index]['bio'], snapshot.data.docs[index]['gender'])),
+                                                                );
+                                                              },
                                                               child: Text('Profile',
                                                                 style: TextStyle(
                                                                   fontSize: 14.0,

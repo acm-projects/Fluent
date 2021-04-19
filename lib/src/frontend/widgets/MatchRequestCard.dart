@@ -7,8 +7,8 @@ class MatchingRequestCard extends StatefulWidget {
   static Widget create(BuildContext context) {
     final matching = ServicesProvider.of(context).services.matching;
     return FutureBuilder(
-      future: matching.getUsers(
-          FirebaseAuth.instance.currentUser.uid), //filled in actural UID instead of future function
+      future: matching.getUsers(FirebaseAuth.instance.currentUser
+          .uid), //filled in actural UID instead of future function
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           print(snapshot.error.toString());
@@ -53,130 +53,163 @@ class _MatchingRequestCard extends State<MatchingRequestCard> {
       this.potentialBio, this.potentialGender);
 
   Widget build(BuildContext context) {
-    print(potentialBio);
     final size = MediaQuery.of(context).size;
     final matching = ServicesProvider.of(context).services.matching;
     //while (user == null) {
     //return Center(child: CircularProgressIndicator());
     //}
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      //   leading:
+      //     IconButton(
+      //         icon: Icon(Icons.arrow_back, color: Colors.blue, size: 30),
+      //         onPressed: () async {
+      //           Navigator.pop(context);
+      //         })
+      // ),
+      body: Column(children: <Widget>[
+        SizedBox(height: 30,),
+        Row(
           children: <Widget>[
-            SizedBox(height: 30),
-            Container(
-                height: size.height * .6,
-                width: size.width * .95,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  color: const Color(0xFBFBFC),
+            IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.blue, size: 30),
+                onPressed: () async {
+                  Navigator.pop(context);
+                }),
+            Center(
+              child: Text(
+                'Profile',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 44.0,
+                  letterSpacing: 2.0,
+                  color: Colors.lightBlue,
                 ),
-                child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Stack(children: <Widget>[
-                      Container(
-                        alignment: Alignment.center,
-                        margin: EdgeInsets.all(0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          shape: BoxShape.rectangle,
-                          image: DecorationImage(
-                            image: NetworkImage('$potentialPFP'),
-                            fit: BoxFit.fill,
+              ),
+            ),
+          ]
+        ),
+        SizedBox(height: 15),
+        SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Container(
+                  height: size.height * .65,
+                  width: size.width * .95,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: const Color(0xFBFBFC),
+                  ),
+                  child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Stack(children: <Widget>[
+                        Container(
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.all(0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            shape: BoxShape.rectangle,
+                            image: DecorationImage(
+                              image: NetworkImage('$potentialPFP'),
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         ),
-                      ),
-                      Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                Flexible(
-                                  flex:10,
-                                  child: Text(
-                                    ' $potentialName, $potentialGender',
-                                    style: TextStyle(
-                                        fontFamily: 'AirbnbCerealBold',
-                                        fontSize: 36,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                    //TextStyle(height: 2, fontSize: 20),
+                        Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Flexible(
+                                    flex: 10,
+                                    child: Text(
+                                      ' $potentialName, $potentialGender',
+                                      style: TextStyle(
+                                          fontFamily: 'AirbnbCerealBold',
+                                          fontSize: 36,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          decorationColor: Colors.black
+                                      ),
+                                      //TextStyle(height: 2, fontSize: 20),
 
-                                    // textScaleFactor: 1.8, style:
-                                    // TextStyle(color: Colors.blue)),
+                                      // textScaleFactor: 1.8, style:
+                                      // TextStyle(color: Colors.blue)),
+                                    ),
                                   ),
-                                ),
-                                Flexible(
-                                    flex: 2,
-                                    child: Center(
-                                        child: Container(
-                                          // adding margin
-                                            margin: const EdgeInsets.only(left:5.0, right: 5.0),
-                                            // adding padding
-                                            padding: const EdgeInsets.all(3.0),
-                                            child: Expanded(
-                                              child: SingleChildScrollView(
-                                                  child:
-                                                  Column(children: <Widget>[
-                                                    Text(
-                                                      '$potentialBio',
-                                                      style: TextStyle(
-                                                          fontFamily:
-                                                          'AirbnbCereal',
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                          FontWeight.normal,
-                                                          color: Colors.white),
-                                                      //TextStyle(height: 2, fontSize: 20),
+                                  Flexible(
+                                      flex: 2,
+                                      child: Center(
+                                          child: Container(
+                                              // adding margin
+                                              margin: const EdgeInsets.only(
+                                                  left: 5.0, right: 5.0),
+                                              // adding padding
+                                              padding:
+                                                  const EdgeInsets.all(3.0),
+                                              child: Expanded(
+                                                child: SingleChildScrollView(
+                                                    child: Column(
+                                                        children: <Widget>[
+                                                      Text(
+                                                        '$potentialBio',
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                'AirbnbCereal',
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            color:
+                                                                Colors.white),
+                                                        //TextStyle(height: 2, fontSize: 20),
 
-                                                      // textScaleFactor: 1.8, style:
-                                                      // TextStyle(color: Colors.blue)),
-                                                    ),
-                                                  ])),
-                                            )))),
-                                SizedBox(height: 10),
-                              ])),
-                    ]),
-                    elevation: 10)),
-            Row(
-                mainAxisAlignment: MainAxisAlignment
-                    .center, //Center Row contents horizontally,
-                children: <Widget>[
-                  IconButton(
-                    icon: new Icon(
-                      Icons.thumb_up,
-                      size: 40.0,
-                      color: Colors.green,
+                                                        // textScaleFactor: 1.8, style:
+                                                        // TextStyle(color: Colors.blue)),
+                                                      ),
+                                                    ])),
+                                              )))),
+                                  SizedBox(height: 10),
+                                ])),
+                      ]),
+                      elevation: 10)),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment
+                      .center, //Center Row contents horizontally,
+                  children: <Widget>[
+                    IconButton(
+                      icon: new Icon(
+                        Icons.thumb_up,
+                        size: 40.0,
+                        color: Colors.green,
+                      ),
+                      onPressed: () async {
+                        user = await matching.chooseUser(
+                            potentialUID, potentialName, potentialPFP);
+                      },
                     ),
-                    onPressed: () async {
-                      user = await matching.chooseUser(
-                          potentialUID, potentialName, potentialPFP);
-
-
-                    },
-                  ),
-                  SizedBox(width: 50, height: 100),
-                  IconButton(
-                    icon: new Icon(
-                      Icons.thumb_down,
-                      size: 40.0,
-                      color: Colors.red,
+                    SizedBox(width: 50, height: 100),
+                    IconButton(
+                      icon: new Icon(
+                        Icons.thumb_down,
+                        size: 40.0,
+                        color: Colors.red,
+                      ),
+                      onPressed: () async {
+                        user = await matching.skipUser(
+                            FirebaseAuth.instance.currentUser.uid, user[0].uid);
+                      },
                     ),
-                    onPressed: () async {
-                      user = await matching.skipUser(
-                          FirebaseAuth.instance.currentUser.uid, user[0].uid);
-
-
-                    },
-                  ),
-                ]),
-          ],
+                  ]),
+            ],
+          ),
         ),
-      ),
+      ]),
     );
   }
 }
