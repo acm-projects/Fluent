@@ -77,6 +77,7 @@ class _MatchingRequestCard extends State<MatchingRequestCard> {
                 onPressed: () async {
                   Navigator.pop(context);
                 }),
+            SizedBox(width: 60),
             Center(
               child: Text(
                 'Profile',
