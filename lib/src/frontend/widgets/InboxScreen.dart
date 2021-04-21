@@ -70,7 +70,11 @@ class _InboxScreenState extends State<InboxScreen> {
             builder: (context, snapshot) {
               if (snapshot.data == null) {
                 return Center(child: CircularProgressIndicator());
-              } else {
+              }
+              else if(snapshot.hasError) {
+                return Center(child: Text(snapshot.error.toString()));
+              }
+              else {
                 return SingleChildScrollView(
                     child: Container(
                         // with constraints we are getting the height of the phone screen so that

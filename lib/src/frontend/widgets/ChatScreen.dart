@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fluent/src/backend/services/base/auth.dart';
 import 'package:fluent/src/backend/services/base/chat.dart';
 import 'package:fluent/src/backend/services/base/services.dart';
+import 'package:fluent/src/frontend/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:fluent/src/backend/models/user.dart';
 import 'package:fluent/src/backend/models/chat.dart';
@@ -250,8 +251,10 @@ class _ChatScreenState extends State<ChatScreen> {
                               size: 30,
                               color: Colors.lightBlueAccent[400],
                             ),
-                            onPressed: () {
-                              confirmBlock(context);
+                            onPressed: () async {
+                              await confirmBlock(context);
+                              if(isBlocked == true)
+                                Navigator.pop(context);
                               print(isBlocked);
                             },
                           ),
