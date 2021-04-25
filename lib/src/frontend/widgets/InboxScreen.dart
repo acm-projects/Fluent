@@ -332,17 +332,24 @@ class _InboxScreenState extends State<InboxScreen> {
                                                                   if (!snapshot.hasData || !snapshot.data.data().containsKey("mostRecentMessage")) {
                                                                     return Text("NEW MATCH");
                                                                   } else {
-                                                                    return Text(
-                                                                        snapshot.data["mostRecentMessage"],
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontSize:
-                                                                              14.0,
-                                                                          fontWeight:
-                                                                              FontWeight.w300,
-                                                                          color:
-                                                                              Colors.grey[600],
-                                                                        ));
+                                                                    return Flexible(
+                                                                      flex: 2,
+                                                                      child: Text(
+                                                                          snapshot.data["mostRecentMessage"],
+                                                                          overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                          maxLines: 2,
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontSize:
+                                                                                14.0,
+                                                                            fontWeight:
+                                                                                FontWeight.w300,
+                                                                            color:
+                                                                                Colors.grey[600],
+                                                                          )),
+                                                                    );
                                                                   }
                                                                 }),
                                                           ],

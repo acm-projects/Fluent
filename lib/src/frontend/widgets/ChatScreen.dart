@@ -23,6 +23,10 @@ class _ChatScreenState extends State<ChatScreen> {
   // determines whether the user is blocked or not
   bool isBlocked;
 
+  // textController and ScrollController for when a message is sent
+  TextEditingController _textController = TextEditingController();
+  ScrollController _scrollController = ScrollController();
+
   Widget _chatBubble(String chatUserProfileUrl, Message chatScreenMessages, bool isCurrentUser) {
     if (chatScreenMessages.timestamp == null) {
       return null;
@@ -173,10 +177,6 @@ class _ChatScreenState extends State<ChatScreen> {
     final chat = ChatServiceProvider.of(context).chatService;
     final currentUser = AuthState.of(context).currentUser;
 
-    // textController and ScrollController for when a message is sent
-    TextEditingController _textController = TextEditingController();
-    ScrollController _scrollController = ScrollController();
-
     // for the listbuilder to be able to detect consecutive messages from the same user
     //int consecutiveUserMessages = 0;
    // int consecutiveOtherMessages = 0;
@@ -307,15 +307,16 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     // TEXT AREA
                    Container(
-                     height: 60,
+                     height: 65,
                      padding: EdgeInsets.fromLTRB(5,2,5,5),
                      child: Row(
                        children: <Widget>[
                          Expanded(
                            child: TextField(
+                             textCapitalization: TextCapitalization.sentences,
                              decoration: InputDecoration(
                                hintText: "Write a message!",
-                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                              ),
 
                              // to determine if the text is empty when trying to send
